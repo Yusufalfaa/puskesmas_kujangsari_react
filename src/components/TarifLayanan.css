@@ -29,7 +29,7 @@
 }
 
 .tarif-carousel-item {
-  flex: 0 0 calc(100% / 3); /* 3 gambar per tampilan default */
+  flex: 0 0 calc(100% / 3);
   padding: 10px;
   text-align: center;
   box-sizing: border-box;

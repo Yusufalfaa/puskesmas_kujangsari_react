@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import Beranda from './pages/Beranda/Beranda';
 import SaranKeluhan from './pages/sarankeluhan/SaranKeluhan';
+import TentangPuskesmas from './pages/TentangPuskesmas/TentangPuskesmas';
 
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Beranda />} />
-        <Route path="/tentangPuskesmas" element={<h1>Tentang Puskesmas</h1>} />
+        <Route path="/tentangPuskesmas" element={<TentangPuskesmas />} />
         <Route path="/saranKeluhan" element={<SaranKeluhan />} />
         <Route path="/kontak" element={<h1>Kontak</h1>} />
         <Route path="/layanan/:id" element={<h1>Layanan Detail</h1>} />
