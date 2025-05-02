@@ -2,8 +2,10 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import CarouselDashboard from '../../components/CarouselDashboard';
 import JadwalPelayanan from '../../components/JadwalPelayanan';
-import './Beranda.css';
 import TarifPelayanan from '../../components/TarifLayanan';
+import TenagaMedis from '../../components/TenagaMedis';
+import './Beranda.css';
+
 
 const Beranda = () => {
   return (
@@ -82,6 +84,8 @@ const Beranda = () => {
         <JadwalPelayanan />
 
         <TarifPelayanan />
+
+        <TenagaMedis />
       </div>
     </div>
   );
