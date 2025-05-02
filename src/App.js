@@ -3,6 +3,7 @@ import './App.css';
 import Navbar from './components/Navbar';
 import { Routes, Route } from 'react-router-dom';
 import Beranda from './pages/Beranda/Beranda';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/kontak" element={<h1>Kontak</h1>} />
         <Route path="/layanan/:id" element={<h1>Layanan Detail</h1>} />
       </Routes>
+      <Footer />
     </div>
   );
 }
