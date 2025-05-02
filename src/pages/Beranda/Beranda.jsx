@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import CarouselDashboard from '../../components/CarouselDashboard';
+import JadwalPelayanan from '../../components/JadwalPelayanan';
 import './Beranda.css';
 
 const Beranda = () => {
@@ -75,6 +76,12 @@ const Beranda = () => {
             </NavLink>
           </div>
 
+        </section>
+
+        <JadwalPelayanan />
+
+        <section className="tarif-layanan">
+          <h2>Tarif Pelayanan</h2>
         </section>
       </div>
     </div>

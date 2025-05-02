@@ -1,8 +1,21 @@
 /* src/components/CarouselDashboard.css */
 .carousel-item img {
-    height: 600px;
-    width: 100%;
-    object-fit: cover;
-    object-position: center;
+  width: 100%;
+  height: auto;
+  max-height: 600px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .carousel-item img {
+    max-height: 300px;
   }
-  
+}
+
+@media (max-width: 480px) {
+  .carousel-item img {
+    max-height: 200px;
+  }
+}
