@@ -1,0 +1,24 @@
+/* Banner */
+.banner {
+    background-color: #0C6478;
+    height: 200px;
+    margin: 40px 0;
+    padding: 0px 120px;
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.banner h1 {
+    font-size: 40px;
+    margin-top: 12px;
+    font-family: 'Epilogue', sans-serif;
+}
+
+.banner p {
+    font-size: 24px;
+    font-family: 'Epilogue', sans-serif;
+}
