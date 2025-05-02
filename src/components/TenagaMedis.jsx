@@ -71,13 +71,15 @@ const TenagaMedis = () => {
           >
             {images.map((img, index) => (
               <div key={index} className="tenaga-carousel-item">
-                <img
-                  src={img.src}
-                  alt={`Tenaga Medis ${index + 1}`}
-                  className="tenaga-carousel-image"
-                  onClick={() => setPopupImage(img.src)}
-                />
-                <span className="tenaga-caption">{img.caption}</span>
+                <div className="tenaga-card">
+                  <img
+                    src={img.src}
+                    alt={`Tenaga Medis ${index + 1}`}
+                    className="tenaga-carousel-image"
+                    onClick={() => setPopupImage(img.src)}
+                  />
+                  <span className="tenaga-caption">{img.caption}</span>
+                </div>
               </div>
             ))}
           </div>
