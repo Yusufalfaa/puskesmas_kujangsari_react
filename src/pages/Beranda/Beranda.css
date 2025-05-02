@@ -1,4 +1,8 @@
 /*Beranda.css*/
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
 
 /*Section Layanan*/
 .layanan-section {

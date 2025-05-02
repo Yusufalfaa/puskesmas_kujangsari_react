@@ -1,0 +1,99 @@
+/* Banner */
+.banner {
+    background-color: #0C6478;
+    height: 200px;
+    margin-top: 40px;
+    padding: 0px 120px;
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+  }
+  
+  .banner h1 {
+    font-size: 40px;
+    margin: 0;
+    font-family: 'Epilogue', sans-serif;
+  }
+  
+  .banner p {
+    font-size: 24px;
+    font-family: 'Epilogue', sans-serif;
+  }
+  
+  /* Button */
+  .btn-saran {
+    background-color: #15919B;
+    color: white;
+    border: none;
+    width: 50%;
+    height: 80px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: block; 
+    margin: 80px auto;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+  }
+  
+  .btn-saran:hover {
+    background-color: #126f77; 
+  }
+  
+  /* Responsif untuk layar dengan lebar kurang dari 768px (tablet & smartphone) */
+  @media (max-width: 768px) {
+    .banner {
+      padding-left: 20px;
+      text-align: center;
+    }
+  
+    .banner h1 {
+      font-size: 32px;
+    }
+  
+    .banner p {
+      font-size: 20px;
+    }
+  
+    .btn-saran {
+      font-size: 16px;
+      width: 70%; /* Menyesuaikan lebar menjadi 70% pada perangkat lebih kecil */
+      height: 70px; /* Menyesuaikan tinggi tombol */
+      padding: 8px 16px;
+    }
+  }
+  
+  /* Responsif untuk layar dengan lebar kurang dari 480px (smartphone) */
+  @media (max-width: 480px) {
+    .banner h1 {
+      font-size: 28px;
+    }
+  
+    .banner p {
+      font-size: 18px;
+    }
+  
+    .btn-saran {
+      font-size: 14px;
+      width: 80%; /* Menyesuaikan lebar menjadi 80% pada perangkat smartphone */
+      height: 60px; /* Menyesuaikan tinggi tombol */
+      padding: 6px 12px;
+    }
+  }
+  
+  /* Konten */
+  .content {
+    padding: 60px 120px;
+    font-family: 'Epilogue', sans-serif;
+    line-height: 1.6;
+    text-align: justify;
+  }
+  
+  .content p {
+    font-size: 18px;
+  }
+  

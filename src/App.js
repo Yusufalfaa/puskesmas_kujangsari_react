@@ -1,9 +1,12 @@
 import React from 'react';
 import './App.css';
 import Navbar from './components/Navbar';
-import { Routes, Route } from 'react-router-dom';
-import Beranda from './pages/Beranda/Beranda';
 import Footer from './components/Footer';
+import { Routes, Route } from 'react-router-dom';
+
+import Beranda from './pages/Beranda/Beranda';
+import SaranKeluhan from './pages/sarankeluhan/SaranKeluhan';
+
 
 function App() {
   return (
@@ -12,7 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Beranda />} />
         <Route path="/tentangPuskesmas" element={<h1>Tentang Puskesmas</h1>} />
-        <Route path="/saranKeluhan" element={<h1>Saran & Keluhan</h1>} />
+        <Route path="/saranKeluhan" element={<SaranKeluhan />} />
         <Route path="/kontak" element={<h1>Kontak</h1>} />
         <Route path="/layanan/:id" element={<h1>Layanan Detail</h1>} />
       </Routes>
