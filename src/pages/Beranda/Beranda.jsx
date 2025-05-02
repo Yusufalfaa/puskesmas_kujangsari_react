@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import CarouselDashboard from '../../components/CarouselDashboard';
 import JadwalPelayanan from '../../components/JadwalPelayanan';
 import './Beranda.css';
+import TarifPelayanan from '../../components/TarifLayanan';
 
 const Beranda = () => {
   return (
@@ -12,7 +13,7 @@ const Beranda = () => {
         <section className="layanan-section">
           <h2>Layanan Kami</h2>
 
-          <div className="layanan-banner bg1">UNIT PELAYANAN PUSKESMAS KUJANG SARI KLASTER 2</div>
+          <div className="layanan-banner bg1">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 2</div>
           <div className="layanan-grid">
             <NavLink to="/layanan/1" className="layanan-box">
               Layanan 1
@@ -28,7 +29,7 @@ const Beranda = () => {
             </NavLink>
           </div>
 
-          <div className="layanan-banner bg2">UNIT PELAYANAN PUSKESMAS KUJANG SARI KLASTER 3</div>
+          <div className="layanan-banner bg2">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 3</div>
           <div className="layanan-grid">
             <NavLink to="/layanan/5" className="layanan-box">
               Layanan 5
@@ -44,7 +45,7 @@ const Beranda = () => {
             </NavLink>
           </div>
 
-          <div className="layanan-banner bg3">UNIT PELAYANAN PUSKESMAS KUJANG SARI KLASTER 4</div>
+          <div className="layanan-banner bg3">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 4</div>
           <div className="layanan-grid">
             <NavLink to="/layanan/9" className="layanan-box">
               Layanan 9
@@ -60,7 +61,7 @@ const Beranda = () => {
             </NavLink>
           </div>
 
-          <div className="layanan-banner bg4">UNIT PELAYANAN PUSKESMAS KUJANG SARI KLASTER 5</div>
+          <div className="layanan-banner bg4">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 5</div>
           <div className="layanan-grid">
             <NavLink to="/layanan/13" className="layanan-box">
               Layanan 13
@@ -80,9 +81,7 @@ const Beranda = () => {
 
         <JadwalPelayanan />
 
-        <section className="tarif-layanan">
-          <h2>Tarif Pelayanan</h2>
-        </section>
+        <TarifPelayanan />
       </div>
     </div>
   );
