@@ -1,128 +1,139 @@
-/* Tarif Pelayanan Carousel */
 .tarif-container {
-    text-align: center;
-    padding: 40px 0;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.tarif-title {
+  font-size: 2rem;
+  margin: 40px 0px;
+}
+
+.tarif-carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.tarif-carousel {
+  overflow: hidden;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.tarif-carousel-track {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+}
+
+.tarif-carousel-item {
+  flex: 0 0 calc(100% / 3); /* 3 gambar per tampilan default */
+  padding: 10px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.tarif-carousel-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: transform 0.3s;
+  margin-bottom: 15px;
+}
+
+.tarif-carousel-image:hover {
+  transform: scale(1.05);
+}
+
+.tarif-caption {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  margin-top: 10px;
+}
+
+.tarif-carousel-button {
+  background-color: #0d6f83;
+  color: white;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0 15px;
+  z-index: 1;
+  border-radius: 5px;
+}
+
+/* Responsif: 2 gambar pada tablet */
+@media (max-width: 992px) {
+  .tarif-carousel-item {
+    flex: 0 0 50%;
   }
-  
-  .tarif-title {
-    font-size: 2rem;
-    margin-top: 40px;
+}
+
+/* Responsif: 1 gambar pada HP */
+@media (max-width: 576px) {
+  .tarif-carousel-item {
+    flex: 0 0 100%;
   }
-  
-  .tarif-carousel-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 90%;
-    margin: 0 auto;
-  }
-  
-  .tarif-carousel {
-    overflow: hidden;
-    width: 100%;
-    max-width: 1000px;
-  }
-  
-  .tarif-carousel-track {
-    display: flex;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .tarif-carousel-image {
-    flex: 0 0 33.3333%;
-    max-width: 33.3333%;
-    height: 600px;
-    object-fit: contain;
-    padding: 10px;
-    cursor: pointer;
-    transition: transform 0.3s;
-  }
-  
-  .tarif-carousel-image:hover {
-    transform: scale(1.02);
-  }
-  
-  .tarif-carousel-button {
-    background-color: #0d6f83;
-    color: white;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    padding: 0 15px;
-    z-index: 1;
-    border-radius: 5px;
-  }
-  
-  .tarif-popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-    overflow: hidden;
-    padding: 20px;
-  }
-  
-  .tarif-popup-image-wrapper {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-    position: relative;
-  }
-  
-  .tarif-popup-image {
-    max-width: 100%;
-    max-height: 100%;
-    cursor: grab;
-    transition: transform 0.2s ease-in-out;
-    transform-origin: center;
-  }
-  
-  .tarif-close-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    font-size: 1.5rem;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 1000;
-  }
-  
-  .tarif-close-button:hover {
-    background-color: rgba(0, 0, 0, 1);
-  }
-  
-  /* Responsif: 2 gambar pada tablet */
-  @media (max-width: 992px) {
-    .tarif-carousel-image {
-      flex: 0 0 50%;
-      max-width: 50%;
-    }
-  }
-  
-  /* Responsif: 1 gambar pada HP */
-  @media (max-width: 576px) {
-    .tarif-carousel-image {
-      flex: 0 0 100%;
-      max-width: 100%;
-    }
-  }
-  
+}
+
+/* Pop-up image CSS tetap seperti sebelumnya */
+.tarif-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.tarif-popup-image-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  position: relative;
+}
+
+.tarif-popup-image {
+  max-width: 100%;
+  max-height: 100%;
+  cursor: grab;
+  transition: transform 0.2s ease-in-out;
+  transform-origin: center;
+}
+
+.tarif-close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.tarif-close-button:hover {
+  background-color: rgba(0, 0, 0, 1);
+}

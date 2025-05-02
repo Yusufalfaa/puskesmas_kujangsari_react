@@ -3,25 +3,25 @@ import './TarifLayanan.css';
 
 const TarifPelayanan = () => {
   const images = [
-    '/assets/tarif1.jpeg',
-    '/assets/tarif2.jpeg',
-    '/assets/tarif3.jpeg',
-    '/assets/tarif4.jpeg',
-    '/assets/tarif5.jpeg',
+    { src: '/assets/tarif1.jpeg', caption: 'Layanan Umum' },
+    { src: '/assets/tarif2.jpeg', caption: 'Layanan Tindakan' },
+    { src: '/assets/tarif3.jpeg', caption: 'Layanan Laboratorium' },
+    { src: '/assets/tarif4.jpeg', caption: 'Layanan Gigi & Mulut' },
+    { src: '/assets/tarif5.jpeg', caption: 'Layanan KIA' },
   ];
 
   const [scrollIndex, setScrollIndex] = useState(0);
   const [popupImage, setPopupImage] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(1);
-  const [imageCount, setImageCount] = useState(3); 
+  const [imageCount, setImageCount] = useState(3);
 
   useEffect(() => {
     const updateImageCount = () => {
       const width = window.innerWidth;
       if (width <= 576) {
-        setImageCount(1); 
+        setImageCount(1);
       } else if (width <= 992) {
-        setImageCount(2); 
+        setImageCount(2);
       } else {
         setImageCount(3);
       }
@@ -29,10 +29,7 @@ const TarifPelayanan = () => {
 
     updateImageCount();
     window.addEventListener('resize', updateImageCount);
-
-    return () => {
-      window.removeEventListener('resize', updateImageCount);
-    };
+    return () => window.removeEventListener('resize', updateImageCount);
   }, []);
 
   const handleNext = () => {
@@ -71,13 +68,15 @@ const TarifPelayanan = () => {
             style={{ transform: `translateX(-${scrollIndex * (100 / imageCount)}%)` }}
           >
             {images.map((img, index) => (
-              <img
-                key={index}
-                src={img}
-                alt={`Tarif ${index + 1}`}
-                className="tarif-carousel-image"
-                onClick={() => setPopupImage(img)}
-              />
+              <div key={index} className="tarif-carousel-item">
+                <img
+                  src={img.src}
+                  alt={img.caption}
+                  className="tarif-carousel-image"
+                  onClick={() => setPopupImage(img.src)}
+                />
+                <span className="tarif-caption">{img.caption}</span>
+              </div>
             ))}
           </div>
         </div>
@@ -86,9 +85,8 @@ const TarifPelayanan = () => {
 
       {popupImage && (
         <div className="tarif-popup-overlay" onClick={closePopup}>
-          {/* Menghentikan event click dari gambar agar tidak menutup popup */}
           <div className="tarif-popup-image-wrapper" onClick={(e) => e.stopPropagation()}>
-            <button className="tarif-close-button" onClick={closePopup}>X</button>
+            <button className="tarif-close-button" onClick={closePopup}>×</button>
             <img
               src={popupImage}
               alt="Popup"
