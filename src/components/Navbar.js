@@ -9,16 +9,12 @@ const Navbar = () => {
       <div className="container">
         <NavLink className="navbar-brand" to="/">
           <img
-            src={`${process.env.PUBLIC_URL}/logoKujangsari.png`}
+            src={`${process.env.PUBLIC_URL}/logoKujangsari2.png`}
             alt="Logo"
-            width="30"
-            height="30"
+            width="200"
+            height="60"
             className="d-inline-block align-text-top me-2"
           />
-          <div>
-            <span>Puskesmas</span>
-            <span className="text-info fw-bold">Kujangsari</span>
-          </div>
         </NavLink>
         <button
           className="navbar-toggler"
