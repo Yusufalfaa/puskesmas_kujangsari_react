@@ -23,7 +23,6 @@
     font-family: 'Epilogue', sans-serif;
   }
   
-  /* Button */
   .btn-saran {
     background-color: #15919B;
     color: white;
@@ -35,7 +34,7 @@
     border-radius: 5px;
     transition: background-color 0.3s ease;
     display: block; 
-    margin: 80px auto;
+    margin: 20px auto;
     font-family: 'Poppins', sans-serif;
     font-weight: bold;
   }
@@ -44,7 +43,6 @@
     background-color: #126f77; 
   }
   
-  /* Responsif untuk layar dengan lebar kurang dari 768px (tablet & smartphone) */
   @media (max-width: 768px) {
     .banner {
       padding-left: 20px;
@@ -61,13 +59,12 @@
   
     .btn-saran {
       font-size: 16px;
-      width: 70%; /* Menyesuaikan lebar menjadi 70% pada perangkat lebih kecil */
-      height: 70px; /* Menyesuaikan tinggi tombol */
+      width: 70%; 
+      height: 70px; 
       padding: 8px 16px;
     }
   }
   
-  /* Responsif untuk layar dengan lebar kurang dari 480px (smartphone) */
   @media (max-width: 480px) {
     .banner h1 {
       font-size: 28px;
@@ -79,15 +76,15 @@
   
     .btn-saran {
       font-size: 14px;
-      width: 80%; /* Menyesuaikan lebar menjadi 80% pada perangkat smartphone */
-      height: 60px; /* Menyesuaikan tinggi tombol */
+      width: 80%; 
+      height: 60px; 
       padding: 6px 12px;
     }
   }
   
   /* Konten */
   .content {
-    padding: 60px 120px;
+    padding: 60px 120px !important;
     font-family: 'Epilogue', sans-serif;
     line-height: 1.6;
     text-align: justify;
