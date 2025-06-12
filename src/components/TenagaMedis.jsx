@@ -2,20 +2,26 @@ import React, { useState, useEffect } from 'react';
 import './TenagaMedis.css';
 
 const TenagaMedis = () => {
-  const images = [
-    { src: '/assets/medis1.jpg', caption: 'Dokter 1' },
-    { src: '/assets/medis1.jpg', caption: 'Perawat 2' },
-    { src: '/assets/medis1.jpg', caption: 'Dokter 3' },
-    { src: '/assets/medis1.jpg', caption: 'Ahli Gizi 4' },
-    { src: '/assets/medis1.jpg', caption: 'Fisioterapis 5' },
-    { src: '/assets/medis1.jpg', caption: 'Radiolog 6' },
-    { src: '/assets/medis1.jpg', caption: 'Dokter 7' }
-  ];
-
+  const [images, setImages] = useState([]);
   const [scrollIndex, setScrollIndex] = useState(0);
   const [popupImage, setPopupImage] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [imageCount, setImageCount] = useState(5);
+
+  // Ambil data dari sdm-home.json
+  useEffect(() => {
+    fetch('/assets/sdm-home.json')
+      .then((res) => res.json())
+      .then((data) => {
+        const merged = Object.values(data).flatMap((list) =>
+          list.map((item) => ({
+            src: item.src,
+            caption: item.fileName,
+          }))
+        );
+        setImages(merged);
+      });
+  }, []);
 
   useEffect(() => {
     const updateImageCount = () => {

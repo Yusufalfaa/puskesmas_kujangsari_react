@@ -62,3 +62,30 @@
   color: white !important;
   text-decoration: none;
 }
+
+/* Sesuaikan dropdown agar tampil seperti item navbar */
+.navbar .dropdown-menu {
+  background-color: #213A58;
+  border-radius: none !important;
+  border: none;
+  padding: 8px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  margin-top: 10px;
+}
+
+.navbar .dropdown-menu .dropdown-item {
+  color: #ffffff;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 0px !important;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+}
+
+.navbar .dropdown-menu .dropdown-item:hover {
+  background-color: #15919B;
+  color: white;
+  text-decoration: none;
+}

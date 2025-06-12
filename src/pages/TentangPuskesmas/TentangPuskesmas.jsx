@@ -1,21 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './TentangPuskesmas.css';
 import { Container, Row, Col } from 'react-bootstrap';
 
 const TentangPuskesmas = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupImage, setPopupImage] = useState("");
+  const [scale, setScale] = useState(1);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [start, setStart] = useState({ x: 0, y: 0 });
 
-  // Fungsi untuk membuka pop-up gambar
   const openPopup = (imageSrc) => {
     setPopupImage(imageSrc);
     setShowPopup(true);
+    setScale(1);
+    setPosition({ x: 0, y: 0 });
   };
 
-  // Fungsi untuk menutup pop-up
   const closePopup = () => {
     setShowPopup(false);
     setPopupImage("");
+    setScale(1);
+    setPosition({ x: 0, y: 0 });
+  };
+
+  const toggleZoom = (e) => {
+    e.stopPropagation();
+    if (scale === 1) {
+      setScale(2);
+    } else {
+      setScale(1);
+      setPosition({ x: 0, y: 0 });
+    }
+  };
+
+  const handleMouseDown = (e) => {
+    if (scale > 1) {
+      setIsDragging(true);
+      setStart({ x: e.clientX - position.x, y: e.clientY - position.y });
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging || scale === 1) return;
+    const newX = e.clientX - start.x;
+    const newY = e.clientY - start.y;
+    setPosition({ x: newX, y: newY });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    const handleWindowMouseMove = (e) => {
+      if (isDragging && scale > 1) {
+        const newX = e.clientX - start.x;
+        const newY = e.clientY - start.y;
+        setPosition({ x: newX, y: newY });
+      }
+    };
+
+    const handleWindowMouseUp = () => {
+      if (isDragging) {
+        setIsDragging(false);
+      }
+    };
+
+    if (isDragging) {
+      window.addEventListener('mousemove', handleWindowMouseMove);
+      window.addEventListener('mouseup', handleWindowMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleWindowMouseMove);
+      window.removeEventListener('mouseup', handleWindowMouseUp);
+    };
+  }, [isDragging, start, scale]);
+
+  const dragHandlers = {
+    onMouseDown: handleMouseDown,
+    onMouseMove: handleMouseMove,
+    onMouseUp: handleMouseUp,
+    onMouseLeave: handleMouseUp,
   };
 
   return (
@@ -107,7 +174,20 @@ const TentangPuskesmas = () => {
       {showPopup && (
         <div className="popup" onClick={closePopup}>
           <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <img src={popupImage} alt="Pop-up" />
+            <img
+              src={popupImage}
+              alt="Pop-up"
+              onClick={toggleZoom}
+              {...dragHandlers}
+              style={{
+                transform: `scale(${scale}) translate(${position.x / scale}px, ${position.y / scale}px)`,
+                transition: isDragging ? 'none' : 'transform 0.3s ease',
+                cursor: scale === 1 ? 'zoom-in' : isDragging ? 'grabbing' : 'grab',
+                maxWidth: '90%',
+                maxHeight: '90%',
+                userSelect: 'none',
+              }}
+            />
             <button className="close-btn" onClick={closePopup}>X</button>
           </div>
         </div>

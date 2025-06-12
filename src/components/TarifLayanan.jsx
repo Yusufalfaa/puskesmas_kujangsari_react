@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import './TarifLayanan.css';
 
 const TarifPelayanan = () => {
@@ -12,19 +12,21 @@ const TarifPelayanan = () => {
 
   const [scrollIndex, setScrollIndex] = useState(0);
   const [popupImage, setPopupImage] = useState(null);
-  const [zoomLevel, setZoomLevel] = useState(1);
+  const [zoom, setZoom] = useState(1);
   const [imageCount, setImageCount] = useState(3);
+  const [dragging, setDragging] = useState(false);
+  const [startDrag, setStartDrag] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const imageRef = useRef(null);
+  const wrapperRef = useRef(null);
 
   useEffect(() => {
     const updateImageCount = () => {
       const width = window.innerWidth;
-      if (width <= 576) {
-        setImageCount(1);
-      } else if (width <= 992) {
-        setImageCount(2);
-      } else {
-        setImageCount(3);
-      }
+      if (width <= 576) setImageCount(1);
+      else if (width <= 992) setImageCount(2);
+      else setImageCount(3);
     };
 
     updateImageCount();
@@ -47,14 +49,63 @@ const TarifPelayanan = () => {
   const handleWheelZoom = (e) => {
     if (e.ctrlKey) {
       e.preventDefault();
-      const zoomChange = e.deltaY > 0 ? -0.1 : 0.1;
-      setZoomLevel((prev) => Math.min(Math.max(prev + zoomChange, 1), 3));
+      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      setZoom((prev) => Math.min(Math.max(prev + delta, 1), 3));
     }
   };
 
+  const handleMouseDown = (e) => {
+    if (zoom > 1) {
+      setDragging(true);
+      setStartDrag({ x: e.clientX - position.x, y: e.clientY - position.y });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setDragging(false);
+  };
+
+  const handleMouseMove = useCallback(
+    (e) => {
+      if (!dragging || !imageRef.current || !wrapperRef.current) return;
+
+      const img = imageRef.current;
+      const wrapper = wrapperRef.current;
+
+      const containerRect = wrapper.getBoundingClientRect();
+      const imageWidth = img.naturalWidth * zoom;
+      const imageHeight = img.naturalHeight * zoom;
+
+      const maxX = (imageWidth - containerRect.width) / 2 + 20;
+      const maxY = (imageHeight - containerRect.height) / 2 + 20;
+
+      let newX = e.clientX - startDrag.x;
+      let newY = e.clientY - startDrag.y;
+
+      newX = Math.min(Math.max(newX, -maxX), maxX);
+      newY = Math.min(Math.max(newY, -maxY), maxY);
+
+      setPosition({ x: newX, y: newY });
+    },
+    [dragging, zoom, startDrag]
+  );
+
+  useEffect(() => {
+    if (dragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [dragging, handleMouseMove]);
+
   const closePopup = () => {
     setPopupImage(null);
-    setZoomLevel(1);
+    setZoom(1);
+    setPosition({ x: 0, y: 0 });
   };
 
   return (
@@ -85,14 +136,24 @@ const TarifPelayanan = () => {
 
       {popupImage && (
         <div className="tarif-popup-overlay" onClick={closePopup}>
-          <div className="tarif-popup-image-wrapper" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="tarif-popup-image-wrapper"
+            onClick={(e) => e.stopPropagation()}
+            ref={wrapperRef}
+          >
             <button className="tarif-close-button" onClick={closePopup}>×</button>
             <img
+              ref={imageRef}
               src={popupImage}
               alt="Popup"
               className="tarif-popup-image"
-              style={{ transform: `scale(${zoomLevel})` }}
               onWheel={handleWheelZoom}
+              onMouseDown={handleMouseDown}
+              onMouseLeave={handleMouseUp}
+              style={{
+                transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
+                cursor: zoom > 1 ? 'grab' : 'default',
+              }}
             />
           </div>
         </div>

@@ -1,0 +1,58 @@
+{
+  "Bidan": [
+    {
+      "fileName": "Cynthia Ratna Juharsa, A.Md.Keb",
+      "src": "/assets/SDM/Bidan/Cynthia Ratna Juharsa, A.Md.Keb.png"
+    },
+    {
+      "fileName": "Kanti Purwanti, S.Keb. Bdn",
+      "src": "/assets/SDM/Bidan/Kanti Purwanti, S.Keb. Bdn.png"
+    },
+    {
+      "fileName": "Ratna Rahmawati, A.Md.Keb",
+      "src": "/assets/SDM/Bidan/Ratna Rahmawati, A.Md.Keb.png"
+    }
+  ],
+  "Dokter": [
+    {
+      "fileName": "dr. Dewi Susanti",
+      "src": "/assets/SDM/Dokter/dr. Dewi Susanti.png"
+    },
+    {
+      "fileName": "dr. Hj. Viska Meydiani, Sp.DLP.",
+      "src": "/assets/SDM/Dokter/dr. Hj. Viska Meydiani, Sp.DLP..png"
+    }
+  ],
+  "Dokter Gigi": [
+    {
+      "fileName": "drg.  Iiyani Henyda Tarigan",
+      "src": "/assets/SDM/Dokter Gigi/drg.  Iiyani Henyda Tarigan.png"
+    },
+    {
+      "fileName": "drg. Novia Tarina Lasiyah",
+      "src": "/assets/SDM/Dokter Gigi/drg. Novia Tarina Lasiyah.png"
+    }
+  ],
+  "Perawat": [
+    {
+      "fileName": "Nur Utami S, AMK",
+      "src": "/assets/SDM/Perawat/Nur Utami S, AMK.png"
+    },
+    {
+      "fileName": "Nurhasanah, S.Kep. Ners",
+      "src": "/assets/SDM/Perawat/Nurhasanah, S.Kep. Ners.png"
+    },
+    {
+      "fileName": "Pipih Kusmayanti, AMK",
+      "src": "/assets/SDM/Perawat/Pipih Kusmayanti, AMK.png"
+    },
+    {
+      "fileName": "Rayati, S.Kep. Ners",
+      "src": "/assets/SDM/Perawat/Rayati, S.Kep. Ners.png"
+    },
+    {
+      "fileName": "Susi Yuningsih, S.Kep. Ners",
+      "src": "/assets/SDM/Perawat/Susi Yuningsih, S.Kep. Ners.png"
+    }
+  ]
+}

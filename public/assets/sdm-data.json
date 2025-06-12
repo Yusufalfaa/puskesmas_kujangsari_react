@@ -1,0 +1,144 @@
+{
+  "Bidan": [
+    {
+      "fileName": "Cynthia Ratna Juharsa, A.Md.Keb",
+      "src": "/assets/SDM/Bidan/Cynthia Ratna Juharsa, A.Md.Keb.png"
+    },
+    {
+      "fileName": "Kanti Purwanti, S.Keb. Bdn",
+      "src": "/assets/SDM/Bidan/Kanti Purwanti, S.Keb. Bdn.png"
+    },
+    {
+      "fileName": "Ratna Rahmawati, A.Md.Keb",
+      "src": "/assets/SDM/Bidan/Ratna Rahmawati, A.Md.Keb.png"
+    }
+  ],
+  "Dokter": [
+    {
+      "fileName": "dr. Dewi Susanti",
+      "src": "/assets/SDM/Dokter/dr. Dewi Susanti.png"
+    },
+    {
+      "fileName": "dr. Hj. Viska Meydiani, Sp.DLP.",
+      "src": "/assets/SDM/Dokter/dr. Hj. Viska Meydiani, Sp.DLP..png"
+    }
+  ],
+  "Dokter Gigi": [
+    {
+      "fileName": "drg.  Iiyani Henyda Tarigan",
+      "src": "/assets/SDM/Dokter Gigi/drg.  Iiyani Henyda Tarigan.png"
+    },
+    {
+      "fileName": "drg. Novia Tarina Lasiyah",
+      "src": "/assets/SDM/Dokter Gigi/drg. Novia Tarina Lasiyah.png"
+    }
+  ],
+  "Farmasi": [
+    {
+      "fileName": "apt. Siti Mariyam, S.Farm",
+      "src": "/assets/SDM/Farmasi/apt. Siti Mariyam, S.Farm.png"
+    },
+    {
+      "fileName": "Della Oktaviana, A.Md. Farm",
+      "src": "/assets/SDM/Farmasi/Della Oktaviana, A.Md. Farm.png"
+    },
+    {
+      "fileName": "Popon Sulastriani, A.Md. Farm",
+      "src": "/assets/SDM/Farmasi/Popon Sulastriani, A.Md. Farm.png"
+    }
+  ],
+  "Gizi-Promkes-Surveilans": [
+    {
+      "fileName": "Diding, S.KM",
+      "src": "/assets/SDM/Gizi-Promkes-Surveilans/Diding, S.KM.png"
+    },
+    {
+      "fileName": "Megga Marrisa Cordiani, S.KM",
+      "src": "/assets/SDM/Gizi-Promkes-Surveilans/Megga Marrisa Cordiani, S.KM.png"
+    },
+    {
+      "fileName": "Risna Anggraeni, S.Gz",
+      "src": "/assets/SDM/Gizi-Promkes-Surveilans/Risna Anggraeni, S.Gz.png"
+    }
+  ],
+  "Perawat": [
+    {
+      "fileName": "Nur Utami S, AMK",
+      "src": "/assets/SDM/Perawat/Nur Utami S, AMK.png"
+    },
+    {
+      "fileName": "Nurhasanah, S.Kep. Ners",
+      "src": "/assets/SDM/Perawat/Nurhasanah, S.Kep. Ners.png"
+    },
+    {
+      "fileName": "Pipih Kusmayanti, AMK",
+      "src": "/assets/SDM/Perawat/Pipih Kusmayanti, AMK.png"
+    },
+    {
+      "fileName": "Rayati, S.Kep. Ners",
+      "src": "/assets/SDM/Perawat/Rayati, S.Kep. Ners.png"
+    },
+    {
+      "fileName": "Susi Yuningsih, S.Kep. Ners",
+      "src": "/assets/SDM/Perawat/Susi Yuningsih, S.Kep. Ners.png"
+    }
+  ],
+  "Rekam Medis-Kesehatan Lingkungan-Analis Lab": [
+    {
+      "fileName": "Ericha Nurlina Putri, A.Md, A.K",
+      "src": "/assets/SDM/Rekam Medis-Kesehatan Lingkungan-Analis Lab/Ericha Nurlina Putri, A.Md, A.K.png"
+    },
+    {
+      "fileName": "Nenden Sopiah, S.Tr",
+      "src": "/assets/SDM/Rekam Medis-Kesehatan Lingkungan-Analis Lab/Nenden Sopiah, S.Tr.png"
+    },
+    {
+      "fileName": "Silfa Ahmad Nurbalqis,S.KM",
+      "src": "/assets/SDM/Rekam Medis-Kesehatan Lingkungan-Analis Lab/Silfa Ahmad Nurbalqis,S.KM.png"
+    }
+  ],
+  "Tenaga Penunjang": [
+    {
+      "fileName": "Aang Saepuloh",
+      "src": "/assets/SDM/Tenaga Penunjang/Aang Saepuloh.png"
+    },
+    {
+      "fileName": "Chandra Adetia",
+      "src": "/assets/SDM/Tenaga Penunjang/Chandra Adetia.png"
+    },
+    {
+      "fileName": "Kurnia Surya C",
+      "src": "/assets/SDM/Tenaga Penunjang/Kurnia Surya C.png"
+    },
+    {
+      "fileName": "Mahmud",
+      "src": "/assets/SDM/Tenaga Penunjang/Mahmud.png"
+    },
+    {
+      "fileName": "Oom Omah",
+      "src": "/assets/SDM/Tenaga Penunjang/Oom Omah.png"
+    },
+    {
+      "fileName": "R. Barnas Sukmana",
+      "src": "/assets/SDM/Tenaga Penunjang/R. Barnas Sukmana.png"
+    }
+  ],
+  "TU": [
+    {
+      "fileName": "A. Faisyal Rachman JP. S,E",
+      "src": "/assets/SDM/TU/A. Faisyal Rachman JP. S,E.png"
+    },
+    {
+      "fileName": "Nanang Anwar",
+      "src": "/assets/SDM/TU/Nanang Anwar.png"
+    },
+    {
+      "fileName": "Nofi Nurleni",
+      "src": "/assets/SDM/TU/Nofi Nurleni.png"
+    },
+    {
+      "fileName": "Wiarsih",
+      "src": "/assets/SDM/TU/Wiarsih.png"
+    }
+  ]
+}

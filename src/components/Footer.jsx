@@ -8,16 +8,18 @@ const Footer = () => {
         <div className="footer-left">
           <h3>Puskesmas Kujangsari</h3>
           <ul>
-            <a href="https://wa.me/6282129690500" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/+6282129690500" target="_blank" rel="noopener noreferrer">
               <li><i className="fab fa-whatsapp"></i> +6282129690500</li>
             </a>
-            <a href="tel:0227530456">
-              <li><i className="fas fa-phone-alt"></i> (022) 7530465</li>
+            <a href="tel:02287504989">
+              <li><i className="fas fa-phone-alt"></i> (022) 87504989</li>
             </a>
             <a href="https://instagram.com/uptd_puskesmaskujangsari" target="_blank" rel="noopener noreferrer">
               <li><i className="fab fa-instagram"></i> @uptd_puskesmaskujangsari</li>
             </a>
-            <li><i className="fas fa-envelope"></i> uptdpkmkujangsari@gmail.com</li>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=uptpkmkujangsari@gmail.com" target="_blank" rel="noopener noreferrer">
+            <li><i className="fas fa-envelope"></i> uptpkmkujangsari@gmail.com</li>
+            </a>
           </ul>
         </div>
 

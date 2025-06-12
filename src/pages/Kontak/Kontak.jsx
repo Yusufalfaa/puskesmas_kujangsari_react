@@ -12,7 +12,7 @@ const Kontak = () => {
       
       <div className="content">
 
-      <a href="https://wa.me/6282129690500" target="_blank" rel="noopener noreferrer">
+      <a href="https://wa.me/+6282129690500" target="_blank" rel="noopener noreferrer">
         <div className="contact-box">
           <FaWhatsapp size={92} />
           <p>+62 82129690500</p>
@@ -26,10 +26,10 @@ const Kontak = () => {
         </div>
       </a>
 
-      <a href="tel:0227530456">
+      <a href="tel:02287504989">
         <div className="contact-box">
           <FaPhoneAlt size={92}/>
-          <p>(022) 7530456</p>
+          <p>(022) 87504989</p>
         </div>
       </a>
       </div>

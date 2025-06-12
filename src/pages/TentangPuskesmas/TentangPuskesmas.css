@@ -115,6 +115,8 @@ h2 {
     height: auto;
     object-fit: contain;
     border-radius: 5px;
+    user-select: none;
+    pointer-events: auto;
 }
 
 

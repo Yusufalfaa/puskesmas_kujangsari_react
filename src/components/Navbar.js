@@ -34,10 +34,29 @@ const Navbar = () => {
                 Beranda
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/tentangPuskesmas" activeClassName="active">
+            <li className="nav-item dropdown">
+              <NavLink
+                className="nav-link dropdown-toggle"
+                to="/tentangPuskesmas"
+                id="tentangDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
                 Tentang Puskesmas
               </NavLink>
+              <ul className="dropdown-menu" aria-labelledby="tentangDropdown">
+                <li>
+                  <NavLink className="dropdown-item" to="/tentangPuskesmas">
+                    Profil Puskesmas
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink className="dropdown-item" to="/tenagaKerja">
+                    Tenaga Kerja
+                  </NavLink>
+                </li>
+              </ul>
             </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="/saranKeluhan" activeClassName="active">
