@@ -7,13 +7,13 @@ const CarouselDashboard = () => {
   return (
     <Carousel fade>
       <Carousel.Item>
-        <img className="d-block w-100" src="/assets/gambar1.png" alt="Slide 1" />
+        <img className="d-block w-100" src="/assets/gambar1.jpeg" alt="Slide 1" />
       </Carousel.Item>
       <Carousel.Item>
-        <img className="d-block w-100" src="/assets/gambar2.png" alt="Slide 2" />
+        <img className="d-block w-100" src="/assets/gambar2.jpeg" alt="Slide 2" />
       </Carousel.Item>
       <Carousel.Item>
-        <img className="d-block w-100" src="/assets/gambar3.png" alt="Slide 3" />
+        <img className="d-block w-100" src="/assets/gambar3.jpeg" alt="Slide 3" />
       </Carousel.Item>
     </Carousel>
   );

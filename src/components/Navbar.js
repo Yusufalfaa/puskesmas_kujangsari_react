@@ -7,15 +7,19 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark shadow-sm">
       <div className="container">
+        {/* Logo di paling kiri (sekarang berada di urutan pertama) */}
         <NavLink className="navbar-brand" to="/">
           <img
             src={`${process.env.PUBLIC_URL}/logoKujangsari2.png`}
-            alt="Logo"
+            alt="Logo Puskesmas Kujangsari"
             width="200"
             height="60"
             className="d-inline-block align-text-top me-2"
           />
         </NavLink>
+
+        {/* Tombol Toggler (Hamburger Icon) untuk mobile */}
+        {/* Hapus kelas order-md-X dan order-X dari sini */}
         <button
           className="navbar-toggler"
           type="button"
@@ -27,10 +31,13 @@ const Navbar = () => {
         >
           <span className="navbar-toggler-icon" />
         </button>
-        <div className="collapse navbar-collapse justify-content-between" id="navbarNav">
-          <ul className="navbar-nav mx-auto">
+
+        {/* Konten Navigasi */}
+        {/* Hapus kelas order-md-X dan order-X dari sini */}
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav"> {/* Biarkan CSS kustom yang mengatur penengahan */}
             <li className="nav-item">
-              <NavLink className="nav-link" exact to="/" activeClassName="active">
+              <NavLink className="nav-link" to="/" end>
                 Beranda
               </NavLink>
             </li>
@@ -59,12 +66,12 @@ const Navbar = () => {
               </ul>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/saranKeluhan" activeClassName="active">
+              <NavLink className="nav-link" to="/saranKeluhan" end>
                 Saran & Keluhan
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/kontak" activeClassName="active">
+              <NavLink className="nav-link" to="/kontak" end>
                 Kontak
               </NavLink>
             </li>
