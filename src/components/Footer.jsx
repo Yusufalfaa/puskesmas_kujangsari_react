@@ -24,7 +24,7 @@ const Footer = () => {
         </div>
 
         <div className="footer-right">
-          <p>&copy; 2025 Muhamad Yusuf Al Farizzi</p>
+          <p>&copy; IUM-033</p>
         </div>
       </div>
     </footer>

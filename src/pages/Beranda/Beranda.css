@@ -1,10 +1,15 @@
-/*Beranda.css*/
+/* Beranda.css */
 body {
   font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
+.beranda-content {
+  padding: 20px 0;
+}
 
-/*Section Layanan*/
+/* Bagian Layanan */
 .layanan-section {
   padding: 40px 0;
   text-align: center;
@@ -13,21 +18,19 @@ body {
 .layanan-section h2 {
   font-size: 2rem;
   margin-bottom: 30px;
+  font-weight: bold;
 }
 
 .layanan-banner {
   width: 80%;
   margin: 20px auto;
+  display: block;
   padding: 20px;
   color: #ffffff;
   font-weight: bold;
   border-radius: 4px;
   font-size: 1.1rem;
   text-align: left;
-}
-
-h2 {
-  font-weight: bold;
 }
 
 .bg1 {
@@ -48,11 +51,22 @@ h2 {
 
 .layanan-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
   gap: 40px;
-  width: 70%;
+  width: 60%;
   margin: 40px auto;
+  justify-content: center;
 }
+
+.layanan-grid-last {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 400px)); 
+  gap: 40px;
+  width: 60%;
+  margin: 40px auto;
+  justify-content: center;
+}
+
 
 .layanan-box {
   background-color: #f8f9fa;
@@ -73,20 +87,30 @@ h2 {
 
 @media (max-width: 992px) {
   .layanan-grid {
-    grid-template-columns: repeat(2, 1fr);
-    width: 70%;
+    grid-template-columns: repeat(2, 1fr); /* 2 kolom di tablet */
+    width: 85%;
+  }
+  .layanan-banner {
+    width: 90%;
   }
 }
 
 @media (max-width: 576px) {
   .layanan-grid {
-    grid-template-columns: repeat(1, 1fr);
-    width: 70%;
+    grid-template-columns: repeat(1, 1fr); /* 1 kolom di mobile */
+    width: 90%;
+  }
+  .layanan-banner {
+    width: 95%;
+    font-size: 1rem;
+  }
+  .layanan-box {
+    height: 80px;
   }
 }
 
-
-/* Section Tarif Pelayanan  */
-  .tarif-layanan h2 {
-    margin: 40px;
-  }
+/* Bagian Tarif Pelayanan */
+.tarif-layanan h2 {
+  margin: 40px;
+  text-align: center;
+}
