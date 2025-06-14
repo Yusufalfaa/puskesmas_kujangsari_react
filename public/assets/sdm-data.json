@@ -49,17 +49,18 @@
   ],
   "Gizi-Promkes-Surveilans": [
     {
-      "fileName": "Diding, S.KM",
-      "src": "/assets/SDM/Gizi-Promkes-Surveilans/Diding, S.KM.png"
+      "fileName": "Risna Anggraeni, S.Gz",
+      "src": "/assets/SDM/Gizi-Promkes-Surveilans/Risna Anggraeni, S.Gz.png"
     },
     {
       "fileName": "Megga Marrisa Cordiani, S.KM",
       "src": "/assets/SDM/Gizi-Promkes-Surveilans/Megga Marrisa Cordiani, S.KM.png"
     },
     {
-      "fileName": "Risna Anggraeni, S.Gz",
-      "src": "/assets/SDM/Gizi-Promkes-Surveilans/Risna Anggraeni, S.Gz.png"
+      "fileName": "Diding, S.KM",
+      "src": "/assets/SDM/Gizi-Promkes-Surveilans/Diding, S.KM.png"
     }
+    
   ],
   "Perawat": [
     {
@@ -85,16 +86,16 @@
   ],
   "Rekam Medis-Kesehatan Lingkungan-Analis Lab": [
     {
-      "fileName": "Ericha Nurlina Putri, A.Md, A.K",
-      "src": "/assets/SDM/Rekam Medis-Kesehatan Lingkungan-Analis Lab/Ericha Nurlina Putri, A.Md, A.K.png"
-    },
-    {
       "fileName": "Nenden Sopiah, S.Tr",
       "src": "/assets/SDM/Rekam Medis-Kesehatan Lingkungan-Analis Lab/Nenden Sopiah, S.Tr.png"
     },
     {
       "fileName": "Silfa Ahmad Nurbalqis,S.KM",
       "src": "/assets/SDM/Rekam Medis-Kesehatan Lingkungan-Analis Lab/Silfa Ahmad Nurbalqis,S.KM.png"
+    },
+    {
+      "fileName": "Ericha Nurlina Putri, A.Md, A.K",
+      "src": "/assets/SDM/Rekam Medis-Kesehatan Lingkungan-Analis Lab/Ericha Nurlina Putri, A.Md, A.K.png"
     }
   ],
   "Tenaga Penunjang": [
