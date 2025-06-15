@@ -1,12 +1,24 @@
 // src/components/LoginForm.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../contexts/AuthContext';
 import './LoginForm.css';
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
+  
+  const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
     setFormData({ 
@@ -18,22 +30,41 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setSuccess('');
+    setLoading(true);
 
     const { username, password } = formData;
 
-    // 🔍 Query ke tabel 'users' Supabase
-    const { data, error: supabaseError } = await supabase
-      .from('users')
-      .select('*')
-      .eq('username', username)
-      .eq('password', password)
-      .single();
+    try {
+      // 🔍 Query ke tabel 'users' Supabase
+      const { data, error: supabaseError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('username', username)
+        .eq('password', password)
+        .single();
 
-    if (supabaseError || !data) {
-      setError('Username atau password salah.');
-    } else {
-      setSuccess(`Selamat datang, ${data.username}! Role Anda: ${data.role}`);
+      if (supabaseError || !data) {
+        setError('Username atau password salah.');
+      } else {
+        // Login successful - save user data and redirect
+        const userData = {
+          id: data.id,
+          username: data.username,
+          role: data.role,
+          created_at: data.created_at
+        };
+        
+        login(userData);
+        
+        // Show success message briefly before redirect
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
+      }
+    } catch (err) {
+      setError('Terjadi kesalahan saat login. Coba lagi.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,7 +77,9 @@ const LoginForm = () => {
           type="text"
           name="username"
           placeholder="Username"
+          value={formData.username}
           onChange={handleChange}
+          disabled={loading}
           required
         />
 
@@ -54,14 +87,17 @@ const LoginForm = () => {
           type="password"
           name="password"
           placeholder="Password"
+          value={formData.password}
           onChange={handleChange}
+          disabled={loading}
           required
         />
 
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        {success && <p style={{ color: 'green' }}>{success}</p>}
 
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Loading...' : 'Login'}
+        </button>
       </form>
     </div>
   );

@@ -2,8 +2,17 @@ import React from 'react';
 import './Navbar.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Navbar = () => {
+  const { user, logout, isAuthenticated } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    // Optionally redirect to home page after logout
+    window.location.href = '/';
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark shadow-sm">
       <div className="container">
@@ -76,12 +85,41 @@ const Navbar = () => {
             </li>
           </ul>
 
-          {/* Tombol Login di Kanan */}
+          {/* Tombol Login/Logout di Kanan */}
           <div className="navbar-nav navbar-nav-right">
-            <NavLink className="nav-link login-btn" to="/login">
-              <i className="fas fa-user me-2"></i>
-              Login
-            </NavLink>
+            {isAuthenticated ? (
+              <div className="nav-item dropdown">
+                <button
+                  className="nav-link login-btn dropdown-toggle"
+                  id="userDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  style={{ border: 'none', background: 'transparent' }}
+                >
+                  <i className="fas fa-user me-2"></i>
+                  {user?.username}
+                </button>
+                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                  <li>
+                    <span className="dropdown-item-text">
+                      <small>Role: {user?.role}</small>
+                    </span>
+                  </li>
+                  <li><hr className="dropdown-divider" /></li>
+                  <li>
+                    <button className="dropdown-item" onClick={handleLogout}>
+                      <i className="fas fa-sign-out-alt me-2"></i>
+                      Logout
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              <NavLink className="nav-link login-btn" to="/login">
+                <i className="fas fa-user me-2"></i>
+                Login
+              </NavLink>
+            )}
           </div>
         </div>
       </div>
