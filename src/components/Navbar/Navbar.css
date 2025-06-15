@@ -21,6 +21,7 @@
 .navbar .container {
   display: flex; /* Aktifkan flexbox */
   justify-content: space-between;
+  align-items: center;
   width: 100%;
   margin: 0 auto; /* Tengah-kan container di dalam navbar fixed */
   position: relative;
@@ -31,31 +32,47 @@
   font-size: 1.6rem;
   font-weight: bold;
   display: flex;
-  align-items: left;
+  align-items: center;
   color: #ffffff;
   text-decoration: none;
+  flex-shrink: 0; /* Logo tidak akan menyusut */
 }
 
 .navbar-brand img {
   height: 50px; /* Atur tinggi logo secara eksplisit */
   width: auto;
-  /* margin-right: 12px; Ini sudah diatur oleh Bootstrap's me-2 class */
   border-radius: 50%; /* Optional */
-  justify-content: left;
 }
 
-
-.navbar-nav {
-  display: flex; /* Aktifkan flexbox untuk menu */
-  justify-content: right;
+/* NAVBAR COLLAPSE LAYOUT */
+.navbar-collapse {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 30px;
-  margin: 0; 
-  list-style: none;
   width: 100%;
 }
 
+/* MENU NAVIGASI DI TENGAH */
+.navbar-nav-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin: 0;
+  list-style: none;
+  flex: 1; /* Ambil ruang yang tersedia */
+  margin-left: 80px; /* Geser menu ke kanan untuk menciptakan balance */
+  margin-right: 80px; /* Geser menu dari kanan untuk balance */
+}
 
+/* TOMBOL LOGIN DI KANAN */
+.navbar-nav-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+/* STYLING UNTUK NAV LINKS */
 .navbar-nav .nav-link {
   display: flex;
   justify-content: center;
@@ -67,6 +84,7 @@
   text-decoration: none;
   border-radius: 8px;
   transition: background-color 0.3s ease, color 0.3s ease;
+  white-space: nowrap;
 }
 
 .navbar-nav .nav-link:hover {
@@ -80,6 +98,25 @@
   background-color: #15919B !important;
   color: white !important;
   font-weight: 600;
+}
+
+/* STYLING KHUSUS UNTUK TOMBOL LOGIN */
+.login-btn {
+  background-color: #15919B !important;
+  color: white !important;
+  font-weight: 600;
+  border: 2px solid #15919B;
+  padding: 8px 20px !important;
+  border-radius: 25px !important;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: transparent !important;
+  color: #15919B !important;
+  border-color: #15919B;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(21, 145, 155, 0.3);
 }
 
 /* DROPDOWN MENU */
@@ -124,19 +161,34 @@
   .navbar-collapse {
     width: 100%; /* collapse menu ambil lebar penuh */
     margin-top: 10px; /* Jarak dari toggler */
+    flex-direction: column;
   }
 
-  .navbar-nav {
+  .navbar-nav-center {
     flex-direction: column; /* Tumpuk menu secara vertikal */
     width: 100%; /* Ambil lebar penuh */
     gap: 0; /* Hapus gap antar item vertikal */
     align-items: center; /* Tengahkan item vertikal */
+    margin-bottom: 15px;
+    margin-left: 0; /* Reset margin untuk mobile */
+    margin-right: 0; /* Reset margin untuk mobile */
+  }
+
+  .navbar-nav-right {
+    width: 100%;
+    justify-content: center;
+    margin-left: 0;
   }
 
   .navbar-nav .nav-link {
     width: 100%; /* Ambil lebar penuh */
     text-align: center;
     padding: 10px 15px; /* Padding untuk item vertikal */
+  }
+
+  .login-btn {
+    width: auto !important;
+    margin-top: 10px;
   }
 
   .navbar .dropdown-menu {

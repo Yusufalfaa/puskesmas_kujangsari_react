@@ -7,7 +7,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark shadow-sm">
       <div className="container">
-        {/* Logo di paling kiri (sekarang berada di urutan pertama) */}
+        {/* Logo di paling kiri */}
         <NavLink className="navbar-brand" to="/">
           <img
             src={`${process.env.PUBLIC_URL}/logoKujangsari2.png`}
@@ -19,7 +19,6 @@ const Navbar = () => {
         </NavLink>
 
         {/* Tombol Toggler (Hamburger Icon) untuk mobile */}
-        {/* Hapus kelas order-md-X dan order-X dari sini */}
         <button
           className="navbar-toggler"
           type="button"
@@ -33,9 +32,9 @@ const Navbar = () => {
         </button>
 
         {/* Konten Navigasi */}
-        {/* Hapus kelas order-md-X dan order-X dari sini */}
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav"> {/* Biarkan CSS kustom yang mengatur penengahan */}
+          {/* Menu Navigasi di Tengah */}
+          <ul className="navbar-nav navbar-nav-center">
             <li className="nav-item">
               <NavLink className="nav-link" to="/" end>
                 Beranda
@@ -76,6 +75,14 @@ const Navbar = () => {
               </NavLink>
             </li>
           </ul>
+
+          {/* Tombol Login di Kanan */}
+          <div className="navbar-nav navbar-nav-right">
+            <NavLink className="nav-link login-btn" to="/login">
+              <i className="fas fa-user me-2"></i>
+              Login
+            </NavLink>
+          </div>
         </div>
       </div>
     </nav>
