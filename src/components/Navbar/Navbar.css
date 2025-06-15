@@ -9,9 +9,10 @@
 /* NAVBAR CONTAINER UTAMA */
 .navbar {
   position: fixed;
-  top: 0;
+  top: 0 !important; /* KUNCI: Paksa navbar menempel di paling atas */
   z-index: 1000;
   background-color: #213A58 !important;
+  padding: 15px 30px;
   width: 100%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
