@@ -1,4 +1,4 @@
-// src/components/LoginForm.jsx
+// src/pages/Auth/LoginForm.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
@@ -9,6 +9,7 @@ const LoginForm = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   
   const navigate = useNavigate();
   const { login, isAuthenticated } = useAuth();
@@ -16,7 +17,7 @@ const LoginForm = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      navigate('/admin-beranda');
     }
   }, [isAuthenticated, navigate]);
 
@@ -35,7 +36,7 @@ const LoginForm = () => {
     const { username, password } = formData;
 
     try {
-      // 🔍 Query ke tabel 'users' Supabase
+      // Query ke tabel 'users' Supabase
       const { data, error: supabaseError } = await supabase
         .from('users')
         .select('*')
@@ -46,7 +47,7 @@ const LoginForm = () => {
       if (supabaseError || !data) {
         setError('Username atau password salah.');
       } else {
-        // Login successful - save user data and redirect
+        // Login successful - save user data
         const userData = {
           id: data.id,
           username: data.username,
@@ -55,48 +56,72 @@ const LoginForm = () => {
         };
         
         login(userData);
+        setSuccess(true);
         
-        // Show success message briefly before redirect
+        // Show success message and redirect to admin dashboard
         setTimeout(() => {
-          navigate('/');
-        }, 1000);
+          navigate('/admin-beranda');
+        }, 1500);
       }
     } catch (err) {
       setError('Terjadi kesalahan saat login. Coba lagi.');
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
   };
 
+  if (success) {
+    return (
+      <div className="login-container">
+        <div className="login-form">
+          <div className="success-message">
+            <h2>Login Berhasil!</h2>
+            <p>Mengarahkan ke dashboard admin...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="login-container">
       <form className="login-form" onSubmit={handleSubmit}>
-        <h2>Login</h2>
+        <h2>Login Admin</h2>
+        <p className="login-subtitle">Masuk ke panel administrasi</p>
 
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={formData.username}
-          onChange={handleChange}
-          disabled={loading}
-          required
-        />
+        <div className="form-group">
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={formData.username}
+            onChange={handleChange}
+            disabled={loading}
+            required
+          />
+        </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          disabled={loading}
-          required
-        />
+        <div className="form-group">
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            disabled={loading}
+            required
+          />
+        </div>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && (
+          <div className="error-message">
+            <p>{error}</p>
+          </div>
+        )}
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Loading...' : 'Login'}
+        <button type="submit" disabled={loading} className="login-button">
+          {loading ? 'Memproses...' : 'Login'}
         </button>
       </form>
     </div>

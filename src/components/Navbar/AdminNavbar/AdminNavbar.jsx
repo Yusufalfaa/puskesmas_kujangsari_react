@@ -1,8 +1,8 @@
 import React from 'react';
-import './Navbar.css';
+import '../../Navbar/Navbar.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavLink } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
@@ -45,14 +45,14 @@ const Navbar = () => {
           {/* Menu Navigasi di Tengah */}
           <ul className="navbar-nav navbar-nav-center">
             <li className="nav-item">
-              <NavLink className="nav-link" to="/" end>
+              <NavLink className="nav-link" to="/admin-beranda" end>
                 Beranda
               </NavLink>
             </li>
             <li className="nav-item dropdown">
               <NavLink
                 className="nav-link dropdown-toggle"
-                to="/tentangPuskesmas"
+                to="/admin-tentangPuskesmas"
                 id="tentangDropdown"
                 role="button"
                 data-bs-toggle="dropdown"
@@ -62,24 +62,24 @@ const Navbar = () => {
               </NavLink>
               <ul className="dropdown-menu" aria-labelledby="tentangDropdown">
                 <li>
-                  <NavLink className="dropdown-item" to="/tentangPuskesmas">
+                  <NavLink className="dropdown-item" to="/admin-tentangPuskesmas">
                     Profil Puskesmas
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink className="dropdown-item" to="/tenagaKerja">
+                  <NavLink className="dropdown-item" to="/admin-tenagaKerja">
                     Tenaga Kerja
                   </NavLink>
                 </li>
               </ul>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/saranKeluhan" end>
+              <NavLink className="nav-link" to="/admin-saranKeluhan" end>
                 Saran & Keluhan
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/kontak" end>
+              <NavLink className="nav-link" to="/admin-kontak" end>
                 Kontak
               </NavLink>
             </li>

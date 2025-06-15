@@ -1,7 +1,35 @@
-// src/contexts/AuthContext.js
+// src/contexts/AuthContext.jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
+
+// Cookie utilities
+const setCookie = (name, value, days = 7) => {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+  document.cookie = `${name}=${JSON.stringify(value)};expires=${expires.toUTCString()};path=/;secure;samesite=strict`;
+};
+
+const getCookie = (name) => {
+  const nameEQ = name + "=";
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) === 0) {
+      try {
+        return JSON.parse(c.substring(nameEQ.length, c.length));
+      } catch (e) {
+        return null;
+      }
+    }
+  }
+  return null;
+};
+
+const deleteCookie = (name) => {
+  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+};
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -17,21 +45,21 @@ export const AuthProvider = ({ children }) => {
 
   // Check if user is logged in on app load
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
+    const savedUser = getCookie('auth_user');
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      setUser(savedUser);
     }
     setLoading(false);
   }, []);
 
   const login = (userData) => {
     setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
+    setCookie('auth_user', userData, 7); // Cookie expires in 7 days
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
+    deleteCookie('auth_user');
   };
 
   const value = {
