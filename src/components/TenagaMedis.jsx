@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 import './TenagaMedis.css';
 
 const TenagaMedis = () => {
@@ -7,20 +8,60 @@ const TenagaMedis = () => {
   const [popupImage, setPopupImage] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [imageCount, setImageCount] = useState(5);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Ambil data dari sdm-home.json
+  const formatNameWithTitle = (name, degree) => {
+    const lowerName = name?.toLowerCase() || '';
+    const lowerDegree = degree?.toLowerCase() || '';
+
+    if (lowerName.includes('dr.') || lowerName.includes('drg.')) {
+      return degree ? `${name}, ${degree}` : name;
+    }
+
+    if (lowerDegree.includes('dr.') || lowerDegree.includes('drg.')) {
+      const titleMatch = degree.match(/(drg?\.\s*)/i);
+      if (titleMatch) {
+        const title = titleMatch[0].trim();
+        const remainingDegree = degree.replace(title, '').trim();
+        return remainingDegree ? `${title} ${name}, ${remainingDegree}` : `${title} ${name}`;
+      }
+    }
+
+    return degree ? `${name}, ${degree}` : name;
+  };
+
   useEffect(() => {
-    fetch('/assets/sdm-home.json')
-      .then((res) => res.json())
-      .then((data) => {
-        const merged = Object.values(data).flatMap((list) =>
-          list.map((item) => ({
-            src: item.src,
-            caption: item.fileName,
-          }))
-        );
-        setImages(merged);
-      });
+    const fetchTenagaMedis = async () => {
+      try {
+        setLoading(true);
+
+        const { data, error } = await supabase
+          .from('sdm')
+          .select('*')
+          .in('jobdesk', ['Bidan', 'Dokter', 'Dokter Gigi', 'Perawat'])
+          .order('jobdesk', { ascending: true })
+          .order('name', { ascending: true });
+
+        if (error) throw error;
+
+        const formattedData = data.map((item) => ({
+          src: item.profilePictureUrl,
+          caption: formatNameWithTitle(item.name, item.degree),
+          jobdesk: item.jobdesk,
+          id: item.id
+        }));
+
+        setImages(formattedData);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        setError('Gagal memuat data tenaga medis');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTenagaMedis();
   }, []);
 
   useEffect(() => {
@@ -65,32 +106,83 @@ const TenagaMedis = () => {
     setZoomLevel(1);
   };
 
+  if (loading) {
+    return (
+      <div className="tenaga-container">
+        <h2 className="tenaga-title">Tenaga Medis</h2>
+        <div className="tenaga-loading">
+          <p>Memuat data tenaga medis...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="tenaga-container">
+        <h2 className="tenaga-title">Tenaga Medis</h2>
+        <div className="tenaga-error">
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (images.length === 0) {
+    return (
+      <div className="tenaga-container">
+        <h2 className="tenaga-title">Tenaga Medis</h2>
+        <div className="tenaga-empty">
+          <p>Tidak ada data tenaga medis yang tersedia.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="tenaga-container">
       <h2 className="tenaga-title">Tenaga Medis</h2>
       <div className="tenaga-carousel-wrapper">
-        <button onClick={handlePrev} className="tenaga-carousel-button left">{'<'}</button>
+        <button 
+          onClick={handlePrev} 
+          className="tenaga-carousel-button left"
+          disabled={scrollIndex === 0}
+        >
+          {'<'}
+        </button>
         <div className="tenaga-carousel">
           <div
             className="tenaga-carousel-track"
             style={{ transform: `translateX(-${scrollIndex * (100 / imageCount)}%)` }}
           >
             {images.map((img, index) => (
-              <div key={index} className="tenaga-carousel-item">
+              <div key={img.id || index} className="tenaga-carousel-item">
                 <div className="tenaga-card">
                   <img
                     src={img.src}
-                    alt={`Tenaga Medis ${index + 1}`}
+                    alt={`Tenaga Medis ${img.caption}`}
+                    loading="lazy" // ✅ Lazy loading here
                     className="tenaga-carousel-image"
                     onClick={() => setPopupImage(img.src)}
+                    onError={(e) => {
+                      e.target.src = '/assets/placeholder-avatar.png';
+                    }}
                   />
-                  <span className="tenaga-caption">{img.caption}</span>
+                  <span className="tenaga-caption" title={img.caption}>
+                    {img.caption}
+                  </span>
                 </div>
               </div>
             ))}
           </div>
         </div>
-        <button onClick={handleNext} className="tenaga-carousel-button right">{'>'}</button>
+        <button 
+          onClick={handleNext} 
+          className="tenaga-carousel-button right"
+          disabled={scrollIndex >= images.length - imageCount}
+        >
+          {'>'}
+        </button>
       </div>
 
       {popupImage && (
@@ -100,6 +192,7 @@ const TenagaMedis = () => {
             <img
               src={popupImage}
               alt="Popup"
+              loading="lazy"
               className="tenaga-popup-image"
               style={{ transform: `scale(${zoomLevel})` }}
               onWheel={handleWheelZoom}

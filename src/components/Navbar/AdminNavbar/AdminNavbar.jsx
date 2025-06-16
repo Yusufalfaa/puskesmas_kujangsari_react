@@ -17,7 +17,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-dark shadow-sm">
       <div className="container">
         {/* Logo di paling kiri */}
-        <NavLink className="navbar-brand" to="/">
+        <NavLink className="navbar-brand" to="/admin-beranda">
           <img
             src={`${process.env.PUBLIC_URL}/logoKujangsari2.png`}
             alt="Logo Puskesmas Kujangsari"

@@ -121,7 +121,7 @@ const LoginForm = () => {
         )}
 
         <button type="submit" disabled={loading} className="login-button">
-          {loading ? 'Memproses...' : 'Login'}
+          {loading ? 'Loading...' : 'Login'}
         </button>
       </form>
     </div>
