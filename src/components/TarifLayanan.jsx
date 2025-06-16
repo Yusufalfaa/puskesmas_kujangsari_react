@@ -1,15 +1,11 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { supabase } from '../lib/supabase';
 import './TarifLayanan.css';
 
 const TarifPelayanan = () => {
-  const images = [
-    { src: '/assets/tarif1.jpeg', caption: 'Layanan Umum' },
-    { src: '/assets/tarif2.jpeg', caption: 'Layanan Tindakan' },
-    { src: '/assets/tarif3.jpeg', caption: 'Layanan Laboratorium' },
-    { src: '/assets/tarif4.jpeg', caption: 'Layanan Gigi & Mulut' },
-    { src: '/assets/tarif5.jpeg', caption: 'Layanan KIA' },
-  ];
-
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [scrollIndex, setScrollIndex] = useState(0);
   const [popupImage, setPopupImage] = useState(null);
   const [zoom, setZoom] = useState(1);
@@ -20,6 +16,58 @@ const TarifPelayanan = () => {
 
   const imageRef = useRef(null);
   const wrapperRef = useRef(null);
+
+  // Caption mapping tetap sama seperti sebelumnya
+  const captionMapping = {
+    'Tarif-1': 'Layanan Umum',
+    'Tarif-2': 'Layanan Tindakan',
+    'Tarif-3': 'Layanan Laboratorium',
+    'Tarif-4': 'Layanan Gigi & Mulut',
+    'Tarif-5': 'Layanan KIA'
+  };
+
+  // Fungsi untuk mengambil data dari Supabase
+  const fetchTarifData = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('img-assets')
+        .select('*')
+        .eq('assets', 'Tarif Pelayanan')
+        .order('name');
+
+      if (error) {
+        throw error;
+      }
+
+      // Format data sesuai dengan struktur yang dibutuhkan
+      const formattedImages = data.map(item => ({
+        src: item.imgUrl,
+        caption: captionMapping[item.name] || item.name,
+        name: item.name
+      }));
+
+      // Urutkan sesuai dengan urutan yang diinginkan (Tarif-1, Tarif-2, dst)
+      const orderedImages = formattedImages.sort((a, b) => {
+        const aNum = parseInt(a.name.split('-')[1]);
+        const bNum = parseInt(b.name.split('-')[1]);
+        return aNum - bNum;
+      });
+
+      setImages(orderedImages);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching tarif data:', err);
+      setError('Gagal memuat data tarif. Silakan coba lagi.');
+      setImages([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTarifData();
+  }, []);
 
   useEffect(() => {
     const updateImageCount = () => {
@@ -108,9 +156,70 @@ const TarifPelayanan = () => {
     setPosition({ x: 0, y: 0 });
   };
 
+  // Loading state
+  if (loading) {
+    return (
+      <div className="tarif-container">
+        <h2 className="tarif-title">Tarif Pelayanan</h2>
+        <div style={{ textAlign: 'center', padding: '50px' }}>
+          <p>Memuat data tarif...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error && images.length === 0) {
+    return (
+      <div className="tarif-container">
+        <h2 className="tarif-title">Tarif Pelayanan</h2>
+        <div style={{ textAlign: 'center', padding: '50px' }}>
+          <p style={{ color: 'red' }}>{error}</p>
+          <button 
+            onClick={fetchTarifData}
+            style={{ 
+              marginTop: '10px', 
+              padding: '10px 20px', 
+              backgroundColor: '#007bff', 
+              color: 'white', 
+              border: 'none', 
+              borderRadius: '5px',
+              cursor: 'pointer'
+            }}
+          >
+            Coba Lagi
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="tarif-container">
       <h2 className="tarif-title">Tarif Pelayanan</h2>
+      {error && images.length === 0 ? (
+        <div style={{ 
+          backgroundColor: '#f8d7da', 
+          color: '#721c24', 
+          padding: '15px', 
+          borderRadius: '5px', 
+          marginBottom: '20px',
+          textAlign: 'center'
+        }}>
+          {error}
+        </div>
+      ) : error && images.length > 0 ? (
+        <div style={{ 
+          backgroundColor: '#fff3cd', 
+          color: '#856404', 
+          padding: '10px', 
+          borderRadius: '5px', 
+          marginBottom: '20px',
+          textAlign: 'center'
+        }}>
+          Data berhasil dimuat dari database
+        </div>
+      ) : null}
       <div className="tarif-carousel-wrapper">
         <button onClick={handlePrev} className="tarif-carousel-button left">{'<'}</button>
         <div className="tarif-carousel">
@@ -125,6 +234,10 @@ const TarifPelayanan = () => {
                   alt={img.caption}
                   className="tarif-carousel-image"
                   onClick={() => setPopupImage(img.src)}
+                  onError={(e) => {
+                    console.error('Error loading image:', img.src);
+                    e.target.style.display = 'none';
+                  }}
                 />
                 <span className="tarif-caption">{img.caption}</span>
               </div>

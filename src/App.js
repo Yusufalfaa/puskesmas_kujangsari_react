@@ -13,13 +13,15 @@ import SaranKeluhan from './pages/sarankeluhan/SaranKeluhan';
 import TentangPuskesmas from './pages/TentangPuskesmas/TentangPuskesmas';
 import Kontak from './pages/Kontak/Kontak';
 import TenagaKerja from './pages/TenagaKerja/TenagaKerja'
+import Galeri from './pages/Galeri/Galeri';
 import Klaster2Page from './pages/LayananKlaster/klaster-2';
 
 import Admin_Beranda from './pages/Admin/Beranda/Admin_Beranda';
 import Admin_SaranKeluhan from './pages/Admin/sarankeluhan/Admin_SaranKeluhan';
 import Admin_TentangPuskesmas from './pages/Admin/TentangPuskesmas/Admin_TentangPuskesmas';
 import Admin_Kontak from './pages/Admin/Kontak/Admin_Kontak';
-import Admin_TenagaKerja from './pages/Admin/TenagaKerja/Admin_TenagaKerja'
+import Admin_TenagaKerja from './pages/Admin/TenagaKerja/Admin_TenagaKerja';
+import Admin_Galeri from './pages/Admin/Galeri/Admin_Galeri';
 import Admin_Klaster2Page from './pages/Admin/LayananKlaster/klaster-2';
 
 function AppContent() {
@@ -43,6 +45,7 @@ function AppContent() {
         <Route path="/saranKeluhan" element={<SaranKeluhan />} />
         <Route path="/kontak" element={<Kontak />} />
         <Route path="/layanan/:id" element={<h1>Layanan Detail</h1>} />
+        <Route path="/galeri" element={<Galeri />} />
         <Route path="/layanan/klaster-2" element={<Klaster2Page />} />
         
         {/* Protected Admin Routes */}
@@ -91,6 +94,14 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <h1>Admin Layanan Detail</h1>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin-galeri" 
+          element={
+            <ProtectedRoute>
+              <Admin_Galeri />
             </ProtectedRoute>
           } 
         />

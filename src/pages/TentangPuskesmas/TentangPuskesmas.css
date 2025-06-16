@@ -176,3 +176,8 @@ h2 {
 .struktur-organisasi {
     margin-bottom: 100px;
 }
+
+.image-column {
+  padding: 0 40px;
+  position: relative;
+}

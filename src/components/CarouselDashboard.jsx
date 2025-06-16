@@ -9,51 +9,39 @@ const CarouselDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch banner images dari Supabase Storage
+  // Fetch banner images dari tabel img-assets dengan filter assets = 'Banner'
   const fetchBannerImages = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      // Ambil daftar file dari bucket image-asset folder Banner
-      const { data: files, error } = await supabase.storage
-        .from('image-asset')
-        .list('Banner', {
-          limit: 100,
-          offset: 0
-        });
+      // Query data dari tabel img-assets dengan filter assets = 'Banner'
+      const { data: images, error } = await supabase
+        .from('img-assets')
+        .select('*')
+        .eq('assets', 'Banner')
+        .order('created_at', { ascending: true }); // Urutkan berdasarkan created_at
 
       if (error) {
         throw error;
       }
 
-      if (files && files.length > 0) {
-        // Filter hanya file gambar
-        const imageFiles = files.filter(file => 
-          file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i)
-        );
+      if (images && images.length > 0) {
+        // Format data untuk carousel
+        const formattedImages = images.map((image, index) => ({
+          id: image.id,
+          name: image.name,
+          url: image.imgUrl, // Menggunakan imgUrl dari database
+          alt: `Banner ${image.name}` || `Banner ${index + 1}`
+        }));
 
-        // Generate URL untuk setiap gambar
-        const imagesWithUrls = imageFiles.map((file, index) => {
-          const { data } = supabase.storage
-            .from('image-asset')
-            .getPublicUrl(`Banner/${file.name}`);
-          
-          return {
-            id: file.id || `banner-${index}`,
-            name: file.name,
-            url: data.publicUrl,
-            alt: `Banner ${index + 1}`
-          };
-        });
-
-        setBannerImages(imagesWithUrls);
+        setBannerImages(formattedImages);
       } else {
         setError('Tidak ada gambar banner yang ditemukan');
       }
     } catch (error) {
       console.error('Error fetching banner images:', error);
-      setError('Gagal memuat gambar banner');
+      setError('Gagal memuat gambar banner: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -103,7 +91,7 @@ const CarouselDashboard = () => {
     return (
       <div className="carousel-empty-container">
         <div className="d-flex justify-content-center align-items-center" style={{ height: '400px' }}>
-          <p className="text-muted">Tidak ada gambar banner</p>
+          <p className="text-muted">Tidak ada gambar banner untuk ditampilkan</p>
         </div>
       </div>
     );
@@ -126,6 +114,10 @@ const CarouselDashboard = () => {
             onError={(e) => {
               // Fallback image jika gagal load
               e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI0MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNjAwIiB5PSIyMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzZiNzI4MCI+R2FnYWwgTWVtdWF0IEJhbm5lcjwvdGV4dD48L3N2Zz4=';
+            }}
+            style={{
+              height: '400px', // Sesuaikan tinggi sesuai kebutuhan
+              objectFit: 'cover' // Memastikan gambar terpotong dengan baik
             }}
           />
         </Carousel.Item>
