@@ -8,6 +8,7 @@
   padding: 40px 100px;
   flex-wrap: wrap;
   gap: 30px;
+  position: relative;
 }
 
 .petugas-box,
@@ -17,8 +18,64 @@
   padding: 20px;
 }
 
+/* Header dengan tombol settings */
+.header-with-settings {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.header-with-settings h3 {
+  margin: 0;
+}
+
+/* Tombol settings */
+.settings-btn {
+  background-color: #ff4444;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.settings-btn:hover {
+  background-color: #cc3333;
+  transform: scale(1.1);
+}
+
+.settings-btn:active {
+  transform: scale(0.95);
+}
+
+/* Garis pembatas horizontal */
+.divider {
+  width: 100%;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.3);
+  margin: 15px 0 20px 0;
+}
+
+/* Garis pembatas vertikal di tengah */
+.vertical-divider {
+  width: 2px;
+  background-color: rgba(255, 255, 255, 0.3);
+  margin: 0 15px;
+}
+
+/* Hapus rule yang menyebabkan masalah */
 .jadwal-box h3 {
-  margin-bottom: 47px;
+  margin-bottom: 10px;
+}
+
+.petugas-box h3 {
+  margin-bottom: 10px;
 }
 
 h3 {
@@ -79,4 +136,21 @@ li {
   padding: 10px 15px; /* Tambah padding kanan dan atas-bawah */
   margin: 30px -15px; /* Margin negatif kanan untuk extend ke luar */
   border-radius: 3px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .jadwal-container {
+    flex-direction: column;
+    padding: 20px 30px;
+  }
+  
+  .vertical-divider {
+    display: none;
+  }
+  
+  .petugas-box,
+  .jadwal-box {
+    min-width: auto;
+  }
 }

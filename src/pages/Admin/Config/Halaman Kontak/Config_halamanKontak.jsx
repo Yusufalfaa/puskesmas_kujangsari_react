@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../../lib/supabase';
-import './Config_Kontak.css';
 import { FaEdit, FaSave, FaTimes, FaPlus, FaTrash, FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
@@ -165,9 +164,12 @@ const Config_Kontak = () => {
       {/* Header */}
       <div className="config-header">
         <div className="header-left">
-          <button className="back-button" onClick={handleBack}>
-            <FaArrowLeft />
-          </button>
+          <button className="back-btn" onClick={() => navigate(-1)}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          Kembali
+        </button>
           <h1>Konfigurasi Kontak</h1>
         </div>
         <button 

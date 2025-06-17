@@ -25,8 +25,10 @@ import Admin_TenagaKerja from './pages/Admin/TenagaKerja/Admin_TenagaKerja';
 import Admin_Galeri from './pages/Admin/Galeri/Admin_Galeri';
 import Admin_Klaster2Page from './pages/Admin/LayananKlaster/klaster-2';
 
-import Config_HalamanKontak from './pages/Admin/Config/Halaman Kontak/Config_Kontak';
+import Config_HalamanKontak from './pages/Admin/Config/Halaman Kontak/Config_halamanKontak';
 import Config_Kontak from './pages/Admin/Config/Semua Kontak/Config_Kontak';
+import Config_PetugasKesehatan from './pages/Admin/Config/Petugas Kesehatan/Config_petugasKesehatan';
+import Config_WaktuPelayanan from './pages/Admin/Config/Waktu Pelayanan/Config_waktuPelayanan';
 
 function AppContent() {
   const location = useLocation();
@@ -135,6 +137,22 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Config_Kontak />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin-config-petugasKesehatan" 
+          element={
+            <ProtectedRoute>
+              <Config_PetugasKesehatan />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin-config-waktuPelayanan" 
+          element={
+            <ProtectedRoute>
+              <Config_WaktuPelayanan />
             </ProtectedRoute>
           } 
         />
