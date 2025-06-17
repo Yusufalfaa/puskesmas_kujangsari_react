@@ -1,37 +1,161 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../../../lib/supabase';
 import './Kontak.css';
-import { FaWhatsapp, FaInstagram, FaPhoneAlt } from 'react-icons/fa';
+import { FaWhatsapp, FaInstagram, FaPhoneAlt, FaCog } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate untuk navigasi
+
+// Konfigurasi Supabase
 
 const Kontak = () => {
+  const [contacts, setContacts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Hook untuk navigasi
+
+  // Fetch data kontak dari Supabase (hanya WhatsApp, Instagram, Phone)
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from('contacts')
+          .select('*')
+          .in('contact_type', ['WhatsApp', 'Instagram', 'Phone'])
+          .order('created_at', { ascending: true });
+
+        if (error) {
+          throw error;
+        }
+
+        setContacts(data || []);
+      } catch (err) {
+        console.error('Error fetching contacts:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContacts();
+  }, []);
+
+  // Fungsi untuk navigasi ke halaman admin config kontak
+  const handleSettingsClick = () => {
+    navigate('/admin-config-kontak');
+  };
+
+  // Mengelompokkan kontak berdasarkan contact_type
+  const groupedContacts = contacts.reduce((acc, contact) => {
+    const type = contact.contact_type;
+    if (!acc[type]) {
+      acc[type] = [];
+    }
+    acc[type].push(contact);
+    return acc;
+  }, {});
+
+  // Fungsi untuk mendapatkan icon berdasarkan contact_type
+  const getContactIcon = (contactType) => {
+    const type = contactType.toLowerCase();
+    switch (type) {
+      case 'whatsapp':
+        return <FaWhatsapp size={92} />;
+      case 'instagram':
+        return <FaInstagram size={92} />;
+      case 'phone':
+        return <FaPhoneAlt size={92} />;
+      default:
+        return <FaPhoneAlt size={92} />;
+    }
+  };
+
+  // Fungsi untuk mendapatkan link berdasarkan contact_type dan value
+  const getContactLink = (contactType, value) => {
+    const type = contactType.toLowerCase();
+    switch (type) {
+      case 'whatsapp':
+        const whatsappNumber = value.replace(/[^\d+]/g, '');
+        return `https://wa.me/${whatsappNumber}`;
+      case 'phone':
+        const phoneNumber = value.replace(/[^\d]/g, '');
+        return `tel:${phoneNumber}`;
+      case 'instagram':
+        const username = value.startsWith('@') ? value.substring(1) : value;
+        return `https://instagram.com/${username}`;
+      default:
+        return '#';
+    }
+  };
+
+  // Fungsi untuk menentukan apakah link harus dibuka di tab baru
+  const shouldOpenInNewTab = (contactType) => {
+    const type = contactType.toLowerCase();
+    return ['whatsapp', 'instagram'].includes(type);
+  };
+
+  // Urutan tampilan kontak
+  const displayOrder = ['WhatsApp', 'Instagram', 'Phone'];
+
   return (
     <div>
       <div className="banner">
+        {/* Tombol Settings di pojok kanan atas */}
+        <div className="settings-container">
+          <button 
+            className="settings-button"
+            onClick={handleSettingsClick}
+            title="Konfigurasi Kontak"
+          >
+            <FaCog size={24} />
+          </button>
+        </div>
+        
         <h1>KONTAK KAMI</h1>
         <p>Anda dapat menghubungi kami melalui kontak di bawah ini.</p>
       </div>
       
       <div className="content">
+        {loading && (
+          <div className="loading-container">
+            <p>Loading Kontak...</p>
+          </div>
+        )}
 
-      <a href="https://wa.me/+6282129690500" target="_blank" rel="noopener noreferrer">
-        <div className="contact-box">
-          <FaWhatsapp size={92} />
-          <p>+62 82129690500</p>
-        </div>
-      </a>
+        {error && (
+          <div className="error-container">
+            <p>Error loading contacts: {error}</p>
+          </div>
+        )}
 
-      <a href="https://instagram.com/uptd_puskesmaskujangsari" target="_blank" rel="noopener noreferrer">
-        <div className="contact-box">
-          <FaInstagram size={92}/>
-          <p>@uptd_puskesmaskujangsari</p>
-        </div>
-      </a>
+        {!loading && !error && (
+          <>
+            {displayOrder.map((contactType) => {
+              const contactList = groupedContacts[contactType];
+              if (!contactList || contactList.length === 0) return null;
 
-      <a href="tel:02287504989">
-        <div className="contact-box">
-          <FaPhoneAlt size={92}/>
-          <p>(022) 87504989</p>
-        </div>
-      </a>
+              // Jika ada multiple contacts dengan tipe yang sama, tampilkan yang pertama
+              // Atau bisa dimodifikasi untuk menampilkan semua
+              const primaryContact = contactList[0];
+
+              return (
+                <a
+                  key={contactType}
+                  href={getContactLink(primaryContact.contact_type, primaryContact.value)}
+                  target={shouldOpenInNewTab(primaryContact.contact_type) ? "_blank" : "_self"}
+                  rel={shouldOpenInNewTab(primaryContact.contact_type) ? "noopener noreferrer" : undefined}
+                >
+                  <div className="contact-box">
+                    {getContactIcon(primaryContact.contact_type)}
+                    <p>{primaryContact.value}</p>
+                    {contactList.length > 1 && (
+                      <span className="multiple-indicator">+{contactList.length - 1} more</span>
+                    )}
+                  </div>
+                </a>
+              );
+            })}
+          </>
+        )}
       </div>
 
       <h2>Lokasi Puskesmas Kujangsari</h2>
@@ -46,7 +170,6 @@ const Kontak = () => {
           ></iframe>
         </div>
       </div>
-
     </div>
   );
 };

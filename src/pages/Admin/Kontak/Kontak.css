@@ -10,6 +10,7 @@
     flex-direction: column;
     justify-content: center;
     text-align: left;
+    position: relative; /* Tambahkan ini untuk positioning tombol settings */
 }
 
 .banner h1 {
@@ -21,6 +22,42 @@
 .banner p {
     font-size: 24px;
     font-family: 'Epilogue', sans-serif;
+}
+
+/* Container untuk tombol settings */
+.settings-container {
+  position: absolute;
+  top: 20px;
+  right: 120px; /* Sesuaikan dengan padding banner */
+  z-index: 10;
+}
+
+/* Styling untuk tombol settings */
+.settings-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.settings-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: rotate(90deg);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.settings-button:active {
+  transform: rotate(90deg) scale(0.95);
 }
 
 /* Konten */
@@ -65,6 +102,14 @@
       padding: 40px 40px;
       gap: 40px;
     }
+    
+    .banner {
+      padding: 0px 40px;
+    }
+    
+    .settings-container {
+      right: 40px;
+    }
   }
   
   @media (max-width: 768px) {
@@ -73,6 +118,25 @@
       align-items: center;
       padding: 20px;
       gap: 30px;
+    }
+    
+    .banner {
+      padding: 0px 20px;
+    }
+    
+    .settings-container {
+      top: 15px;
+      right: 20px;
+    }
+    
+    .settings-button {
+      width: 45px;
+      height: 45px;
+    }
+    
+    .settings-button svg {
+      width: 20px;
+      height: 20px;
     }
   }
   
@@ -98,5 +162,3 @@
     height: 100%;
     border: 0;
   }
-  
-  
