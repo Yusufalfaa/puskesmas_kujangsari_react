@@ -16,10 +16,10 @@ const Beranda = () => {
 
           <div className="layanan-banner bg1">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 2</div>
           <div className="layanan-grid">
-            <NavLink to="/layanan/1" className="layanan-box">
+            <NavLink to="/layanan/klaster-2-1" className="layanan-box">
               Pelayanan Kesehatan bagi ibu hamil, bersalin, dan nifas
             </NavLink>
-            <NavLink to="/layanan/2" className="layanan-box">
+            <NavLink to="/layanan/klaster-2-2" className="layanan-box">
               Pelayanan Kesehatan bagi anak balita dan anak prasekolah
             </NavLink>
             <NavLink to="/layanan/3" className="layanan-box">
