@@ -8,7 +8,7 @@ import './Beranda.css';
 
 const Beranda = () => {
   return (
-    <div>
+    <div className="beranda-page-wrapper"> {/* Pastikan wrapper ini ada dan berfungsi */}
       <CarouselDashboard />
       <div className="beranda-content">
         <section className="layanan-section">
@@ -16,49 +16,50 @@ const Beranda = () => {
 
           <div className="layanan-banner bg1">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 2</div>
           <div className="layanan-grid">
-            <NavLink to="/layanan/klaster-2-1" className="layanan-box">
+            {/* NavLink ini akan menuju LayananKlasterPage untuk klaster-2 */}
+            {/* ID klaster 'klaster-2' akan diteruskan sebagai parameter */}
+            <NavLink to="/layanan/klaster/klaster-2" className="layanan-box">
               Pelayanan Kesehatan bagi ibu hamil, bersalin, dan nifas
             </NavLink>
-            <NavLink to="/layanan/klaster-2-2" className="layanan-box">
+            {/* Untuk layanan lain di klaster 2 yang merupakan sub-kategori, tetap arahkan ke klaster-2 */}
+            <NavLink to="/layanan/klaster/klaster-2" className="layanan-box">
               Pelayanan Kesehatan bagi anak balita dan anak prasekolah
             </NavLink>
-            <NavLink to="/layanan/3" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-2" className="layanan-box">
               Pelayanan Kesehatan bagi anak usia sekolah dan remaja
             </NavLink>
           </div>
 
           <div className="layanan-banner bg2">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 3</div>
           <div className="layanan-grid">
-            <NavLink to="/layanan/4" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-3" className="layanan-box">
               Pelayanan Kesehatan bagi usia dewasa
             </NavLink>
-            <NavLink to="/layanan/5" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-3" className="layanan-box">
               Pelayanan Kesehatan bagi Lanjut Usia
             </NavLink>
           </div>
 
           <div className="layanan-banner bg3">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 4</div>
           <div className="layanan-grid">
-            <NavLink to="/layanan/6" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-4" className="layanan-box">
               Pencegahan, Kewaspadaan Dini dan Respon
             </NavLink>
-            <NavLink to="/layanan/7" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-4" className="layanan-box">
               Pengawasan kualitas lingkungan
             </NavLink>
           </div>
 
           <div className="layanan-banner bg4">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 5</div>
           <div className="layanan-grid-last">
-            <NavLink to="/layanan/13" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-5" className="layanan-box">
               Pelayanan gawat darurat, rawat inap, kefarmasian, dan laboratorium.
             </NavLink>
           </div>
         </section>
 
         <JadwalPelayanan />
-
         <TarifPelayanan />
-
         <TenagaMedis />
       </div>
     </div>

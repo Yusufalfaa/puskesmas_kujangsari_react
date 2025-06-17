@@ -1,21 +1,50 @@
 /* src/components/CarouselDashboard.css */
-.carousel-item img {
+
+.carousel-dashboard-container {
+  /* Tinggi dan lebar akan ditentukan di Beranda.css untuk overall layout */
+  width: 100%; 
+  height: 100%; /* Pastikan kontainer ini mengambil tinggi dari parent */
+  overflow: hidden;
+}
+
+/* Gaya untuk komponen react-bootstrap Carousel */
+.carousel {
   width: 100%;
-  height: 100%;
-  max-height: auto;
-  object-fit: cover;
-  object-position: center;
+  height: 100%; /* Ambil tinggi dari .carousel-dashboard-container */
+}
+
+/* Gaya untuk setiap item di dalam Carousel */
+.carousel-item {
+  width: 100%;
+  height: 100%; /* Ambil tinggi dari .carousel */
+  display: flex; /* Gunakan flexbox untuk menengahkan gambar jika perlu */
+  justify-content: center;
+  align-items: center;
+}
+
+/* Gaya untuk gambar di dalam Carousel.Item */
+.carousel-image-custom { /* <--- KELAS BARU UNTUK GAMBAR */
+  width: 100%;
+  height: 100%; /* <--- KUNCI: Gambar mengambil tinggi penuh dari item */
+  object-fit: cover; /* <--- KUNCI: Penuhi area tanpa distorsi (potong jika perlu) */
+  object-position: center; /* Pusat gambar jika dipotong */
   display: block;
 }
 
-@media (max-width: 768px) {
-  .carousel-item img {
-    max-height: 300px;
-  }
+/* Gaya untuk panah navigasi */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
 }
 
-@media (max-width: 480px) {
-  .carousel-item img {
-    max-height: 200px;
-  }
+.carousel-indicators [data-bs-target] {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+}
+
+.carousel-indicators .active {
+  background-color: #fff;
 }

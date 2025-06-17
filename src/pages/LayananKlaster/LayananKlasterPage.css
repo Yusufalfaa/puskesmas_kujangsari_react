@@ -1,0 +1,66 @@
+.klaster-page-container {
+  padding-top: 60px; /* Sesuaikan dengan tinggi navbar */
+  padding-left: 30px;
+  padding-right: 30px;
+  min-height: calc(100vh - 100px);
+  box-sizing: border-box;
+  text-align: center;
+}
+.klaster-page-container .main-title {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #213A58;
+  font-weight: bold;
+}
+.klaster-page-container .subtitle {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 40px;
+}
+.layanan-subkategori-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ukuran kotak sub-kategori */
+  gap: 30px;
+  padding: 20px 0;
+  justify-content: center;
+}
+.layanan-subkategori-box {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 150px;
+  text-decoration: none;
+  color: #000;
+  font-weight: 550;
+  transition: transform 0.2s ease;
+}
+.layanan-subkategori-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+.layanan-subkategori-box h3 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  color: #213A58;
+}
+.subkategori-box-banner {
+  background-color: #00bcd4; /* Warna banner bawah */
+  color: #fff;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+    .layanan-subkategori-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}

@@ -23,6 +23,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  height: 75px;;
   margin: 0 auto; /* Tengah-kan container di dalam navbar fixed */
   position: relative;
 }
