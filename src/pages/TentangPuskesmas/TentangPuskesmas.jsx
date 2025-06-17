@@ -282,9 +282,20 @@ const TentangPuskesmas = () => {
                 <p>
                   Puskesmas Kujangsari berdiri sejak tahun 1989. Awal berdiri Puskesmas Kujangsari bernama Puskesmas Buah Batu dan berlokasi di Pasar Kordon. Sejak tahun 2004 Puskesmas pindah ke Jl. Terusan Buah Batu No. 314 dan pada tahun 2008 berganti nama menjadi Puskesmas Kujangsari.
                   <br /><br />
-                  Wilayah kerja kami terdiri dari Kelurahan Kujangsari dan Batununggal. Luas wilayah kami yaitu 600,098 Ha, dengan 313,76 Ha luas wilayah daerah binaan.
-                  <br /><br />
-                  Puskesmas kami menyediakan Pelayanan Rawat Jalan dalam Gedung Upaya Kesehatan Perseorangan (UKP) dan Pelayanan Luar Gedung (Upaya Kesehatan Masyarakat). Sejak September tahun 2024 kami menyelenggarakan Integrasi Layanan Primer (ILP) yang mendukung terlayaninya kesehatan seluruh masyarakat berdasarkan siklus hidup.
+                  Wilayah kerja kami terdiri dari Kelurahan Kujangsari dan Batununggal. Luas wilayah kami yaitu 600,098 Ha, dengan 313,76 Ha luas wilayah daerah binaan. Puskesmas Kami berbatasan dengan:
+                  <br />
+                  Utara : Kecamatan Lengkong<br />
+                  Selatan : Kabupaten bandung<br />
+                  Barat : Kelurahan Mengger<br />
+                  Timur : Kecamatan Buah Batu.<br />
+                  <br />
+                  Puskesmas kami menyediakan Pelayanan Rawat Jalan dalam Gedung Upaya Kesehatan Perseorangan (UKP) dan Pelayanan Luar Gedung (Upaya Kesehatan Masyarakat). Sejak September tahun 2024 kami menyelenggarakan Integrasi Layanan Primer (ILP) yang mendukung terlayaninya kesehatan seluruh masyarakat berdasarkan siklus hidup. Pelayanan kami terdiri dari:
+                  <br />
+                  1.Klaster 1 Manajemen<br />
+                  2.Klaster 2 Pelayanan Ibu dan anak<br />
+                  3.Klaster 3 Pelayanan Dewasa lansia<br />
+                  4.Klaster 4 Pelayanan Penanggulangan Penyakit Menular dan Kesehatan Lingkungan<br />
+                  5.Lintas Klaster (Pelayanan Gigi Mulut, Lab, Farmasi, Gawat Darurat)<br />
                 </p>
               </Col>
               <Col md={6} className="image-column">

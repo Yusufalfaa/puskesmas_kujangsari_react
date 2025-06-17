@@ -17,13 +17,19 @@ const Beranda = () => {
           <div className="layanan-banner bg1">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 2</div>
           <div className="layanan-grid">
             <NavLink to="/layanan/klaster/klaster-2/ibu-hamil" className="layanan-box">
-              Pelayanan Kesehatan bagi ibu hamil, bersalin, dan nifas
+              Pemeriksaan Ibu Hamil
             </NavLink>
             <NavLink to="/layanan/klaster/klaster-2/anak-balita-prasekolah" className="layanan-box">
-              Pelayanan Kesehatan bagi anak balita dan anak prasekolah
+              Pelayanan Imunisasi Bayi
             </NavLink>
             <NavLink to="/layanan/klaster/klaster-2/anak-usia-sekolah-remaja" className="layanan-box">
-              Pelayanan Kesehatan bagi anak usia sekolah dan remaja
+              Pelayanan USG
+            </NavLink>
+            <NavLink to="/layanan/klaster/klaster-2/anak-usia-sekolah-remaja" className="layanan-box">
+              Pelayanan Pemeriksaan Anak 0-5 Tahun
+            </NavLink>
+            <NavLink to="/layanan/klaster/klaster-2/anak-usia-sekolah-remaja" className="layanan-box">
+              Pelayanan Anak dan Remaja
             </NavLink>
           </div>
 
@@ -47,7 +53,7 @@ const Beranda = () => {
             </NavLink>
           </div>
 
-          <div className="layanan-banner bg4">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 5</div>
+          <div className="layanan-banner bg4">Layanan Lintas Klaster</div>
           <div className="layanan-grid-last">
             <NavLink to="/layanan/klaster/klaster-5/penunjang-medis" className="layanan-box">
               Pelayanan gawat darurat, rawat inap, kefarmasian, dan laboratorium.
