@@ -15,7 +15,7 @@ const Beranda = () => {
           <h2>Layanan Kami</h2>
 
           <div className="layanan-banner bg1">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 1</div>
-          <div className="layanan-grid">
+          <div className="layanan-grid-item">
             <NavLink to="/layanan/klaster/klaster-2/ibu-hamil" className="layanan-box">
               Pendaftaran
             </NavLink>

@@ -58,6 +58,15 @@ body {
   justify-content: center;
 }
 
+.layanan-grid-item {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 400px)); 
+  gap: 40px;
+  width: 60%;
+  margin: 40px auto;
+  justify-content: center;
+}
+
 .layanan-box {
   background-color: #f8f9fa;
   padding: 20px;
