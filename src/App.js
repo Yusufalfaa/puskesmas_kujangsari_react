@@ -16,6 +16,8 @@ import Kontak from './pages/Kontak/Kontak';
 import TenagaKerja from './pages/TenagaKerja/TenagaKerja'
 import Galeri from './pages/Galeri/Galeri';
 import LayananSubDetailPage from './pages/LayananKlaster/LayananSubDetailPage';
+import FloatingWhatsAppIcon from './components/FloatingWhatsAppIcon/FloatingWhatsAppIcon';
+
 
 import Admin_Beranda from './pages/Admin/Beranda/Admin_Beranda';
 import Admin_SaranKeluhan from './pages/Admin/sarankeluhan/Admin_SaranKeluhan';
@@ -158,6 +160,13 @@ function AppContent() {
       
       {/* Conditional Footer - Show AdminFooter for admin routes only if authenticated, regular Footer for public routes */}
       {(isAdminRoute && isAuthenticated ? <AdminFooter /> : <Footer />)}
+       
+      {!isLoginPage && (
+        isAdminRoute && isAuthenticated ? <AdminFooter /> : <Footer />
+      )}
+      {!isLoginPage && !isAdminRoute && (
+        <FloatingWhatsAppIcon/>
+      )}
     </div>
   );
 }

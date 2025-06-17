@@ -114,3 +114,161 @@ body {
   margin: 40px;
   text-align: center;
 }
+
+.video-placeholder-container {
+  text-align: center;
+  padding: 60px 0; 
+  background-color: #f0f2f5; 
+  margin-top: 40px; 
+  border-radius: 8px;
+  overflow: hidden; 
+}
+
+.video-title {
+  font-size: 2rem;
+  color: #213A58;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.video-player {
+  width: 80%; 
+  max-width: 800px; 
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 auto; 
+}
+
+.video-description {
+  font-size: 1rem;
+  color: #555;
+  margin-top: 20px;
+  max-width: 700px; 
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .video-placeholder-container {
+    padding: 40px 0;
+    margin-top: 30px;
+  }
+  .video-title {
+    font-size: 1.8rem;
+  }
+  .video-player {
+    width: 90%;
+  }
+  .video-description {
+    font-size: 0.9rem;
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .video-title {
+    font-size: 1.5rem;
+  }
+  .video-player {
+    width: 95%;
+  }
+}
+
+/* GAYA UNTUK PLACEHOLDER VIDEO */
+.video-placeholder-container {
+  text-align: center;
+  padding: 60px 0; 
+  background-color: #f0f2f5; 
+  margin-top: 40px; 
+  border-radius: 8px;
+  overflow: hidden; 
+}
+
+.video-title {
+  font-size: 2rem;
+  color: #213A58;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.video-player { /* <--- SESUAIKAN GAYA INI UNTUK IFRAME */
+  width: 80%; /* Lebar video relatif terhadap parent */
+  max-width: 800px; /* Lebar maksimum video */
+  aspect-ratio: 16 / 9; /* <--- KUNCI: Pertahankan rasio aspek 16:9 (lebar/tinggi) */
+  height: auto; /* Memungkinkan tinggi menyesuaikan aspek */
+  border: none; /* Hapus border default iframe */
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 auto; /* Tengahkan video */
+}
+
+.video-description {
+  font-size: 1rem;
+  color: #555;
+  margin-top: 20px;
+  max-width: 700px; 
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+/* Media Queries untuk Video Player */
+@media (max-width: 768px) {
+  .video-placeholder-container {
+    padding: 40px 0;
+    margin-top: 30px;
+  }
+  .video-title {
+    font-size: 1.8rem;
+  }
+  .video-player {
+    width: 90%; /* Lebih lebar di tablet */
+    /* Jika menggunakan padding-bottom trick, sesuaikan padding-bottom */
+  }
+  .video-description {
+    font-size: 0.9rem;
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .video-title {
+    font-size: 1.5rem;
+  }
+  .video-player {
+    width: 95%; /* Lebih lebar di mobile */
+    /* Jika menggunakan padding-bottom trick, sesuaikan padding-bottom */
+  }
+}
+
+.video-separator {
+  width: 50%; /* Lebar pemisah (misal: setengah lebar container video) */
+  max-width: 400px; /* Lebar maksimum pemisah */
+  height: 2px; /* Tinggi atau ketebalan garis pemisah */
+  background-color: #ccc; /* Warna garis pemisah */
+  margin: 40px auto; /* Jarak atas dan bawah dari video, dan tengahkan */
+  border-radius: 2px; /* Sedikit membulatkan sudut garis */
+}
+
+/* ... (Sisa gaya Beranda.css Anda) ... */
+
+/* Media Queries untuk Video Player */
+@media (max-width: 768px) {
+  /* ... (gaya media query video yang sudah ada) ... */
+  .video-separator {
+    margin: 30px auto; /* Kurangi margin di mobile */
+    width: 60%; /* Sesuaikan lebar pemisah di mobile */
+  }
+}
+
+@media (max-width: 576px) {
+  /* ... (gaya media query video yang sudah ada) ... */
+  .video-separator {
+    margin: 20px auto; /* Kurangi margin lebih lanjut di layar kecil */
+    width: 70%; /* Sesuaikan lebar pemisah di layar sangat kecil */
+  }
+}

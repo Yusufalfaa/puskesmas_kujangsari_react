@@ -21,7 +21,12 @@ const SaranKeluhan = () => {
           Silakan sampaikan saran dan masukan Anda melalui tautan berikut:
         </p>
         
-        <button className="btn-saran">Saran dan Keluhan Puskesmas Kujangsari</button>
+        <button
+          className="btn-saran"
+          onClick={() => window.open('https://bit.ly/IKM_KUJANGSARI', '_blank', 'noopener noreferrer')}
+        >
+          Saran dan Keluhan Puskesmas Kujangsari
+        </button>
 
         <p>
           Terima kasih atas partisipasi dan perhatian Anda. Masukan yang diberikan akan kami tindak lanjuti demi perbaikan layanan yang berkelanjutan.
