@@ -13,7 +13,7 @@ const layananData = {
         detailItems: [
           {
             id: 'persalinan',
-            imageUrl: `${process.env.PUBLIC_URL}/assets/icons/layanan_persalinan.png`, // Ganti dengan path ikon Anda
+            imageUrl: `${process.env.PUBLIC_URL}https://nursing.nyu.edu/sites/default/files/inline-images/1738104083176.jpg`, // Ganti dengan path ikon Anda
             title: 'Unit Pelayanan Persalinan',
             subtitle: 'Unit Pelayanan Persalinan',
             description: 'Menyediakan layanan persalinan yang aman dan nyaman dengan fasilitas lengkap.'

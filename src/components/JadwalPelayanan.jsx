@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< HEAD
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
 import './JadwalPelayanan.css';
+=======
+import { supabase } from '../lib/supabase'; // Sesuaikan path jika berbeda
+import './JadwalPelayanan.css'; // Pastikan CSS ini diimpor
+>>>>>>> e6a026531418280e592f44a0ce15f5b6f4be21f4
 
 const JadwalPelayanan = () => {
   const [petugasHariIni, setPetugasHariIni] = useState([]);
@@ -115,6 +120,7 @@ const JadwalPelayanan = () => {
   return (
     <div className="jadwal-container">
       <div className="petugas-box">
+<<<<<<< HEAD
         <div className="header-with-settings">
           <h3>Petugas Kesehatan</h3>
           <button className="settings-btn" onClick={handlePetugasConfig} title="Konfigurasi Petugas Kesehatan">
@@ -126,6 +132,11 @@ const JadwalPelayanan = () => {
         </div>
         <div className="divider"></div>
         <p><strong>Hari Ini: {tanggalHariIni}</strong></p>
+=======
+        <h3>Petugas Kesehatan</h3>
+        {/* Tambahkan kelas .jadwal-text agar gaya p spesifik */}
+        <p className="jadwal-text"><strong>Hari Ini: {tanggalHariIni}</strong></p>
+>>>>>>> e6a026531418280e592f44a0ce15f5b6f4be21f4
         {petugasHariIni.length > 0 ? (
           <ul>
             {petugasHariIni.map((petugas, index) => (
@@ -141,7 +152,8 @@ const JadwalPelayanan = () => {
             ))}
           </ul>
         ) : (
-          <p>Tidak ada petugas yang bertugas hari ini.</p>
+          // Tambahkan kelas .jadwal-text di sini juga
+          <p className="jadwal-text">Tidak ada petugas yang bertugas hari ini.</p>
         )}
       </div>
 
@@ -170,7 +182,8 @@ const JadwalPelayanan = () => {
             ))}
           </ul>
         ) : (
-          <p>Jadwal pelayanan tidak tersedia.</p>
+          // Tambahkan kelas .jadwal-text di sini juga
+          <p className="jadwal-text">Jadwal pelayanan tidak tersedia.</p>
         )}
       </div>
     </div>

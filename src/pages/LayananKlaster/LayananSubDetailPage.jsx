@@ -1,13 +1,13 @@
 // src/pages/LayananKlaster/LayananSubDetailPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import GridItem from '../../components/GridItem/GridItem'; // Re-use GridItem
-import Modal from '../../components/Modal/Modal';       // Re-use Modal
-import layananData from '../../data/layananData'; // Import data hirarkis
-import './LayananSubDetailPage.css'; // Gaya untuk halaman detail sub-layanan
+import GridItem from '../../components/GridItem/GridItem';
+import Modal from '../../components/Modal/Modal';
+import layananData from '../../data/layananData';
+import './LayananSubDetailPage.css'; 
 
 const LayananSubDetailPage = () => {
-  const { klasterId, subLayananId } = useParams(); // Ambil kedua parameter dari URL
+  const { klasterId, subLayananId } = useParams(); 
   const navigate = useNavigate();
 
   const [subLayananInfo, setSubLayananInfo] = useState(null);
@@ -15,18 +15,16 @@ const LayananSubDetailPage = () => {
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    // Cari data klaster utama
     const klaster = layananData[klasterId];
     if (klaster) {
-      // Cari sub-kategori di dalamnya
       const subKategori = klaster.subKategoris.find(sub => sub.id === subLayananId);
       if (subKategori) {
         setSubLayananInfo(subKategori);
       } else {
-        navigate('/not-found'); // Sub-layanan tidak ditemukan
+        navigate('/not-found'); 
       }
     } else {
-      navigate('/not-found'); // Klaster tidak ditemukan
+      navigate('/not-found'); 
     }
   }, [klasterId, subLayananId, navigate]);
 
@@ -53,12 +51,13 @@ const LayananSubDetailPage = () => {
       <h1 className="main-title">{subLayananInfo.name}</h1>
       <p className="subtitle">Detail layanan di bawah kategori ini:</p>
 
-      {/* Grid untuk item-item detail (Unit Pelayanan Persalinan, dll.) */}
-      <div className="dynamic-detail-item-grid">
-        {subLayananInfo.detailItems.map((item) => (
-          <GridItem key={item.id} item={item} onClick={handleItemClick} />
-        ))}
-      </div>
+      <div className="centered-scroll-wrapper"> 
+        <div className="dynamic-detail-item-grid">
+          {subLayananInfo.detailItems.map((item) => (
+            <GridItem key={item.id} item={item} onClick={handleItemClick} />
+          ))}
+        </div>
+      </div> 
 
       {isModalOpen && selectedItem && (
         <Modal

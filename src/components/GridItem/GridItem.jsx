@@ -13,7 +13,6 @@ const GridItem = ({ item, onClick }) => {
         <p className="item-subtitle">{item.subtitle}</p>
       </div>
       <div className="grid-item-banner">
-        {item.subtitle}
       </div>
     </div>
   );
