@@ -23,7 +23,7 @@ const SaranKeluhan = () => {
         
         <button
           className="btn-saran"
-          onClick={() => window.open('https://bit.ly/skmkjsr', '_blank', 'noopener noreferrer')}
+          onClick={() => window.open('https://bit.ly/IKM_KUJANGSARI', '_blank', 'noopener noreferrer')}
         >
           Saran dan Keluhan Puskesmas Kujangsari
         </button>
