@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Carousel } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './CarouselDashboard.css';
-import { supabase } from '../lib/supabase'; // Sesuaikan path jika berbeda
+import { supabase } from '../../lib/supabase'; // Sesuaikan path jika berbeda
 
 const CarouselDashboard = () => {
   const [bannerImages, setBannerImages] = useState([]);
@@ -56,7 +56,7 @@ const CarouselDashboard = () => {
   if (loading) {
     return (
       <div className="carousel-loading-container">
-        <div className="d-flex justify-content-center align-items-center" style={{ height: '400px' }}>
+        <div className="d-flex justify-content-center align-items-center" style={{ height: 'auto' }}>
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
@@ -116,7 +116,7 @@ const CarouselDashboard = () => {
               e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI0MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNjAwIiB5PSIyMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzZiNzI4MCI+R2FnYWwgTWVtdWF0IEJhbm5lcjwvdGV4dD48L3N2Zz4=';
             }}
             style={{
-              height: '400px', // Sesuaikan tinggi sesuai kebutuhan
+              height: '700px', // Sesuaikan tinggi sesuai kebutuhan
               objectFit: 'cover' // Memastikan gambar terpotong dengan baik
             }}
           />

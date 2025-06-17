@@ -41,7 +41,7 @@ const Kontak = () => {
 
   // Fungsi untuk navigasi ke halaman admin config kontak
   const handleSettingsClick = () => {
-    navigate('/admin-config-kontak');
+    navigate('/admin-config-halamanKontak');
   };
 
   // Mengelompokkan kontak berdasarkan contact_type

@@ -1,8 +1,9 @@
 import React from 'react';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
-import AdminNavbar from './components/Navbar/AdminNavbar/AdminNavbar';
-import Footer from './components/Footer';
+import AdminNavbar from './components/Navbar/AdminNavbar';
+import Footer from './components/Footer/Footer';
+import AdminFooter from './components/Footer/AdminFooter';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -24,6 +25,8 @@ import Admin_Kontak from './pages/Admin/Kontak/Admin_Kontak';
 import Admin_TenagaKerja from './pages/Admin/TenagaKerja/Admin_TenagaKerja';
 import Admin_Galeri from './pages/Admin/Galeri/Admin_Galeri';
 import Admin_Klaster2Page from './pages/Admin/LayananKlaster/klaster-2';
+
+import Config_Kontak from './pages/Admin/Config/Halaman Kontak/Config_Kontak';
 
 function AppContent() {
   const location = useLocation();
@@ -111,6 +114,14 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Admin_Klaster2Page />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin-config-halamanKontak" 
+          element={
+            <ProtectedRoute>
+              <Config_Kontak />
             </ProtectedRoute>
           } 
         />

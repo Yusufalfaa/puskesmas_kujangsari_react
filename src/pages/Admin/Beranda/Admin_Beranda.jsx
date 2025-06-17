@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import CarouselDashboard from '../../../components/CarouselDashboard';
+import CarouselDashboard from '../../../components/CarouselDashboard/CarouselDashboard';
 import JadwalPelayanan from '../../../components/JadwalPelayanan';
 import TarifPelayanan from '../../../components/TarifLayanan';
 import TenagaMedis from '../../../components/TenagaMedis';

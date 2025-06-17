@@ -1,8 +1,8 @@
 import React from 'react';
-import '../../Navbar/Navbar.css';
+import './Navbar.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavLink } from 'react-router-dom';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
@@ -105,12 +105,6 @@ const Navbar = () => {
                   {user?.username}
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                  <li>
-                    <span className="dropdown-item-text">
-                      <small>Role: {user?.role}</small>
-                    </span>
-                  </li>
-                  <li><hr className="dropdown-divider" /></li>
                   <li>
                     <button className="dropdown-item" onClick={handleLogout}>
                       <i className="fas fa-sign-out-alt me-2"></i>
