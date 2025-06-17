@@ -15,8 +15,7 @@ import TentangPuskesmas from './pages/TentangPuskesmas/TentangPuskesmas';
 import Kontak from './pages/Kontak/Kontak';
 import TenagaKerja from './pages/TenagaKerja/TenagaKerja'
 import Galeri from './pages/Galeri/Galeri';
-import Klaster2Page1 from './pages/LayananKlaster/klaster-2/klaster-2-1';
-import Klaster2Page2 from './pages/LayananKlaster/klaster-2/klaster-2-2';
+import LayananSubDetailPage from './pages/LayananKlaster/LayananSubDetailPage';
 
 import Admin_Beranda from './pages/Admin/Beranda/Admin_Beranda';
 import Admin_SaranKeluhan from './pages/Admin/sarankeluhan/Admin_SaranKeluhan';
@@ -49,8 +48,8 @@ function AppContent() {
         <Route path="/saranKeluhan" element={<SaranKeluhan />} />
         <Route path="/kontak" element={<Kontak />} />
         <Route path="/galeri" element={<Galeri />} />
-        <Route path="/layanan/klaster-2-1" element={<Klaster2Page1 />} />
-        <Route path="/layanan/klaster-2-2" element={<Klaster2Page2 />} />
+          
+        <Route path="/layanan/klaster/:klasterId/:subLayananId" element={<LayananSubDetailPage />} />
         
         {/* Protected Admin Routes */}
         <Route 

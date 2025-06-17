@@ -7,7 +7,7 @@ import layananData from '../../data/layananData'; // Import data hirarkis
 import './LayananSubDetailPage.css'; // Gaya untuk halaman detail sub-layanan
 
 const LayananSubDetailPage = () => {
-  const { klasterId, subLayananId } = useParams(); // Ambil kedua parameter
+  const { klasterId, subLayananId } = useParams(); // Ambil kedua parameter dari URL
   const navigate = useNavigate();
 
   const [subLayananInfo, setSubLayananInfo] = useState(null);
@@ -51,7 +51,7 @@ const LayananSubDetailPage = () => {
   return (
     <div className="sub-detail-page-container">
       <h1 className="main-title">{subLayananInfo.name}</h1>
-      <p className="subtitle">Detail layanan di bawah kategori ini:</p> {/* Deskripsi bisa disesuaikan */}
+      <p className="subtitle">Detail layanan di bawah kategori ini:</p>
 
       {/* Grid untuk item-item detail (Unit Pelayanan Persalinan, dll.) */}
       <div className="dynamic-detail-item-grid">
