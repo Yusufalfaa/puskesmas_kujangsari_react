@@ -43,9 +43,7 @@ function AppContent() {
   return (
     <div className="App">
       {/* Conditional Navbar - Show AdminNavbar for admin routes only if authenticated, regular Navbar for public routes */}
-      {!isLoginPage && (
-        isAdminRoute && isAuthenticated ? <AdminNavbar /> : <Navbar />
-      )}
+      {(isAdminRoute && isAuthenticated ? <AdminNavbar /> : <Navbar />)}
       
       <Routes>
         {/* Public Routes */}
@@ -159,9 +157,7 @@ function AppContent() {
       </Routes>
       
       {/* Conditional Footer - Show AdminFooter for admin routes only if authenticated, regular Footer for public routes */}
-      {!isLoginPage && (
-        isAdminRoute && isAuthenticated ? <AdminFooter /> : <Footer />
-      )}
+      {(isAdminRoute && isAuthenticated ? <AdminFooter /> : <Footer />)}
     </div>
   );
 }

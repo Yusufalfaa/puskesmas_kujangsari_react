@@ -97,13 +97,6 @@
   background-color: #fafafa;
 }
 
-.datetime-col {
-  font-size: 12px;
-  color: #6c757d;
-  white-space: nowrap;
-  min-width: 120px;
-}
-
 .action-buttons {
   display: flex;
   gap: 8px;
@@ -223,7 +216,7 @@
 }
 
 .modal-content {
-  background-color: white;
+  background-color: #0D6F83;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   width: 100%;
@@ -249,15 +242,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 25px;
-  border-bottom: 1px solid #dee2e6;
-  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;;
   border-radius: 12px 12px 0 0;
 }
 
 .modal-header h2 {
   margin: 0;
-  color: #333;
-  font-size: 1.5rem;
+  color: #ffffff;
+  font-size: 1.75rem;
   font-weight: 600;
 }
 
@@ -394,7 +386,7 @@
   }
   
   .config-table {
-    min-width: 1000px;
+    min-width: 800px;
     font-size: 11px;
   }
   
@@ -462,10 +454,6 @@
     padding: 4px 6px;
   }
 
-  .datetime-col {
-    font-size: 10px;
-  }
-
   .modal-header {
     padding: 12px 15px;
   }
@@ -479,3 +467,4 @@
     padding: 10px 12px;
   }
 }
+

@@ -193,7 +193,9 @@ const ConfigWaktuPelayanan = () => {
       {showAddForm && (
         <div className="form-overlay">
           <div className="form-modal">
-            <h3>Tambah Jadwal Baru</h3>
+            <div className="form-modal-header">
+              <h3>Tambah Jadwal Baru</h3>
+            </div>
             <form onSubmit={(e) => { e.preventDefault(); handleAdd(); }}>
               <div className="form-group">
                 <label>Hari:</label>

@@ -219,7 +219,7 @@ const ConfigPetugasKesehatan = () => {
   };
 
   const formatDateTime = (dateString) => {
-    if (!dateString) return 'Tidak ada pembaruan';
+    if (!dateString) return 'Tidak tersedia';
     const date = new Date(dateString);
     const options = {
       year: 'numeric',
@@ -385,16 +385,10 @@ const ConfigPetugasKesehatan = () => {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Tambah Jadwal Baru</h2>
-              <button className="modal-close" onClick={handleCloseModal}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            </div>
-            
+            </div>            
             <form onSubmit={handleModalSubmit} className="modal-form">
               <div className="form-group">
-                <label htmlFor="modal-doctor">Petugas Kesehatan *</label>
+                <label htmlFor="modal-doctor">Petugas Kesehatan*</label>
                 <select
                   id="modal-doctor"
                   value={modalForm.doctor_id}
@@ -411,7 +405,7 @@ const ConfigPetugasKesehatan = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="modal-day">Hari *</label>
+                <label htmlFor="modal-day">Hari*</label>
                 <select
                   id="modal-day"
                   value={modalForm.day}
@@ -426,7 +420,7 @@ const ConfigPetugasKesehatan = () => {
 
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="modal-start">Waktu Mulai *</label>
+                  <label htmlFor="modal-start">Waktu Mulai*</label>
                   <input
                     type="time"
                     id="modal-start"
