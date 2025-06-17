@@ -1,0 +1,109 @@
+.admin-footer {
+  position: relative; /* untuk positioning tombol settings */
+  background-color: #1d3557;
+  color: white;
+  padding: 40px 30px;
+  font-family: 'Poppins', sans-serif;
+  text-align: left;
+}
+
+.admin-footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  position: relative; /* optional tambahan */
+}
+
+.admin-footer-content h3 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.admin-footer-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-footer-content ul li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  justify-content: flex-start;
+}
+
+.admin-footer-content ul li i {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  min-width: 20px;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+.admin-footer-left {
+  flex: 1;
+  min-width: 250px;
+}
+
+.admin-footer-right {
+  align-self: flex-end;
+  font-size: 14px;
+  text-align: right;
+  color: #ffffff;
+}
+
+.admin-footer-settings {
+  position: absolute;
+  right: 10px;
+}
+
+.settings-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.settings-btn:hover {
+  background: linear-gradient(135deg, #2980b9, #1f5f99);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+.settings-btn:hover i {
+  animation-duration: 0.5s;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .admin-footer-right {
+    align-self: center;
+    margin-top: 20px;
+  }
+
+  .admin-footer-settings {
+    top: 10px;
+    right: 15px;
+  }
+}

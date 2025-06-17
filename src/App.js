@@ -25,7 +25,8 @@ import Admin_TenagaKerja from './pages/Admin/TenagaKerja/Admin_TenagaKerja';
 import Admin_Galeri from './pages/Admin/Galeri/Admin_Galeri';
 import Admin_Klaster2Page from './pages/Admin/LayananKlaster/klaster-2';
 
-import Config_Kontak from './pages/Admin/Config/Halaman Kontak/Config_Kontak';
+import Config_HalamanKontak from './pages/Admin/Config/Halaman Kontak/Config_Kontak';
+import Config_Kontak from './pages/Admin/Config/Semua Kontak/Config_Kontak';
 
 function AppContent() {
   const location = useLocation();
@@ -33,11 +34,16 @@ function AppContent() {
   
   // Check if current route is admin route
   const isAdminRoute = location.pathname.startsWith('/admin-');
+  
+  // Check if current route is login page
+  const isLoginPage = location.pathname === '/login';
 
   return (
     <div className="App">
-      {/* Conditional Navbar - Show AdminNavbar for admin routes, regular Navbar for public routes */}
-      {isAdminRoute && isAuthenticated ? <AdminNavbar /> : <Navbar />}
+      {/* Conditional Navbar - Show AdminNavbar for admin routes only if authenticated, regular Navbar for public routes */}
+      {!isLoginPage && (
+        isAdminRoute && isAuthenticated ? <AdminNavbar /> : <Navbar />
+      )}
       
       <Routes>
         {/* Public Routes */}
@@ -120,13 +126,24 @@ function AppContent() {
           path="/admin-config-halamanKontak" 
           element={
             <ProtectedRoute>
+              <Config_HalamanKontak />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin-config-kontak" 
+          element={
+            <ProtectedRoute>
               <Config_Kontak />
             </ProtectedRoute>
           } 
         />
       </Routes>
       
-      <Footer />
+      {/* Conditional Footer - Show AdminFooter for admin routes only if authenticated, regular Footer for public routes */}
+      {!isLoginPage && (
+        isAdminRoute && isAuthenticated ? <AdminFooter /> : <Footer />
+      )}
     </div>
   );
 }
