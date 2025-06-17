@@ -55,6 +55,14 @@ const Beranda = () => {
           </div>
         </section>
 
+        <div className="video-placeholder-container">
+          <h3 className="video-title">Video Profil Puskesmas Kujangsari</h3>
+          <video controls className="video-player" poster="/assets/video_thumbnail.jpg"> {/* Ganti path poster */}
+            <source src="/assets/video_profil.mp4" type="video/mp4" /> {/* Ganti path video Anda */}
+            Browser Anda tidak mendukung tag video.
+          </video>
+        </div>
+
         <JadwalPelayanan />
         <TarifPelayanan />
         <TenagaMedis />
