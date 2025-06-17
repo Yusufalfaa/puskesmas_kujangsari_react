@@ -229,6 +229,11 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
+.form-modal-header{
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 30px;
+}
+
 .form-modal h3 {
   margin: 0 0 25px 0;
   color: white;
