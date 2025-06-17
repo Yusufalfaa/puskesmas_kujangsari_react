@@ -159,8 +159,10 @@ function AppContent() {
       </Routes>
       
       {/* Conditional Footer - Show AdminFooter for admin routes only if authenticated, regular Footer for public routes */}
-      {(isAdminRoute && isAuthenticated ? <AdminFooter /> : <Footer />)}
-      
+      {!isLoginPage && (
+        isAdminRoute && isAuthenticated ? <AdminFooter /> : <Footer />
+      )}
+
       {!isLoginPage && !isAdminRoute && (
         <FloatingWhatsAppIcon/>
       )}
