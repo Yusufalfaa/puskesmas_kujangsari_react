@@ -280,7 +280,7 @@ const TentangPuskesmas = () => {
             <Row>
               <Col md={6} className="text-column">
                 <p>
-                  Puskesmas Kujangsari berdiri sejak tahun 1989. Awal berdiri Puskesmas Kujangsari bernama Puskesmas Buah Batu dan berlokasi di Pasar Kordon. Sejak tahun 2004 Puskesmas pindah ke Jl. Terusan Buah Batu No. 314 dan pada tahun 2008 beganti nama menjadi Puskesmas Kujangsari.
+                  Puskesmas Kujangsari berdiri sejak tahun 1989. Awal berdiri Puskesmas Kujangsari bernama Puskesmas Buah Batu dan berlokasi di Pasar Kordon. Sejak tahun 2004 Puskesmas pindah ke Jl. Terusan Buah Batu No. 314 dan pada tahun 2008 berganti nama menjadi Puskesmas Kujangsari.
                   <br /><br />
                   Wilayah kerja kami terdiri dari Kelurahan Kujangsari dan Batununggal. Luas wilayah kami yaitu 600,098 Ha, dengan 313,76 Ha luas wilayah daerah binaan.
                   <br /><br />

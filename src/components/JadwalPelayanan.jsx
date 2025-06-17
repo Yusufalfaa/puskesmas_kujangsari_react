@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import './JadwalPelayanan.css';
+import { supabase } from '../lib/supabase'; // Sesuaikan path jika berbeda
+import './JadwalPelayanan.css'; // Pastikan CSS ini diimpor
 
 const JadwalPelayanan = () => {
   const [petugasHariIni, setPetugasHariIni] = useState([]);
@@ -104,7 +104,8 @@ const JadwalPelayanan = () => {
     <div className="jadwal-container">
       <div className="petugas-box">
         <h3>Petugas Kesehatan</h3>
-        <p><strong>Hari Ini: {tanggalHariIni}</strong></p>
+        {/* Tambahkan kelas .jadwal-text agar gaya p spesifik */}
+        <p className="jadwal-text"><strong>Hari Ini: {tanggalHariIni}</strong></p>
         {petugasHariIni.length > 0 ? (
           <ul>
             {petugasHariIni.map((petugas, index) => (
@@ -120,7 +121,8 @@ const JadwalPelayanan = () => {
             ))}
           </ul>
         ) : (
-          <p>Tidak ada petugas yang bertugas hari ini.</p>
+          // Tambahkan kelas .jadwal-text di sini juga
+          <p className="jadwal-text">Tidak ada petugas yang bertugas hari ini.</p>
         )}
       </div>
 
@@ -138,7 +140,8 @@ const JadwalPelayanan = () => {
             ))}
           </ul>
         ) : (
-          <p>Jadwal pelayanan tidak tersedia.</p>
+          // Tambahkan kelas .jadwal-text di sini juga
+          <p className="jadwal-text">Jadwal pelayanan tidak tersedia.</p>
         )}
       </div>
     </div>

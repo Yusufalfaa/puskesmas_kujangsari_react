@@ -1,10 +1,14 @@
-.sub-detail-page-container { /* Ganti nama kelas kontainer utama */
-  padding-top: 60px; /* Sesuaikan dengan tinggi navbar */
-  padding-left: 30px;
-  padding-right: 30px;
+/* src/pages/LayananKlaster/LayananKlasterPage.css */
+.sub-detail-page-container { 
+  padding-top: 60px; 
+  padding-left: 20px; 
+  padding-right: 20px; 
   min-height: calc(100vh - 100px);
   box-sizing: border-box;
   text-align: center;
+
+  max-width: 1000px; 
+  margin: 0 auto; 
 }
 
 .sub-detail-page-container .main-title {
@@ -18,48 +22,87 @@
   font-size: 1.1rem;
   color: #555;
   margin-bottom: 40px;
+  display: block; 
+  width: 100%; 
+  text-align: center;
 }
 
-.dynamic-detail-item-grid { /* Ganti nama kelas grid */
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+.layanan-subkategori-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
   padding: 20px 0;
+}
+
+.layanan-subkategori-box {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 20px 50px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  min-height: 80px;
+  width: 100%;
+  max-width: 500px;
+  text-decoration: none;
+  color: #000;
+  font-weight: 600;
+  font-size: 1.2rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.layanan-subkategori-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+  background-color: #e0e0e0;
+}
+.layanan-subkategori-box h3 {
+  font-size: 1.3rem;
+  margin: 0;
+  color: #213A58;
+}
+.subkategori-box-banner {
+  display: none;
 }
 
-/* Media Queries untuk LayananSubDetailPage */
 @media (max-width: 992px) {
-  .dynamic-detail-item-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-  }
-  .sub-detail-page-container {
-    padding-top: 50px;
-    padding-left: 15px;
-    padding-right: 15px;
-  }
+    .layanan-subkategori-box {
+        max-width: 450px;
+        font-size: 1.1rem;
+    }
+    .klaster-page-container {
+        max-width: 700px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 }
-
 @media (max-width: 768px) {
-  .dynamic-detail-item-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-  }
-  .sub-detail-page-container .main-title {
-    font-size: 2rem;
-  }
-  .sub-detail-page-container .subtitle {
-    font-size: 1rem;
-  }
+    .layanan-subkategori-grid {
+        gap: 15px;
+    }
+    .layanan-subkategori-box {
+        max-width: 350px;
+        font-size: 1rem;
+        padding: 15px 40px;
+    }
+    .klaster-page-container {
+        max-width: 600px;
+    }
 }
-
 @media (max-width: 576px) {
-  .dynamic-detail-item-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  .sub-detail-page-container .main-title {
-    font-size: 1.8rem;
-  }
+    .layanan-subkategori-box {
+        width: 90%;
+        max-width: none;
+        font-size: 0.95rem;
+        padding: 12px 30px;
+    }
+    .klaster-page-container {
+        max-width: 100%;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
 }
