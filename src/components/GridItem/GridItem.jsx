@@ -1,6 +1,6 @@
 // src/components/GridItem/GridItem.jsx
 import React from 'react';
-import './GridItem.css'; // Nama CSS sesuai nama komponen
+import './GridItem.css';
 
 const GridItem = ({ item, onClick }) => {
   return (

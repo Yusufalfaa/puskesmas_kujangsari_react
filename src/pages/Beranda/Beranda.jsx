@@ -14,6 +14,13 @@ const Beranda = () => {
         <section className="layanan-section">
           <h2>Layanan Kami</h2>
 
+          <div className="layanan-banner bg1">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 1</div>
+          <div className="layanan-grid">
+            <NavLink to="/layanan/klaster/klaster-2/ibu-hamil" className="layanan-box">
+              Pendaftaran
+            </NavLink>
+           </div>
+
           <div className="layanan-banner bg1">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 2</div>
           <div className="layanan-grid">
             <NavLink to="/layanan/klaster/klaster-2/ibu-hamil" className="layanan-box">
@@ -36,27 +43,42 @@ const Beranda = () => {
           <div className="layanan-banner bg2">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 3</div>
           <div className="layanan-grid">
             <NavLink to="/layanan/klaster/klaster-3/usia-dewasa" className="layanan-box">
-              Pelayanan Kesehatan bagi usia dewasa
+              Pelayanan Pemeriksaan Dewasa dan Lansia
             </NavLink>
             <NavLink to="/layanan/klaster/klaster-3/lansia" className="layanan-box">
-              Pelayanan Kesehatan bagi Lanjut Usia
+              Pelayanan Pemeriksaan Calon Pengantin
+            </NavLink>
+            <NavLink to="/layanan/klaster/klaster-3/lansia" className="layanan-box">
+              Pelayanan KB
             </NavLink>
           </div>
 
           <div className="layanan-banner bg3">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 4</div>
           <div className="layanan-grid">
             <NavLink to="/layanan/klaster/klaster-4/pencegahan-respon" className="layanan-box">
-              Pencegahan, Kewaspadaan Dini dan Respon
+              Pelayanan TBC
             </NavLink>
             <NavLink to="/layanan/klaster/klaster-4/kualitas-lingkungan" className="layanan-box">
-              Pengawasan kualitas lingkungan
+              Pelayanan Penanggulangan Penyakit Menular
             </NavLink>
           </div>
 
-          <div className="layanan-banner bg4">Layanan Lintas Klaster</div>
-          <div className="layanan-grid-last">
+          <div className="layanan-banner bg4">UNIT PELAYANAN LINTAS KLASTER</div>
+          <div className="layanan-grid">
             <NavLink to="/layanan/klaster/klaster-5/penunjang-medis" className="layanan-box">
-              Pelayanan gawat darurat, rawat inap, kefarmasian, dan laboratorium.
+              Pelayanan Tindakan
+            </NavLink>
+            <NavLink to="/layanan/klaster/klaster-5/penunjang-medis" className="layanan-box">
+              Pelayanan Kesehatan Gigi dan Mulut
+            </NavLink>
+            <NavLink to="/layanan/klaster/klaster-5/penunjang-medis" className="layanan-box">
+              Pelayanan Kefarmasian
+            </NavLink>
+            <NavLink to="/layanan/klaster/klaster-5/penunjang-medis" className="layanan-box">
+              Pelayanan Gizi
+            </NavLink>
+            <NavLink to="/layanan/klaster/klaster-5/penunjang-medis" className="layanan-box">
+              Pelayanan Labolatorium
             </NavLink>
           </div>
         </section>

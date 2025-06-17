@@ -7,7 +7,6 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark shadow-sm">
       <div className="container">
-        {/* Logo di paling kiri */}
         <NavLink className="navbar-brand" to="/">
           <img
             src={`${process.env.PUBLIC_URL}/logoKujangsari2.png`}
@@ -33,7 +32,6 @@ const Navbar = () => {
 
         {/* Konten Navigasi */}
         <div className="collapse navbar-collapse" id="navbarNav">
-          {/* Menu Navigasi di Tengah */}
           <ul className="navbar-nav navbar-nav-center">
             <li className="nav-item">
               <NavLink className="nav-link" to="/" end>
@@ -81,11 +79,10 @@ const Navbar = () => {
             </li>
           </ul>
 
-          {/* Tombol Login di Kanan */}
           <div className="navbar-nav navbar-nav-right">
             <NavLink className="nav-link login-btn" to="/login">
               <i className="fas fa-user me-2"></i>
-              Login Admin
+              Login
             </NavLink>
           </div>
         </div>
