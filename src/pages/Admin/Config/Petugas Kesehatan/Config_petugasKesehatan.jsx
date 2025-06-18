@@ -124,6 +124,7 @@ const ConfigPetugasKesehatan = () => {
   };
 
   const handleDelete = async (id) => {
+    // eslint-disable-next-line no-restricted-globals
     if (window.confirm('Apakah Anda yakin ingin menghapus jadwal ini?')) {
       try {
         const { error } = await supabase

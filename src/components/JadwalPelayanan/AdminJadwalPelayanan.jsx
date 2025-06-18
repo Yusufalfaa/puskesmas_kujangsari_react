@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './JadwalPelayanan.css';
-import { supabase } from '../lib/supabase'; // Sesuaikan path jika berbeda
+import { supabase } from '../../lib/supabase'; // Sesuaikan path jika berbeda
 import './JadwalPelayanan.css'; // Pastikan CSS ini diimpor
 
 const JadwalPelayanan = () => {

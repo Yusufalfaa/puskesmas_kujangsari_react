@@ -1,7 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import CarouselDashboard from '../../components/CarouselDashboard/CarouselDashboard';
-import JadwalPelayanan from '../../components/JadwalPelayanan';
+import JadwalPelayanan from '../../components/JadwalPelayanan/JadwalPelayanan';
+import VideoBeranda from '../../components/VideoBeranda/VideoBeranda';
 import TarifPelayanan from '../../components/TarifLayanan';
 import TenagaMedis from '../../components/TenagaMedis';
 import './Beranda.css';
@@ -16,7 +17,7 @@ const Beranda = () => {
 
           <div className="layanan-banner bg1">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 1</div>
           <div className="layanan-grid-item">
-            <NavLink to="/layanan/klaster/klaster-2/ibu-hamil" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-1/pendaftaran" className="layanan-box">
               Pendaftaran
             </NavLink>
            </div>
@@ -29,10 +30,10 @@ const Beranda = () => {
             <NavLink to="/layanan/klaster/klaster-2/anak-balita-prasekolah" className="layanan-box">
               Pelayanan Imunisasi Bayi
             </NavLink>
-            <NavLink to="/layanan/klaster/klaster-2/anak-usia-sekolah-remaja" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-2/usg" className="layanan-box">
               Pelayanan USG
             </NavLink>
-            <NavLink to="/layanan/klaster/klaster-2/anak-usia-sekolah-remaja" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-2/anak-0-5-tahun" className="layanan-box">
               Pelayanan Pemeriksaan Anak 0-5 Tahun
             </NavLink>
             <NavLink to="/layanan/klaster/klaster-2/anak-usia-sekolah-remaja" className="layanan-box">
@@ -45,43 +46,44 @@ const Beranda = () => {
             <NavLink to="/layanan/klaster/klaster-3/usia-dewasa" className="layanan-box">
               Pelayanan Pemeriksaan Dewasa dan Lansia
             </NavLink>
-            <NavLink to="/layanan/klaster/klaster-3/lansia" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-3/calon-pengantin" className="layanan-box">
               Pelayanan Pemeriksaan Calon Pengantin
             </NavLink>
-            <NavLink to="/layanan/klaster/klaster-3/lansia" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-3/kb" className="layanan-box">
               Pelayanan KB
             </NavLink>
           </div>
 
           <div className="layanan-banner bg3">UNIT PELAYANAN PUSKESMAS KUJANGSARI KLASTER 4</div>
           <div className="layanan-grid">
-            <NavLink to="/layanan/klaster/klaster-4/pencegahan-respon" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-4/tbc" className="layanan-box">
               Pelayanan TBC
             </NavLink>
-            <NavLink to="/layanan/klaster/klaster-4/kualitas-lingkungan" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-4/penyakit-menular" className="layanan-box">
               Pelayanan Penanggulangan Penyakit Menular
             </NavLink>
           </div>
 
           <div className="layanan-banner bg4">UNIT PELAYANAN LINTAS KLASTER</div>
           <div className="layanan-grid">
-            <NavLink to="/layanan/klaster/klaster-5/penunjang-medis" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-5/tindakan" className="layanan-box">
               Pelayanan Tindakan
             </NavLink>
-            <NavLink to="/layanan/klaster/klaster-5/penunjang-medis" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-5/gigi-mulut" className="layanan-box">
               Pelayanan Kesehatan Gigi dan Mulut
             </NavLink>
-            <NavLink to="/layanan/klaster/klaster-5/penunjang-medis" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-5/kefarmasian" className="layanan-box">
               Pelayanan Kefarmasian
             </NavLink>
-            <NavLink to="/layanan/klaster/klaster-5/penunjang-medis" className="layanan-box">
+            <NavLink to="/layanan/klaster/klaster-5/gizi" className="layanan-box">
               Pelayanan Gizi
             </NavLink>
-            <NavLink to="/layanan/klaster/klaster-5/penunjang-medis" className="layanan-box">
-              Pelayanan Labolatorium
+            <NavLink to="/layanan/klaster/klaster-5/laboratorium" className="layanan-box">
+              Pelayanan Laboratorium
             </NavLink>
           </div>
         </section>
+<<<<<<< Updated upstream
 
         <div className="video-placeholder-container">
           <h3 className="video-title">Video Profil Puskesmas Kujangsari</h3>
@@ -106,6 +108,9 @@ const Beranda = () => {
           <div className="video-separator"></div>
         </div>
 
+=======
+        <VideoBeranda />
+>>>>>>> Stashed changes
         <JadwalPelayanan />
         <TarifPelayanan />
         <TenagaMedis />

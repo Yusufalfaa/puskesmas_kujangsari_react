@@ -31,6 +31,8 @@ import Config_HalamanKontak from './pages/Admin/Config/Halaman Kontak/Config_hal
 import Config_Kontak from './pages/Admin/Config/Semua Kontak/Config_Kontak';
 import Config_PetugasKesehatan from './pages/Admin/Config/Petugas Kesehatan/Config_petugasKesehatan';
 import Config_WaktuPelayanan from './pages/Admin/Config/Waktu Pelayanan/Config_waktuPelayanan';
+import Config_VideoBeranda from './pages/Admin/Config/Video Beranda/Config_videoBeranda';
+
 
 function AppContent() {
   const location = useLocation();
@@ -56,7 +58,6 @@ function AppContent() {
         <Route path="/saranKeluhan" element={<SaranKeluhan />} />
         <Route path="/kontak" element={<Kontak />} />
         <Route path="/galeri" element={<Galeri />} />
-          
         <Route path="/layanan/klaster/:klasterId/:subLayananId" element={<LayananSubDetailPage />} />
         
         {/* Protected Admin Routes */}
@@ -153,6 +154,14 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Config_WaktuPelayanan />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin-config-videoBeranda" 
+          element={
+            <ProtectedRoute>
+              <Config_VideoBeranda />
             </ProtectedRoute>
           } 
         />
