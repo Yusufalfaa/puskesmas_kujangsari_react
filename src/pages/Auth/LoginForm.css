@@ -1,47 +1,303 @@
-/* src/components/LoginForm.css */
-.login-container {
+/* src/pages/Auth/LoginForm.css - Clean Version */
+
+/* Reset dan base styling untuk halaman login */
+.login-page {
+  min-height: calc(100vh - 120px); /* Sesuaikan dengan tinggi navbar + footer */
+  background: linear-gradient(135deg, #0D6E82 50%, #05548d 50%);
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 75vh;
-  background-color: #f0f2f5;
+  justify-content: center;
+  padding: 40px 20px;
+  margin: 0;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
 }
 
 .login-form {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  width: 320px;
-  display: flex;
-  flex-direction: column;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: slideUp 0.6s ease-out;
 }
 
-.login-form h2 {
-  margin-bottom: 1.5rem;
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-header {
   text-align: center;
-  color: #333;
+  margin-bottom: 32px;
 }
 
-.login-form input {
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
+.login-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.02em;
 }
 
-.login-form button {
-  padding: 0.75rem;
-  background-color: #007bff;
+.login-header p {
+  font-size: 16px;
+  color: #718096;
+  margin: 0;
+  font-weight: 400;
+}
+
+.login-form-content {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.form-input {
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2d3748 !important;
+  background: #ffffff !important;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-input::placeholder {
+  color: #a0aec0 !important;
+  font-weight: 400;
+}
+
+.form-input:focus {
+  border-color: #667eea !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  transform: translateY(-1px);
+  background: #ffffff !important;
+  color: #2d3748 !important;
+}
+
+.form-input:disabled {
+  background: #f7fafc !important;
+  color: #a0aec0 !important;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.form-input:valid,
+.form-input:invalid {
+  background: #ffffff !important;
+  color: #2d3748 !important;
+}
+
+.login-button {
+  width: 100%;
+  height: 52px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 1rem;
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+  outline: none;
 }
 
-.login-form button:hover {
-  background-color: #0056b3;
+.login-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.login-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.login-button.loading {
+  pointer-events: none;
+}
+
+.loading-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  background: rgba(245, 101, 101, 0.1);
+  border: 1px solid rgba(245, 101, 101, 0.2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: shake 0.5s ease-in-out;
+}
+
+.error-message span {
+  color: #e53e3e;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.error-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.success-message {
+  text-align: center;
+  padding: 20px;
+}
+
+.success-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #48bb78, #38a169);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 30px;
+  color: white;
+  font-weight: bold;
+  animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.success-message h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 8px 0;
+}
+
+.success-message p {
+  font-size: 16px;
+  color: #718096;
+  margin: 0;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .login-page {
+    padding: 16px;
+  }
+  
+  .login-form {
+    padding: 32px 24px;
+    border-radius: 16px;
+  }
+  
+  .login-header h2 {
+    font-size: 24px;
+  }
+  
+  .form-input,
+  .login-button {
+    height: 48px;
+    font-size: 15px;
+  }
+}
+
+/* Override untuk memastikan styling tidak terganggu */
+.login-page * {
+  box-sizing: border-box;
+}
+
+.login-page input,
+.login-page button {
+  font-family: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.login-page button:focus,
+.login-page input:focus {
+  outline: none;
+}
+
+/* Override CSS framework yang mungkin mengubah background input */
+.login-page input[type="text"],
+.login-page input[type="password"] {
+  background-color: #ffffff !important;
+  color: #2d3748 !important;
+}
+
+.login-page input[type="text"]:focus,
+.login-page input[type="password"]:focus {
+  background-color: #ffffff !important;
+  color: #2d3748 !important;
+}
+
+.login-page input[type="text"]:valid,
+.login-page input[type="password"]:valid {
+  background-color: #ffffff !important;
+  color: #2d3748 !important;
+}
+
+/* Pastikan tidak ada CSS framework yang override */
+.login-page .form-input {
+  background: #ffffff !important;
+  color: #2d3748 !important;
 }
