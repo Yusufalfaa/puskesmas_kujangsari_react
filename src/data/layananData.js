@@ -7,23 +7,16 @@ const layananData = {
     description: 'Klaster ini berfokus pada pelayanan kesehatan untuk ibu dan anak, meliputi:',
     subKategoris: [
       {
-        id: 'ibu-hamil', // ID unik untuk sub-kategori ini (digunakan di URL)
+        id: 'ibu-hamil',
         name: 'Pelayanan Kesehatan bagi Ibu Hamil, Bersalin, dan Nifas',
         bannerText: 'Pelayanan Ibu Hamil',
         detailItems: [
           {
-            id: 'persalinan',
+            id: 'pemeriksaan-kehamilan',
             imageUrl: `${process.env.PUBLIC_URL}https://nursing.nyu.edu/sites/default/files/inline-images/1738104083176.jpg`, // Ganti dengan path ikon Anda
-            title: 'Unit Pelayanan Persalinan',
+            title: 'Unit Pelayanan Pemeriksaan Kehamilan',
             subtitle: 'Unit Pelayanan Persalinan',
-            description: 'Menyediakan layanan persalinan yang aman dan nyaman dengan fasilitas lengkap.'
-          },
-          {
-            id: 'ki-hamil',
-            imageUrl: `${process.env.PUBLIC_URL}/assets/icons/layanan_ki_hamil.png`, // Ganti dengan path ikon Anda
-            title: 'Unit Pelayanan KI Hamil',
-            subtitle: 'Unit Pelayanan KI Hamil',
-            description: 'Layanan Kesehatan Ibu Hamil untuk pemantauan kehamilan dan persiapan persalinan.'
+            description: 'Jadwal Senin dan Kamis, 08.00 - 12.00 WIB. Pemeriksaan kesehatan ibu hamil, persalinan, dan nifas.'
           }
         ]
       },
@@ -33,23 +26,44 @@ const layananData = {
         bannerText: 'Pelayanan Anak Balita & PraSekolah',
         detailItems: [
           {
-            id: 'mtbs-anak',
+            id: 'vaksin-bcg',
             imageUrl: `${process.env.PUBLIC_URL}/assets/icons/layanan_mtbs_anak.png`,
-            title: 'Unit Pelayanan MTBS dan Anak',
-            subtitle: 'Unit Pelayanan MTBS dan Anak',
-            description: 'Manajemen Terpadu Balita Sakit (MTBS) dan layanan kesehatan anak.'
+            title: 'Vaksin BCG',
+            subtitle: 'Unit Pelayanan Anak',
+            description: 'Rabu Minggu ke-1 dan ke-3, 08.00 - 12.00 WIB. Vaksinasi BCG untuk pencegahan tuberkulosis pada anak.'
           },
           {
-            id: 'mtbm',
+            id: 'campak-mr',
             imageUrl: `${process.env.PUBLIC_URL}/assets/icons/layanan_mtbm.png`,
-            title: 'Unit Pelayanan MTBM',
-            subtitle: 'Unit Pelayanan MTBM',
-            description: 'Manajemen Terpadu Balita Muda untuk deteksi dini masalah kesehatan pada bayi.'
+            title: 'Campak MR',
+            subtitle: 'Unit Pelayanan Anak',
+            description: 'Pelayanan setiap hari Rabu, 08.00 - 16.00 WIB. Vaksinasi Campak MR untuk pencegahan campak dan rubella.'
+          },
+          {
+            id: 'pelayanan-lainnya',
+            imageUrl: `${process.env.PUBLIC_URL}/assets/icons/layanan_mtbm.png`,
+            title: 'DPT-Hb-Hib, Polio, tetes, IPV (Polio suntik), PCV, Rotavirus',
+            subtitle: 'Unit Pelayanan Anak',
+            description: 'Rabu dan Jumat'
           }
         ]
       },
       {
-        id: 'anak-usia-sekolah-remaja', // ID untuk sub-kategori ini
+        id: 'anak-usia-sekolah-remaja',
+        name: 'Pelayanan Kesehatan bagi Anak Usia Sekolah dan Remaja',
+        bannerText: 'Usia Sekolah & Remaja',
+        detailItems: [
+          {
+            id: 'kesehatan-remaja',
+            imageUrl: `${process.env.PUBLIC_URL}/assets/icons/kesehatan_remaja.png`,
+            title: 'Kesehatan Remaja',
+            subtitle: 'Remaja',
+            description: 'Konsultasi dan edukasi kesehatan untuk remaja.'
+          }
+        ]
+      },
+{
+        id: 'anak-usia-sekolah-remaja',
         name: 'Pelayanan Kesehatan bagi Anak Usia Sekolah dan Remaja',
         bannerText: 'Usia Sekolah & Remaja',
         detailItems: [

@@ -306,6 +306,17 @@ const TentangPuskesmas = () => {
               </Col>
             </Row>
           </Container>
+                          <div className="video-placeholder-container">
+                  <h3 className="video-title">Mars Puskesmas Kujangsari</h3>
+                  <iframe
+                    className="video-player"
+                    src="https://www.youtube.com/embed/icgneGogDmQ"
+                    title="Mars Puskesmas Kujangsari"
+                    frameBorder="10"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
         </section>
 
         <section className="visi-misi">

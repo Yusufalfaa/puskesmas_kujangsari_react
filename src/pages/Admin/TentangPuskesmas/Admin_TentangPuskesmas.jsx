@@ -296,7 +296,6 @@ const TentangPuskesmas = () => {
             </Row>
           </Container>
         </section>
-
         <section className="visi-misi">
           <h2>Visi & Misi</h2>
           <Container>

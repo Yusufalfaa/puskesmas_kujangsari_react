@@ -201,7 +201,7 @@
 }
 
 /* Modal Styles */
-.modal-overlay {
+.config-container .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -215,8 +215,8 @@
   padding: 20px;
 }
 
-.modal-content {
-  background-color: #0D6F83;
+.config-container .modal-content {
+  background-color: #0D6F83; /* Pastikan ini adalah warna yang Anda inginkan untuk modal ini */
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   width: 100%;
@@ -237,7 +237,7 @@
   }
 }
 
-.modal-header {
+.config-container .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -246,7 +246,7 @@
   border-radius: 12px 12px 0 0;
 }
 
-.modal-header h2 {
+.config-container .modal-header h2 {
   margin: 0;
   color: #ffffff;
   font-size: 1.75rem;

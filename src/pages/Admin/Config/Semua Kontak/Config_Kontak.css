@@ -75,7 +75,7 @@
 }
 
 /* Modal */
-.modal-overlay {
+.config-container .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -88,7 +88,7 @@
   z-index: 1000;
 }
 
-.modal-content {
+.config-container .modal-content {
   background: white;
   border-radius: 12px;
   width: 90%;
@@ -126,7 +126,7 @@
   color: #333;
 }
 
-.modal-body {
+.config-container .modal-body {
   padding: 20px;
 }
 
@@ -162,7 +162,7 @@
   margin-right: 8px;
 }
 
-.modal-footer {
+.config-container .modal-footer {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
