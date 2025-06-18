@@ -2,7 +2,10 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import CarouselDashboard from '../../components/CarouselDashboard/CarouselDashboard';
 import JadwalPelayanan from '../../components/JadwalPelayanan/JadwalPelayanan';
+<<<<<<< Updated upstream
 import VideoBeranda from '../../components/VideoBeranda/VideoBeranda/JadwalPelayanan';
+=======
+>>>>>>> Stashed changes
 import VideoBeranda from '../../components/VideoBeranda/VideoBeranda';
 import TarifPelayanan from '../../components/TarifLayanan';
 import TenagaMedis from '../../components/TenagaMedis';
