@@ -84,29 +84,7 @@ const Beranda = () => {
             </NavLink>
           </div>
         </section>
-
-        <div className="video-placeholder-container">
-          <h3 className="video-title">Video Profil Puskesmas Kujangsari</h3>
-          <iframe
-            className="video-player"
-            src="https://www.youtube.com/embed/4-htQah2lcY"
-            title="Video Profil Puskesmas Kujangsari"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-          <div className="video-separator"></div>
-          <h3 className="video-title">Penerapan ILP UPTD Puskesmas Kujangsari</h3>
-          <iframe
-            className="video-player"
-            src="https://www.youtube.com/embed/uzQ-y_31bS0"
-            title="Penerapan ILP UPTD Puskesmas Kujangsari"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        </div>
-
+        <VideoBeranda />
         <JadwalPelayanan />
         <TarifPelayanan />
         <TenagaMedis />
