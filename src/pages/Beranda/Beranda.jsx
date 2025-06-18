@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import CarouselDashboard from '../../components/CarouselDashboard/CarouselDashboard';
 import JadwalPelayanan from '../../components/JadwalPelayanan/JadwalPelayanan';
+import VideoBeranda from '../../components/VideoBeranda/VideoBeranda/JadwalPelayanan';
 import VideoBeranda from '../../components/VideoBeranda/VideoBeranda';
 import TarifPelayanan from '../../components/TarifLayanan';
 import TenagaMedis from '../../components/TenagaMedis';
@@ -83,7 +84,6 @@ const Beranda = () => {
             </NavLink>
           </div>
         </section>
-<<<<<<< Updated upstream
 
         <div className="video-placeholder-container">
           <h3 className="video-title">Video Profil Puskesmas Kujangsari</h3>
@@ -105,12 +105,8 @@ const Beranda = () => {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
-          <div className="video-separator"></div>
         </div>
 
-=======
-        <VideoBeranda />
->>>>>>> Stashed changes
         <JadwalPelayanan />
         <TarifPelayanan />
         <TenagaMedis />
