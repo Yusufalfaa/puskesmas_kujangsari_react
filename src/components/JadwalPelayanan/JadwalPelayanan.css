@@ -30,30 +30,6 @@
   margin: 0;
 }
 
-/* Tombol settings */
-.settings-btn {
-  background-color: #ff4444;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  color: white;
-}
-
-.settings-btn:hover {
-  background-color: #cc3333;
-  transform: scale(1.1);
-}
-
-.settings-btn:active {
-  transform: scale(0.95);
-}
-
 /* Garis pembatas horizontal */
 .divider {
   width: 100%;

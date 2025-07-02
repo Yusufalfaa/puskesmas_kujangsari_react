@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import CarouselDashboard from '../../components/CarouselDashboard/CarouselDashboard';
 import JadwalPelayanan from '../../components/JadwalPelayanan/JadwalPelayanan';
 import VideoBeranda from '../../components/VideoBeranda/VideoBeranda';
-import TarifPelayanan from '../../components/TarifLayanan';
+import TarifPelayanan from '../../components/TarifLayanan/TarifLayanan';
 import TenagaMedis from '../../components/TenagaMedis';
 import './Beranda.css';
 

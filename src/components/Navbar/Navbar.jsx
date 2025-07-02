@@ -78,13 +78,6 @@ const Navbar = () => {
               </NavLink>
             </li>
           </ul>
-
-          <div className="navbar-nav navbar-nav-right">
-            <NavLink className="nav-link login-btn" to="/login">
-              <i className="fas fa-user me-2"></i>
-              Login
-            </NavLink>
-          </div>
         </div>
       </div>
     </nav>

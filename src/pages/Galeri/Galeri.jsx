@@ -272,7 +272,7 @@ const Galeri = () => {
                     className="view-more-btn"
                     onClick={() => toggleCategory(category)}
                   >
-                    Lihat Lebih Banyak ({items.length - 20} foto lagi)
+                    Lihat Lebih Banyak
                   </button>
                 </div>
               )}

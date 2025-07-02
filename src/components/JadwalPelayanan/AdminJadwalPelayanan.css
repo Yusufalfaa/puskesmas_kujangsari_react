@@ -31,7 +31,7 @@
 }
 
 /* Tombol settings */
-.settings-btn {
+.settings-btn-pelayanan {
   background-color: #ff4444;
   border: none;
   border-radius: 50%;
@@ -45,12 +45,12 @@
   color: white;
 }
 
-.settings-btn:hover {
+.settings-btn-pelayanan:hover {
   background-color: #cc3333;
   transform: scale(1.1);
 }
 
-.settings-btn:active {
+.settings-btn-pelayanan:active {
   transform: scale(0.95);
 }
 

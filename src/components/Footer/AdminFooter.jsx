@@ -83,7 +83,7 @@ const AdminFooter = () => {
       <div className="admin-footer-content">
         <div className="admin-footer-settings">
           <button
-            className="settings-btn"
+            className="settings-btn-footer"
             onClick={handleConfigClick}
             title="Kelola Kontak"
           >

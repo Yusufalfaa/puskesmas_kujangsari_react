@@ -64,10 +64,11 @@ a {
 
 .admin-footer-settings {
   position: absolute;
-  right: 10px;
+  right: 5px;
+  top: -6px;
 }
 
-.settings-btn {
+.settings-btn-footer {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -79,13 +80,13 @@ a {
   transition: all 0.3s ease;
 }
 
-.settings-btn:hover {
+.settings-btn-footer:hover {
   background: linear-gradient(135deg, #2980b9, #1f5f99);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
 }
 
-.settings-btn:hover i {
+.settings-btn-footer:hover i {
   animation-duration: 0.5s;
 }
 
