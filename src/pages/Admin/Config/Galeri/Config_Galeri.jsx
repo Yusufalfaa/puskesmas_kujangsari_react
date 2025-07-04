@@ -1,334 +1,452 @@
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabase';
-import './Galeri.css';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../../../../lib/supabase';
+import './Config_Galeri.css';
 
-const Galeri = () => {
-  const [data, setData] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [expandedCategories, setExpandedCategories] = useState({}); // Track expanded categories
-  const [modalImage, setModalImage] = useState(null); // For zoom modal
-  const [currentImageIndex, setCurrentImageIndex] = useState(0); // Current image index
-  const [currentCategory, setCurrentCategory] = useState(''); // Current category for navigation
+const Config_Gallery = () => {
+  const [galleries, setGalleries] = useState([]);
+  const [buckets, setBuckets] = useState([]);
+  const [folders, setFolders] = useState({});
+  const [selectedBucket, setSelectedBucket] = useState('');
+  const [selectedFolder, setSelectedFolder] = useState('');
+  const [photoType, setPhotoType] = useState('');
+  const [uploadFile, setUploadFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [newBucketName, setNewBucketName] = useState('');
+  const [newFolderName, setNewFolderName] = useState('');
+  const [showAddBucket, setShowAddBucket] = useState(false);
+  const [showAddFolder, setShowAddFolder] = useState(false);
+
+  // Photo type options
+  const photoTypes = [
+    'Tim Kita',
+    'Fasilitas Puskesmas',
+    'Kegiatan',
+    'Pelayanan',
+    'Lainnya'
+  ];
 
   useEffect(() => {
-    fetchGalleryData();
+    fetchGalleries();
+    fetchBuckets();
   }, []);
 
-  const fetchGalleryData = async () => {
-    try {
-      setLoading(true);
+  useEffect(() => {
+    if (selectedBucket) {
+      fetchFolders(selectedBucket);
+    }
+  }, [selectedBucket]);
 
-      const { data: galleryData, error } = await supabase
+  const fetchGalleries = async () => {
+    try {
+      const { data, error } = await supabase
         .from('gallery')
         .select('*')
-        .order('created_at', { ascending: false }); // Mengurutkan berdasarkan tanggal terbaru
-
+        .order('created_at', { ascending: false });
+      
       if (error) throw error;
-
-      // Mengelompokkan data berdasarkan photoType
-      const groupedData = galleryData.reduce((acc, item) => {
-        const category = item.photoType;
-        if (!acc[category]) {
-          acc[category] = [];
-        }
-
-        acc[category].push({
-          id: item.id,
-          imgUrl: item.imgUrl,
-          photoType: item.photoType,
-          createdAt: item.created_at
-        });
-
-        return acc;
-      }, {});
-
-      setData(groupedData);
+      setGalleries(data || []);
     } catch (error) {
-      console.error('Error fetching gallery data:', error);
-      setError('Gagal memuat data galeri');
+      console.error('Error fetching galleries:', error);
+      setError('Gagal mengambil data galeri');
+    }
+  };
+
+  const fetchBuckets = async () => {
+    try {
+      const { data, error } = await supabase.storage.listBuckets();
+      if (error) throw error;
+      setBuckets(data || []);
+    } catch (error) {
+      console.error('Error fetching buckets:', error);
+      setError('Gagal mengambil data bucket');
+    }
+  };
+
+  const fetchFolders = async (bucketName) => {
+    try {
+      const { data, error } = await supabase.storage
+        .from(bucketName)
+        .list('', { limit: 100 });
+      
+      if (error) throw error;
+      
+      // Filter only folders (items without file extensions)
+      const folderList = data
+        .filter(item => !item.name.includes('.'))
+        .map(item => item.name);
+      
+      setFolders(prev => ({ ...prev, [bucketName]: folderList }));
+    } catch (error) {
+      console.error('Error fetching folders:', error);
+      setError('Gagal mengambil data folder');
+    }
+  };
+
+  const handleFileUpload = async (e) => {
+    e.preventDefault();
+    
+    if (!uploadFile || !selectedBucket || !photoType) {
+      setError('Pastikan semua field terisi');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      // Generate unique filename
+      const fileExt = uploadFile.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = selectedFolder ? `${selectedFolder}/${fileName}` : fileName;
+
+      // Upload file to Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from(selectedBucket)
+        .upload(filePath, uploadFile);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from(selectedBucket)
+        .getPublicUrl(filePath);
+
+      // Insert into gallery table
+      const { data: insertData, error: insertError } = await supabase
+        .from('gallery')
+        .insert([
+          {
+            photoType: photoType,
+            imgUrl: urlData.publicUrl
+          }
+        ]);
+
+      if (insertError) throw insertError;
+
+      setSuccess('Foto berhasil diupload!');
+      setUploadFile(null);
+      setPhotoType('');
+      fetchGalleries();
+      
+      // Reset form
+      e.target.reset();
+      
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      setError('Gagal mengupload foto: ' + error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  // Function to toggle expanded state for a category
-  const toggleCategory = (category) => {
-    setExpandedCategories(prev => ({
-      ...prev,
-      [category]: !prev[category]
-    }));
-  };
+  const handleDeletePhoto = async (galleryId, imgUrl) => {
+    if (!window.confirm('Apakah Anda yakin ingin menghapus foto ini?')) return;
 
-  // Function to get displayed items (first 20 or all if expanded)
-  const getDisplayedItems = (items, category) => {
-    const isExpanded = expandedCategories[category];
-    return isExpanded ? items : items.slice(0, 20);
-  };
+    setLoading(true);
+    try {
+      // Extract file path from URL
+      const url = new URL(imgUrl);
+      const pathParts = url.pathname.split('/');
+      const bucketName = pathParts[pathParts.length - 2];
+      const fileName = pathParts[pathParts.length - 1];
+      
+      // Delete from storage
+      const { error: storageError } = await supabase.storage
+        .from(bucketName)
+        .remove([fileName]);
 
-  // Function to check if "View More" button should be shown
-  const shouldShowViewMore = (items, category) => {
-    return items.length > 20 && !expandedCategories[category];
-  };
+      if (storageError) throw storageError;
 
-  // Function to check if "View Less" button should be shown
-  const shouldShowViewLess = (items, category) => {
-    return items.length > 20 && expandedCategories[category];
-  };
+      // Delete from database
+      const { error: dbError } = await supabase
+        .from('gallery')
+        .delete()
+        .eq('id', galleryId);
 
-  // Function to open modal with image
-  const openModal = (imageUrl, category, index) => {
-    setModalImage(imageUrl);
-    setCurrentCategory(category);
-    setCurrentImageIndex(index);
-  };
+      if (dbError) throw dbError;
 
-  // Function to close modal
-  const closeModal = () => {
-    setModalImage(null);
-    setCurrentCategory('');
-    setCurrentImageIndex(0);
-  };
-
-  // Function to navigate to next image
-  const nextImage = () => {
-    const categoryItems = data[currentCategory];
-    const displayedItems = getDisplayedItems(categoryItems, currentCategory);
-    const nextIndex = (currentImageIndex + 1) % displayedItems.length;
-    setCurrentImageIndex(nextIndex);
-    setModalImage(displayedItems[nextIndex].imgUrl);
-  };
-
-  // Function to navigate to previous image
-  const prevImage = () => {
-    const categoryItems = data[currentCategory];
-    const displayedItems = getDisplayedItems(categoryItems, currentCategory);
-    const prevIndex = currentImageIndex === 0 ? displayedItems.length - 1 : currentImageIndex - 1;
-    setCurrentImageIndex(prevIndex);
-    setModalImage(displayedItems[prevIndex].imgUrl);
-  };
-
-  // Handle keyboard navigation
-  const handleKeyPress = (e) => {
-    if (!modalImage) return;
-    
-    if (e.key === 'Escape') {
-      closeModal();
-    } else if (e.key === 'ArrowRight') {
-      nextImage();
-    } else if (e.key === 'ArrowLeft') {
-      prevImage();
+      setSuccess('Foto berhasil dihapus!');
+      fetchGalleries();
+    } catch (error) {
+      console.error('Error deleting photo:', error);
+      setError('Gagal menghapus foto: ' + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Add keyboard event listener
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyPress);
-    return () => {
-      document.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [modalImage, currentImageIndex, currentCategory]);
-
-  // Prevent body scroll when modal is open
-  useEffect(() => {
-    if (modalImage) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+  const handleCreateBucket = async () => {
+    if (!newBucketName.trim()) {
+      setError('Nama bucket tidak boleh kosong');
+      return;
     }
-    
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [modalImage]);
 
-  if (loading) {
-    return (
-      <div>
-        <div className="banner">
-          <h1>GALERI</h1>
-          <p>Kumpulan foto kegiatan dan fasilitas Puskesmas Kujangsari.</p>
-        </div>
-        <div className="loading-container">
-          <p>Memuat data...</p>
-        </div>
-      </div>
-    );
-  }
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.storage.createBucket(newBucketName, {
+        public: true
+      });
 
-  if (error) {
-    return (
-      <div>
-        <div className="banner">
-          <h1>GALERI</h1>
-          <p>Kumpulan foto kegiatan dan fasilitas Puskesmas Kujangsari.</p>
-        </div>
-        <div className="error-container">
-          <p>{error}</p>
-          <button onClick={fetchGalleryData}>Coba Lagi</button>
-        </div>
-      </div>
-    );
-  }
+      if (error) throw error;
 
-  // Jika tidak ada data
-  if (Object.keys(data).length === 0) {
-    return (
-      <div>
-        <div className="banner">
-          <h1>GALERI</h1>
-          <p>Kumpulan foto kegiatan dan fasilitas Puskesmas Kujangsari.</p>
-        </div>
-        <div className="empty-container">
-          <p>Belum ada foto dalam galeri.</p>
-        </div>
-      </div>
-    );
-  }
+      setSuccess('Bucket berhasil dibuat!');
+      setNewBucketName('');
+      setShowAddBucket(false);
+      fetchBuckets();
+    } catch (error) {
+      console.error('Error creating bucket:', error);
+      setError('Gagal membuat bucket: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateFolder = async () => {
+    if (!newFolderName.trim() || !selectedBucket) {
+      setError('Nama folder dan bucket harus dipilih');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Create a placeholder file in the folder to create the folder structure
+      const placeholderFile = new Blob([''], { type: 'text/plain' });
+      
+      const { error } = await supabase.storage
+        .from(selectedBucket)
+        .upload(`${newFolderName}/.placeholder`, placeholderFile);
+
+      if (error) throw error;
+
+      setSuccess('Folder berhasil dibuat!');
+      setNewFolderName('');
+      setShowAddFolder(false);
+      fetchFolders(selectedBucket);
+    } catch (error) {
+      console.error('Error creating folder:', error);
+      setError('Gagal membuat folder: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteBucket = async (bucketName) => {
+    if (!window.confirm(`Apakah Anda yakin ingin menghapus bucket "${bucketName}"? Semua file di dalamnya akan terhapus.`)) return;
+
+    setLoading(true);
+    try {
+      const { error } = await supabase.storage.deleteBucket(bucketName);
+      if (error) throw error;
+
+      setSuccess('Bucket berhasil dihapus!');
+      fetchBuckets();
+      if (selectedBucket === bucketName) {
+        setSelectedBucket('');
+        setSelectedFolder('');
+      }
+    } catch (error) {
+      console.error('Error deleting bucket:', error);
+      setError('Gagal menghapus bucket: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div>
-      <div className="banner">
-        <h1>GALERI</h1>
-        <p>Kumpulan foto kegiatan dan fasilitas Puskesmas Kujangsari.</p>
+    <div className="config-gallery">
+      <div className="config-header">
+        <h1>Konfigurasi Galeri</h1>
+        <p>Kelola foto dan struktur penyimpanan galeri Puskesmas</p>
       </div>
 
-      <div className="gallery-container">
-        {/* Tampilkan Tim Kita terlebih dahulu */}
-        {data['Tim Kita'] && (
-          <div className="gallery-section">
-            <h2>
-              Tim Kita <span className="photo-count">({data['Tim Kita'].length} foto)</span>
-            </h2>
-            <div className="gallery-grid">
-              {getDisplayedItems(data['Tim Kita'], 'Tim Kita').map((item, index) => (
-                <div key={item.id} className="gallery-card">
-                  <img
-                    src={item.imgUrl}
-                    alt="Tim Kita photo"
-                    loading="lazy"
-                    className="gallery-image"
-                    onClick={() => openModal(item.imgUrl, 'Tim Kita', index)}
-                    onError={(e) => {
-                      e.target.src = '/assets/placeholder-image.png';
-                    }}
-                  />
-                </div>
-              ))}
+      {/* Alert Messages */}
+      {error && (
+        <div className="alert alert-error">
+          <span className="alert-icon">⚠️</span>
+          {error}
+        </div>
+      )}
+      
+      {success && (
+        <div className="alert alert-success">
+          <span className="alert-icon">✅</span>
+          {success}
+        </div>
+      )}
+
+      {/* Upload Section */}
+      <div className="upload-section">
+        <h2>Upload Foto Baru</h2>
+        <form onSubmit={handleFileUpload} className="upload-form">
+          <div className="form-row">
+            <div className="form-group">
+              <label>Pilih Bucket:</label>
+              <select 
+                value={selectedBucket} 
+                onChange={(e) => setSelectedBucket(e.target.value)}
+                required
+              >
+                <option value="">Pilih Bucket</option>
+                {buckets.map(bucket => (
+                  <option key={bucket.name} value={bucket.name}>
+                    {bucket.name}
+                  </option>
+                ))}
+              </select>
             </div>
-            
-            {/* View More/Less button for Tim Kita */}
-            {shouldShowViewMore(data['Tim Kita'], 'Tim Kita') && (
-              <div className="view-more-container">
-                <button 
-                  className="view-more-btn"
-                  onClick={() => toggleCategory('Tim Kita')}
-                >
-                  Lihat Lebih Banyak ({items.length - 20} foto lagi)
-                </button>
-              </div>
-            )}
-            
-            {shouldShowViewLess(data['Tim Kita'], 'Tim Kita') && (
-              <div className="view-more-container">
-                <button 
-                  className="view-less-btn"
-                  onClick={() => toggleCategory('Tim Kita')}
-                >
-                  Lihat Lebih Sedikit
-                </button>
-              </div>
-            )}
+
+            <div className="form-group">
+              <label>Pilih Folder:</label>
+              <select 
+                value={selectedFolder} 
+                onChange={(e) => setSelectedFolder(e.target.value)}
+                disabled={!selectedBucket}
+              >
+                <option value="">Root Folder</option>
+                {selectedBucket && folders[selectedBucket]?.map(folder => (
+                  <option key={folder} value={folder}>
+                    {folder}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Tipe Foto:</label>
+              <select 
+                value={photoType} 
+                onChange={(e) => setPhotoType(e.target.value)}
+                required
+              >
+                <option value="">Pilih Tipe</option>
+                {photoTypes.map(type => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>Pilih File:</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setUploadFile(e.target.files[0])}
+              required
+            />
+          </div>
+
+          <button type="submit" disabled={loading} className="btn btn-primary">
+            {loading ? 'Mengupload...' : 'Upload Foto'}
+          </button>
+        </form>
+      </div>
+
+      {/* Bucket Management */}
+      <div className="management-section">
+        <h2>Manajemen Bucket & Folder</h2>
+        
+        <div className="management-buttons">
+          <button 
+            className="btn btn-secondary" 
+            onClick={() => setShowAddBucket(!showAddBucket)}
+          >
+            {showAddBucket ? 'Batal' : 'Tambah Bucket'}
+          </button>
+          
+          <button 
+            className="btn btn-secondary" 
+            onClick={() => setShowAddFolder(!showAddFolder)}
+            disabled={!selectedBucket}
+          >
+            {showAddFolder ? 'Batal' : 'Tambah Folder'}
+          </button>
+        </div>
+
+        {showAddBucket && (
+          <div className="add-form">
+            <div className="form-group">
+              <label>Nama Bucket Baru:</label>
+              <input
+                type="text"
+                value={newBucketName}
+                onChange={(e) => setNewBucketName(e.target.value)}
+                placeholder="Masukkan nama bucket"
+              />
+            </div>
+            <button onClick={handleCreateBucket} className="btn btn-primary">
+              Buat Bucket
+            </button>
           </div>
         )}
-        
-        {/* Tampilkan kategori lainnya kecuali Tim Kita */}
-        {Object.entries(data)
-          .filter(([category]) => category !== 'Tim Kita')
-          .map(([category, items]) => (
-            <div key={category} className="gallery-section">
-              <h2>{category} <span className="photo-count">({items.length} foto)</span></h2>
-              <div className="gallery-grid">
-                {getDisplayedItems(items, category).map((item, index) => (
-                  <div key={item.id} className="gallery-card">
-                    <img
-                      src={item.imgUrl}
-                      alt={`${category} photo`}
-                      loading="lazy"
-                      className="gallery-image"
-                      onClick={() => openModal(item.imgUrl, category, index)}
-                      onError={(e) => {
-                        e.target.src = '/assets/placeholder-image.png';
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-              
-              {/* View More button */}
-              {shouldShowViewMore(items, category) && (
-                <div className="view-more-container">
-                  <button 
-                    className="view-more-btn"
-                    onClick={() => toggleCategory(category)}
-                  >
-                    Lihat Lebih Banyak ({items.length - 20} foto lagi)
-                  </button>
-                </div>
-              )}
-              
-              {/* View Less button */}
-              {shouldShowViewLess(items, category) && (
-                <div className="view-more-container">
-                  <button 
-                    className="view-less-btn"
-                    onClick={() => toggleCategory(category)}
-                  >
-                    Lihat Lebih Sedikit
-                  </button>
-                </div>
-              )}
+
+        {showAddFolder && (
+          <div className="add-form">
+            <div className="form-group">
+              <label>Nama Folder Baru:</label>
+              <input
+                type="text"
+                value={newFolderName}
+                onChange={(e) => setNewFolderName(e.target.value)}
+                placeholder="Masukkan nama folder"
+              />
+            </div>
+            <button onClick={handleCreateFolder} className="btn btn-primary">
+              Buat Folder
+            </button>
+          </div>
+        )}
+
+        <div className="bucket-list">
+          <h3>Daftar Bucket:</h3>
+          {buckets.map(bucket => (
+            <div key={bucket.name} className="bucket-item">
+              <span className="bucket-name">{bucket.name}</span>
+              <button 
+                className="btn btn-danger btn-sm"
+                onClick={() => handleDeleteBucket(bucket.name)}
+              >
+                Hapus
+              </button>
             </div>
           ))}
+        </div>
       </div>
 
-      {/* Modal for image zoom */}
-      {modalImage && (
-  <div className="modal-overlay" onClick={closeModal}>
-    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-      <button className="modal-close" onClick={closeModal}>
-        ×
-      </button>
-
-      <button className="modal-nav modal-prev" onClick={prevImage}>
-        ‹
-      </button>
-
-      <img
-        src={modalImage}
-        alt="Zoomed image"
-        className="modal-image"
-        onError={(e) => {
-          e.target.src = '/assets/placeholder-image.png';
-        }}
-      />
-
-      <button className="modal-nav modal-next" onClick={nextImage}>
-        ›
-      </button>
-
-      <div className="modal-info">
-        <span className="modal-category">{currentCategory}</span>
-        <span className="modal-counter">
-          {currentImageIndex + 1} / {getDisplayedItems(data[currentCategory], currentCategory).length}
-        </span>
+      {/* Gallery List */}
+      <div className="gallery-section">
+        <h2>Daftar Foto Galeri</h2>
+        <div className="gallery-grid">
+          {galleries.map(gallery => (
+            <div key={gallery.id} className="gallery-item">
+              <img 
+                src={gallery.imgUrl} 
+                alt={gallery.photoType}
+                className="gallery-image"
+              />
+              <div className="gallery-info">
+                <p className="photo-type">{gallery.photoType}</p>
+                <p className="photo-date">
+                  {new Date(gallery.created_at).toLocaleDateString('id-ID')}
+                </p>
+                <button 
+                  className="btn btn-danger btn-sm"
+                  onClick={() => handleDeletePhoto(gallery.id, gallery.imgUrl)}
+                >
+                  Hapus
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  </div>
-)}
-
     </div>
   );
 };
 
-export default Galeri;
+export default Config_Gallery;

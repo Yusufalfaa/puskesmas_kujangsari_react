@@ -32,6 +32,7 @@ import Config_Kontak from './pages/Admin/Config/Semua Kontak/Config_Kontak';
 import Config_PetugasKesehatan from './pages/Admin/Config/Petugas Kesehatan/Config_petugasKesehatan';
 import Config_WaktuPelayanan from './pages/Admin/Config/Waktu Pelayanan/Config_waktuPelayanan';
 import Config_VideoBeranda from './pages/Admin/Config/Video Beranda/Config_videoBeranda';
+import Config_Gallery from './pages/Admin/Config/Galeri/Config_Galeri';
 
 
 function AppContent() {
@@ -162,6 +163,14 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Config_VideoBeranda />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin-config-gallery" 
+          element={
+            <ProtectedRoute>
+              <Config_Gallery />
             </ProtectedRoute>
           } 
         />

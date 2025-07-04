@@ -244,6 +244,40 @@
   cursor: zoom-in;
 }
 
+/* Styling untuk tombol config */
+.settings-btn-gallery {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+.settings-btn-gallery:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+.settings-btn-gallery:active {
+  transform: scale(0.95);
+}
+
+.settings-btn-gallery svg {
+  width: 20px;
+  height: 20px;
+}
+
 /* Responsive design */
 @media (min-width: 1200px) {
   .gallery-container {
