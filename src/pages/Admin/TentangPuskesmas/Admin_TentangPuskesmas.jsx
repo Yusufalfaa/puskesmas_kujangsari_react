@@ -191,7 +191,7 @@ const TentangPuskesmas = () => {
     return (
       <div className="image-gallery">
         {images.map((image, index) => (
-          <div key={index} className="gallery-item">
+          <div key={index} className="gallery-item-tentangPuskesmas">
             <img
               src={image.imgUrl}
               alt={`${altText} ${index + 1}`}
@@ -204,7 +204,7 @@ const TentangPuskesmas = () => {
                 width: '100%',
                 height: '200px',
                 objectFit: 'cover',
-                borderRadius: '5px',
+                borderRadius: '35px',
                 cursor: 'pointer',
                 marginBottom: '10px'
               }}

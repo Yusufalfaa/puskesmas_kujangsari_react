@@ -20,7 +20,7 @@ import FloatingWhatsAppIcon from './components/FloatingWhatsAppIcon/FloatingWhat
 
 
 import Admin_Beranda from './pages/Admin/Beranda/Admin_Beranda';
-import Admin_SaranKeluhan from './pages/Admin/sarankeluhan/Admin_SaranKeluhan';
+import Admin_SaranKeluhan from './pages/Admin/SaranKeluhan/Admin_SaranKeluhan';
 import Admin_TentangPuskesmas from './pages/Admin/TentangPuskesmas/Admin_TentangPuskesmas';
 import Admin_Kontak from './pages/Admin/Kontak/Admin_Kontak';
 import Admin_TenagaKerja from './pages/Admin/TenagaKerja/Admin_TenagaKerja';
@@ -33,6 +33,7 @@ import Config_PetugasKesehatan from './pages/Admin/Config/Petugas Kesehatan/Conf
 import Config_WaktuPelayanan from './pages/Admin/Config/Waktu Pelayanan/Config_waktuPelayanan';
 import Config_VideoBeranda from './pages/Admin/Config/Video Beranda/Config_videoBeranda';
 import Config_Gallery from './pages/Admin/Config/Galeri/Config_Galeri';
+import Config_TenagaKerja from './pages/Admin/Config/TenagaKerja/Config_TenagaKerja';
 
 
 function AppContent() {
@@ -167,10 +168,18 @@ function AppContent() {
           } 
         />
         <Route 
-          path="/admin-config-gallery" 
+          path="/admin-config-galeri" 
           element={
             <ProtectedRoute>
               <Config_Gallery />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin-config-tenagaKerja" 
+          element={
+            <ProtectedRoute>
+              <Config_TenagaKerja />
             </ProtectedRoute>
           } 
         />

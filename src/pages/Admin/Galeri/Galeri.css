@@ -248,8 +248,8 @@
 .settings-btn-gallery {
   position: absolute;
   top: 20px;
-  right: 20px;
-  background: rgba(255, 255, 255, 0.2);
+  right: 120px;
+  background: rgba(255, 255, 255, 0.15);
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   width: 50px;
@@ -259,27 +259,31 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: white;
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 10;
 }
 
 .settings-btn-gallery:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.25);
   border-color: rgba(255, 255, 255, 0.5);
-  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.settings-btn-gallery:active {
-  transform: scale(0.95);
+.settings-icon {
+  width: 24px;
+  height: 24px;
+  color: white;
+  transition: all 0.3s ease;
 }
 
-.settings-btn-gallery svg {
-  width: 20px;
-  height: 20px;
+.settings-btn-gallery:hover .settings-icon {
+  color: #ffffff;
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
 }
 
 /* Responsive design */
-@media (min-width: 1200px) {
+@media (min-width: 1800px) {
   .gallery-container {
     padding: 0 30px;
   }

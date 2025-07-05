@@ -108,9 +108,9 @@ const TenagaMedis = () => {
 
   if (loading) {
     return (
-      <div className="tenaga-container">
-        <h2 className="tenaga-title">Tenaga Medis</h2>
-        <div className="tenaga-loading">
+      <div className="tenaga-medis-container">
+        <h2 className="tenaga-medis-title">Tenaga Medis</h2>
+        <div className="tenaga-medis-loading">
           <p>Memuat data tenaga medis...</p>
         </div>
       </div>
@@ -119,9 +119,9 @@ const TenagaMedis = () => {
 
   if (error) {
     return (
-      <div className="tenaga-container">
-        <h2 className="tenaga-title">Tenaga Medis</h2>
-        <div className="tenaga-error">
+      <div className="tenaga-medis-container">
+        <h2 className="tenaga-medis-title">Tenaga Medis</h2>
+        <div className="tenaga-medis-error">
           <p>{error}</p>
         </div>
       </div>
@@ -130,9 +130,9 @@ const TenagaMedis = () => {
 
   if (images.length === 0) {
     return (
-      <div className="tenaga-container">
-        <h2 className="tenaga-title">Tenaga Medis</h2>
-        <div className="tenaga-empty">
+      <div className="tenaga-medis-container">
+        <h2 className="tenaga-medis-title">Tenaga Medis</h2>
+        <div className="tenaga-medis-empty">
           <p>Tidak ada data tenaga medis yang tersedia.</p>
         </div>
       </div>
@@ -140,35 +140,35 @@ const TenagaMedis = () => {
   }
 
   return (
-    <div className="tenaga-container">
-      <h2 className="tenaga-title">Tenaga Medis</h2>
-      <div className="tenaga-carousel-wrapper">
+    <div className="tenaga-medis-container">
+      <h2 className="tenaga-medis-title">Tenaga Medis</h2>
+      <div className="tenaga-medis-carousel-wrapper">
         <button 
           onClick={handlePrev} 
-          className="tenaga-carousel-button left"
+          className="tenaga-medis-carousel-button left"
           disabled={scrollIndex === 0}
         >
           {'<'}
         </button>
-        <div className="tenaga-carousel">
+        <div className="tenaga-medis-carousel">
           <div
-            className="tenaga-carousel-track"
+            className="tenaga-medis-carousel-track"
             style={{ transform: `translateX(-${scrollIndex * (100 / imageCount)}%)` }}
           >
             {images.map((img, index) => (
-              <div key={img.id || index} className="tenaga-carousel-item">
-                <div className="tenaga-card">
+              <div key={img.id || index} className="tenaga-medis-carousel-item">
+                <div className="tenaga-medis-card">
                   <img
                     src={img.src}
                     alt={`Tenaga Medis ${img.caption}`}
                     loading="lazy" // ✅ Lazy loading here
-                    className="tenaga-carousel-image"
+                    className="tenaga-medis-carousel-image"
                     onClick={() => setPopupImage(img.src)}
                     onError={(e) => {
                       e.target.src = '/assets/placeholder-avatar.png';
                     }}
                   />
-                  <span className="tenaga-caption" title={img.caption}>
+                  <span className="tenaga-medis-caption" title={img.caption}>
                     {img.caption}
                   </span>
                 </div>
@@ -178,7 +178,7 @@ const TenagaMedis = () => {
         </div>
         <button 
           onClick={handleNext} 
-          className="tenaga-carousel-button right"
+          className="tenaga-medis-carousel-button right"
           disabled={scrollIndex >= images.length - imageCount}
         >
           {'>'}
@@ -186,14 +186,14 @@ const TenagaMedis = () => {
       </div>
 
       {popupImage && (
-        <div className="tenaga-popup-overlay" onClick={closePopup}>
-          <div className="tenaga-popup-image-wrapper" onClick={(e) => e.stopPropagation()}>
-            <button className="tenaga-close-button" onClick={closePopup}>X</button>
+        <div className="tenaga-medis-popup-overlay" onClick={closePopup}>
+          <div className="tenaga-medis-popup-image-wrapper" onClick={(e) => e.stopPropagation()}>
+            <button className="tenaga-medis-close-button" onClick={closePopup}>X</button>
             <img
               src={popupImage}
               alt="Popup"
               loading="lazy"
-              className="tenaga-popup-image"
+              className="tenaga-medis-popup-image"
               style={{ transform: `scale(${zoomLevel})` }}
               onWheel={handleWheelZoom}
             />

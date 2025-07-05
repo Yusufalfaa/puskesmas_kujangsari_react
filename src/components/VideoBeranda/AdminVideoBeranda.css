@@ -15,7 +15,7 @@
   z-index: 10;
 }
 
-.settings-btn {
+.settings-btn-videoBeranda {
   background-color: #ff4444;
   border: none;
   border-radius: 50%;
@@ -31,12 +31,12 @@
   margin-right: 30px;
 }
 
-.settings-btn:hover {
+.settings-btn-videoBeranda:hover {
   background-color: #cc3333;
   transform: scale(1.1);
 }
 
-.settings-btn:active {
+.settings-btn-videoBeranda:active {
   transform: scale(0.95);
 }
 

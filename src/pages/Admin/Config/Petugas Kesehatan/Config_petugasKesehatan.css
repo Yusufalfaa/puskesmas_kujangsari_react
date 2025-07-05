@@ -355,7 +355,7 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
+@media (max-width: 1800px) {
   .config-table {
     font-size: 12px;
   }

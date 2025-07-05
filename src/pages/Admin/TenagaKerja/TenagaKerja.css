@@ -1,65 +1,257 @@
-.tenaga-container {
-  padding: 40px 60px;
-  font-family: 'Epilogue', sans-serif;
+/* Import existing TenagaKerja.css styles */
+@import url('./TenagaKerja.css');
+
+/* Settings Button Styles */
+.banner {
+  position: relative;
+  background: linear-gradient(135deg, #0d7377 0%, #14a085 100%);
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+  margin-bottom: 40px;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)" /></svg>');
+  opacity: 0.3;
+  z-index: 1;
+}
+
+.banner h1,
+.banner p {
+  position: relative;
+  z-index: 2;
+}
+
+.settings-btn-tenagaKerja {
+  position: absolute;
+  top: 20px;
+  right: 120px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.settings-btn-tenagaKerja:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.settings-icon {
+  width: 24px;
+  height: 24px;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.settings-btn-tenagaKerja:hover .settings-icon {
+  color: #ffffff;
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .settings-btn-tenagaKerja {
+    width: 45px;
+    height: 45px;
+    top: 15px;
+    right: 15px;
+  }
+  
+  .settings-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .banner {
+    padding: 40px 15px;
+  }
+  
+  .banner h1 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+  
+  .banner p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-btn-tenagaKerja {
+    width: 40px;
+    height: 40px;
+    top: 10px;
+    right: 10px;
+  }
+  
+  .settings-icon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .banner {
+    padding: 30px 10px;
+  }
+  
+  .banner h1 {
+    font-size: 1.5rem;
+  }
+  
+  .banner p {
+    font-size: 0.8rem;
+  }
+}
+
+/* Enhanced existing styles */
+.tenaga-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .tenaga-section {
-  width: 100%;
-  text-align: center;
+  margin-bottom: 50px;
 }
 
 .tenaga-section h2 {
-  font-size: 28px;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #0C6478;
-  display: inline-block;
-  padding-bottom: 5px;
-  color: #0C6478;
+  color: #0d7377;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+}
+
+.tenaga-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #0d7377, #14a085);
+  border-radius: 2px;
 }
 
 .tenaga-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 40px;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  justify-items: center;
 }
 
 .tenaga-card {
-  width: 180px;
-  height: 300px;
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  border: 1px solid rgba(13, 115, 119, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.tenaga-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0d7377, #14a085);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.tenaga-card:hover::before {
+  transform: scaleX(1);
+}
+
+.tenaga-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .tenaga-image {
-  width: 100%;
-  height: 240px;
-  border-radius: 8px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  border: 4px solid #e8f6f7;
+  transition: all 0.3s ease;
+}
+
+.tenaga-card:hover .tenaga-image {
+  border-color: #0d7377;
+  transform: scale(1.05);
 }
 
 .tenaga-name {
-  margin-top: 8px;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 1.1rem;
+  font-weight: 600;
   color: #333;
-  word-break: break-word;
-  text-align: center;
+  margin: 0;
+  line-height: 1.4;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .tenaga-container {
-    padding: 20px;
-  }
+.loading-container,
+.error-container {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
 
-  .tenaga-grid {
-    justify-content: center;
-  }
+.error-container button {
+  background: #0d7377;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 20px;
+  transition: background 0.3s ease;
+}
+
+.error-container button:hover {
+  background: #14a085;
+}
+
+/* Loading spinner */
+.loading-container::after {
+  content: '';
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e8f6f7;
+  border-top: 4px solid #0d7377;
+  border-radius: 50%;
+  animation: spin 1s linear;
+  margin-top: 20px;
 }

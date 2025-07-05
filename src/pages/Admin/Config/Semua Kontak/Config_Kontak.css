@@ -379,7 +379,7 @@
 }
 
 /* Responsive */
-@media (max-width: 1200px) {
+@media (max-width: 1800px) {
   .contacts-table {
     font-size: 12px;
   }
