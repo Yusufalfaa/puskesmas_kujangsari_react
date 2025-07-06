@@ -357,12 +357,15 @@ const Config_TenagaKerja = () => {
   }
 
   return (
-    <div className="config-gallery">
+    <div className="config-tenagaKerja">
       {/* Header */}
-      <div className="config-header-new">
+      <div className="config-tenagaKerja-header-new">
         <button className="btn-back" onClick={() => window.history.back()}>
-          ← Kembali
-        </button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+             Kembali
+          </button>
         <h1>Kelola Tenaga Kerja</h1>
         <div className="header-actions">
           <button className="btn-add-staff" onClick={() => handleOpenModal("add")}>
@@ -455,16 +458,16 @@ const Config_TenagaKerja = () => {
 
       {/* Modal */}
       {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
+        <div className="modal-tenagaKerja-overlay">
+          <div className="modal-tenagaKerja-content">
+            <div className="modal-tenagaKerja-header">
               <h2>{modalType === "add" ? "Tambah Tenaga Kerja" : "Edit Tenaga Kerja"}</h2>
-              <button className="modal-close" onClick={handleCloseModal}>
+              <button className="modal-tenagaKerja-close" onClick={handleCloseModal}>
                 ×
               </button>
             </div>
 
-            <form onSubmit={handleFormSubmit} className="modal-form">
+            <form onSubmit={handleFormSubmit} className="modal-tenagaKerja-form">
               <div className="form-group">
                 <label>Nama:</label>
                 <input
@@ -565,7 +568,7 @@ const Config_TenagaKerja = () => {
                 </div>
               )}
 
-              <div className="modal-actions">
+              <div className="modal-tenagaKerja-actions">
                 <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>
                   Batal
                 </button>

@@ -85,16 +85,7 @@ const JadwalPelayanan = () => {
     
     // Untuk gelar lainnya (S.Farm, S.Kep, Amd.Keb, dll), ditaruh di belakang nama
     return `${name}, ${degree}`;
-  };
-
-  // Handle navigasi ke halaman admin config
-  const handlePetugasConfig = () => {
-    navigate('/admin-config-petugasKesehatan');
-  };
-
-  const handleWaktuPelayananConfig = () => {
-    navigate('/admin-config-waktuPelayanan');
-  };
+  };  
 
   if (loading) {
     return (
@@ -114,35 +105,6 @@ const JadwalPelayanan = () => {
 
   return (
     <div className="jadwal-container">
-      <div className="petugas-box">
-        <div className="header-with-settings">
-          <h3>Petugas Kesehatan</h3>
-        </div>
-        <div className="divider"></div>
-        {/* Tambahkan kelas .jadwal-text agar gaya p spesifik */}
-        <p className="jadwal-text"><strong>Hari Ini: {tanggalHariIni}</strong></p>
-        {petugasHariIni.length > 0 ? (
-          <ul>
-            {petugasHariIni.map((petugas, index) => (
-              <li key={petugas.id}>
-                {formatNameWithDegree(
-                  petugas.sdm?.name || `Petugas ${index + 1}`,
-                  petugas.sdm?.degree
-                )} ({petugas.sdm?.jobdesk})
-                <span>
-                  {formatTime(petugas.time_start)} – {formatTime(petugas.time_end)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          // Tambahkan kelas .jadwal-text di sini juga
-          <p className="jadwal-text">Tidak ada petugas yang bertugas hari ini.</p>
-        )}
-      </div>
-
-      <div className="vertical-divider"></div>
-
       <div className="jadwal-box">
         <div className="header-with-settings">
           <h3>Waktu Pelayanan</h3>

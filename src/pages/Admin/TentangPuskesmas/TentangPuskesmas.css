@@ -30,6 +30,65 @@
     line-height: 1.6;
 }
 
+/* Section Header dengan Settings Button */
+.section-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 40px 0;
+}
+
+.section-header h2 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.settings-btn-tentangPuskesmas {
+    position: relative;/* Back to original position for all sections */
+    background-color: #0C6478;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tentang-kami .settings-btn-tentangPuskesmas{
+    left: 25px;
+}
+
+.motto-tata-nilai .settings-btn-tentangPuskesmas{
+    left: 25px;
+}
+
+.visi-misi .settings-btn-tentangPuskesmas {
+    left: 25px;
+}
+
+.struktur-organisasi .settings-btn-tentangPuskesmas {
+    left: 25px; 
+}
+
+.settings-btn-tentangPuskesmas:hover {
+    background-color: #0a5565;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.settings-btn-tentangPuskesmas:active {
+    transform: scale(0.95);
+}
+
+/* Fallback untuk h2 yang tidak menggunakan section-header */
 h2 {
     text-align: center;
     margin: 40px 0;
@@ -119,7 +178,6 @@ h2 {
     pointer-events: auto;
 }
 
-
 .close-btn {
     position: absolute;
     top: 20px;
@@ -136,6 +194,10 @@ h2 {
     justify-content: center;
     cursor: pointer;
     z-index: 1000;
+}
+
+.struktur-organisasi {
+    margin-bottom: 100px;
 }
 
 /* Responsif untuk layar dengan lebar kurang dari 768px (tablet & smartphone) */
@@ -156,6 +218,20 @@ h2 {
     .image-column img {
         padding: 10px;
     }
+
+    .section-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .settings-btn-tentangPuskesmas {
+        position: static;
+        margin-top: 10px;
+    }
+
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
 }
 
 /* Responsif untuk layar dengan lebar kurang dari 480px (smartphone) */
@@ -171,8 +247,13 @@ h2 {
     .image-column img {
         padding: 5px;
     }
-}
 
-.struktur-organisasi {
-    margin-bottom: 100px;
+    .section-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .settings-btn-tentangPuskesmas {
+        width: 35px;
+        height: 35px;
+    }
 }

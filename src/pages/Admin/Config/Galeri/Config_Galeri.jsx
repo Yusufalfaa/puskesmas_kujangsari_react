@@ -272,12 +272,15 @@ const Config_Gallery = () => {
   }
 
   return (
-    <div className="config-gallery">
+    <div className="config-galeri-gallery">
       {/* Header - DIUBAH SESUAI PERMINTAAN */}
-      <div className="config-header-new">
+      <div className="config-galeri-header-new">
         <button className="btn-back" onClick={() => window.history.back()}>
-          ← Kembali
-        </button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Kembali
+          </button>
         <h1>Kelola Galeri</h1>
         <button className="btn-add-photo" onClick={handleOpenUploadModal}>
           Tambah Foto

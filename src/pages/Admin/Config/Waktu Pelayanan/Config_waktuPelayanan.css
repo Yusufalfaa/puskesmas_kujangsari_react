@@ -1,11 +1,11 @@
 /* config_waktuPelayanan.css */
-.config-container {
+.config-waktuPelayanan-container {
   background-color: #f5f5f5;
   min-height: auto;
   padding: 20px;
 }
 
-.config-header {
+.config-waktuPelayanan-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -14,14 +14,14 @@
   gap: 15px;
 }
 
-.config-header h1 {
+.config-waktuPelayanan-header h1 {
   margin: 0;
   font-size: 2rem;
   font-weight: bold;
   color: white;
 }
 
-.back-btn {
+.btn-back {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -35,7 +35,7 @@
   font-size: 14px;
 }
 
-.back-btn:hover {
+.btn-back:hover {
   background-color: rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
 }
@@ -314,21 +314,21 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .config-container {
+  .config-waktuPelayanan-container {
     padding: 15px;
   }
   
-  .config-header {
+  .config-waktuPelayanan-header {
     flex-direction: column;
     align-items: stretch;
   }
   
-  .config-header h1 {
+  .config-waktuPelayanan-header h1 {
     font-size: 1.5rem;
     text-align: center;
   }
   
-  .back-btn,
+  .btn-back,
   .add-btn {
     align-self: center;
   }

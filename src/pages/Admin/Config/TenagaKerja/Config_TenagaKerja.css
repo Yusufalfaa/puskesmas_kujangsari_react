@@ -21,13 +21,14 @@
   align-items: center;
   cursor: pointer;
   padding: 20px 25px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f96b5 30%, #0a7385 100%);
   transition: all 0.3s ease;
   user-select: none;
+  margin: 0 20px 0 20px;
 }
 
 .category-header:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  background: linear-gradient(135deg, #0f96b5 30%, #0a7385 100%);
 }
 
 .category-header h3 {
@@ -180,18 +181,19 @@
 }
 
 /* Header styles */
-.config-header-new {
+.config-tenagaKerja-header-new {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
   padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f96b5 30%, #0a7385 100%);
   border-radius: 12px;
   color: white;
+  margin: 20px 20px 0 20px;
 }
 
-.config-header-new h1 {
+.config-tenagaKerja-header-new h1 {
   margin: 0;
   font-size: 28px;
   font-weight: 600;
@@ -332,7 +334,7 @@
 }
 
 /* Modal styles */
-.modal-overlay {
+.modal-tenagaKerja-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -346,7 +348,7 @@
   padding: 20px;
 }
 
-.modal-content {
+.modal-tenagaKerja-content {
   background: white;
   border-radius: 12px;
   width: 100%;
@@ -356,7 +358,7 @@
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-.modal-header {
+.modal-tenagaKerja-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -364,14 +366,14 @@
   border-bottom: 1px solid #e2e8f0;
 }
 
-.modal-header h2 {
+.modal-tenagaKerja-header h2 {
   margin: 0;
   color: #2d3748;
   font-size: 24px;
   font-weight: 600;
 }
 
-.modal-close {
+.modal-tenagaKerja-close {
   background: none;
   border: none;
   font-size: 24px;
@@ -387,12 +389,12 @@
   transition: all 0.3s;
 }
 
-.modal-close:hover {
+.modal-tenagaKerja-close:hover {
   background: #f7fafc;
   color: #2d3748;
 }
 
-.modal-form {
+.modal-tenagaKerja-form {
   padding: 30px;
 }
 
@@ -445,7 +447,7 @@
   color: #718096;
 }
 
-.modal-actions {
+.modal-tenagaKerja-actions {
   display: flex;
   gap: 15px;
   justify-content: flex-end;
@@ -456,13 +458,13 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .config-header-new {
+  .config-tenagaKerja-header-new {
     flex-direction: column;
     gap: 15px;
     text-align: center;
   }
 
-  .config-header-new h1 {
+  .config-tenagaKerja-header-new h1 {
     order: -1;
     text-align: center;
   }
@@ -508,23 +510,23 @@
     font-size: 16px;
   }
 
-  .modal-overlay {
+  .modal-tenagaKerja-overlay {
     padding: 10px;
   }
 
-  .modal-content {
+  .modal-tenagaKerja-content {
     max-width: 100%;
   }
 
-  .modal-header {
+  .modal-tenagaKerja-header {
     padding: 15px 20px;
   }
 
-  .modal-header h2 {
+  .modal-tenagaKerja-header h2 {
     font-size: 20px;
   }
 
-  .modal-form {
+  .modal-tenagaKerja-form {
     padding: 20px;
   }
 
@@ -533,11 +535,11 @@
     gap: 15px;
   }
 
-  .modal-actions {
+  .modal-tenagaKerja-actions {
     flex-direction: column;
   }
 
-  .modal-actions .btn {
+  .modal-tenagaKerja-actions .btn {
     width: 100%;
     justify-content: center;
   }

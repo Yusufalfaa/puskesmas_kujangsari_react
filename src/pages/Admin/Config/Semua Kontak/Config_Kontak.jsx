@@ -139,11 +139,6 @@ const Config_Kontak = () => {
     }
   };
 
-  // Kembali ke halaman kontak
-  const handleBack = () => {
-    navigate(-1); // Kembali ke halaman sebelumnya
-  };
-
   // Format tanggal
   const formatDate = (dateString) => {
     if (!dateString) return '-';
@@ -159,16 +154,16 @@ const Config_Kontak = () => {
   const contactTypes = ['WhatsApp', 'Instagram', 'Phone', 'Email', 'Website'];
 
   return (
-    <div className="config-kontak-container">
+    <div className="config-kontak-kontak-container">
       {/* Header */}
-      <div className="config-header">
+      <div className="config-kontak-header">
         <div className="header-left">
-          <button className="back-btn" onClick={() => navigate(-1)}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          Kembali
-        </button>
+          <button className="btn-back" onClick={() => navigate(-1)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Kembali
+          </button>
           <h1>Konfigurasi Kontak</h1>
         </div>
         <button 

@@ -1,5 +1,5 @@
 /* Config Kontak Container */
-.config-kontak-container {
+.config-halamanKontak-kontak-container {
   padding: 20px;
   max-width: auto;
   margin: 0 auto;
@@ -7,10 +7,11 @@
 }
 
 /* Header */
-.config-header {
+.config-halamanKontak-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
   margin-bottom: 30px;
   padding: 20px;
   background: linear-gradient(135deg, #0C6478 0%, #0a5563 100%);
@@ -24,33 +25,33 @@
   gap: 15px;
 }
 
-.back-btn {
+.config-halamanKontak-header h1 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.btn-back {
   padding: 10px 20px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 900;
   display: flex;
   align-items: center;
   gap: 8px;
   transition: all 0.3s ease;
-}
-
-.back-btn {
-  background-color: #6c757d;
+  background-color: rgba(255, 255, 255, 0.2);
   color: white;
 }
 
-.back-btn:hover {
+.btn-back:hover {
   background-color: #5a6268;
   transform: translateY(-2px);
-}
-
-.config-header h1 {
-  margin: 0;
-  font-size: 28px;
-  font-weight: 600;
 }
 
 .add-button {
@@ -391,18 +392,30 @@
 }
 
 @media (max-width: 992px) {
-  .config-kontak-container {
+  .config-halamanKontak-kontak-container {
     padding: 15px;
   }
   
-  .config-header {
+  .config-halamanKontak-header {
     flex-direction: column;
     gap: 15px;
     text-align: center;
+    position: static;
+  }
+  
+  .config-halamanKontak-header h1 {
+    position: static;
+    transform: none;
+    order: 1;
   }
   
   .header-left {
     justify-content: center;
+    order: 0;
+  }
+  
+  .add-button {
+    order: 2;
   }
 }
 
@@ -420,7 +433,7 @@
     width: calc(100% - 40px);
   }
   
-  .config-header h1 {
+  .config-halamanKontak-header h1 {
     font-size: 24px;
   }
   

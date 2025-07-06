@@ -17,6 +17,7 @@ import TenagaKerja from './pages/TenagaKerja/TenagaKerja'
 import Galeri from './pages/Galeri/Galeri';
 import LayananSubDetailPage from './pages/LayananKlaster/LayananSubDetailPage';
 import FloatingWhatsAppIcon from './components/FloatingWhatsAppIcon/FloatingWhatsAppIcon';
+import FloatingStorage from './components/FloatingStorage/FloatingStorage';
 
 
 import Admin_Beranda from './pages/Admin/Beranda/Admin_Beranda';
@@ -29,11 +30,13 @@ import Admin_Klaster2Page from './pages/Admin/LayananKlaster/klaster-2';
 
 import Config_HalamanKontak from './pages/Admin/Config/Halaman Kontak/Config_halamanKontak';
 import Config_Kontak from './pages/Admin/Config/Semua Kontak/Config_Kontak';
-import Config_PetugasKesehatan from './pages/Admin/Config/Petugas Kesehatan/Config_petugasKesehatan';
 import Config_WaktuPelayanan from './pages/Admin/Config/Waktu Pelayanan/Config_waktuPelayanan';
 import Config_VideoBeranda from './pages/Admin/Config/Video Beranda/Config_videoBeranda';
 import Config_Gallery from './pages/Admin/Config/Galeri/Config_Galeri';
 import Config_TenagaKerja from './pages/Admin/Config/TenagaKerja/Config_TenagaKerja';
+import Config_StorageManagement from './pages/Admin/Config/StorageManagement/Config_StorageManagement';
+import Config_TentangKami from './pages/Admin/Config/TentangKami/Config_TentangKami';
+
 
 
 function AppContent() {
@@ -144,14 +147,6 @@ function AppContent() {
           } 
         />
         <Route 
-          path="/admin-config-petugasKesehatan" 
-          element={
-            <ProtectedRoute>
-              <Config_PetugasKesehatan />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
           path="/admin-config-waktuPelayanan" 
           element={
             <ProtectedRoute>
@@ -183,15 +178,29 @@ function AppContent() {
             </ProtectedRoute>
           } 
         />
+        <Route 
+          path="/admin-config-storageManagement" 
+          element={
+            <ProtectedRoute>
+              <Config_StorageManagement />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin-config-tentangKami" 
+          element={
+            <ProtectedRoute>
+              <Config_TentangKami />
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
       
       {/* Conditional Footer - Show AdminFooter for admin routes only if authenticated, regular Footer for public routes */}
-      {isAdminRoute && isAuthenticated ? <AdminFooter /> : <Footer />
-      }
+      {isAdminRoute && isAuthenticated ? <AdminFooter /> : <Footer />}
+      {isAdminRoute && !isLoginPage && ( <FloatingStorage/>)}
 
-      {!isLoginPage && !isAdminRoute && (
-        <FloatingWhatsAppIcon/>
-      )}
+      {!isLoginPage && !isAdminRoute && ( <FloatingWhatsAppIcon/>)}
     </div>
   );
 }

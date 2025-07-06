@@ -133,11 +133,6 @@ const Config_Kontak = () => {
     }
   };
 
-  // Kembali ke halaman kontak
-  const handleBack = () => {
-    navigate(-1); // Kembali ke halaman sebelumnya
-  };
-
   // Format tanggal
   const formatDate = (dateString) => {
     if (!dateString) return '-';
@@ -160,11 +155,11 @@ const Config_Kontak = () => {
   };
 
   return (
-    <div className="config-kontak-container">
+    <div className="config-halamanKontak-kontak-container">
       {/* Header */}
-      <div className="config-header">
+      <div className="config-halamanKontak-header">
         <div className="header-left">
-          <button className="back-btn" onClick={() => navigate(-1)}>
+          <button className="btn-back" onClick={() => navigate(-1)}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>

@@ -1,5 +1,5 @@
 /* Header baru sesuai permintaan */
-.config-header-new {
+.config-galeri-header-new {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -10,7 +10,7 @@
   color: white;
 }
 
-.config-header-new h1 {
+.config-galeri-header-new h1 {
   margin: 0;
   font-size: 28px;
   font-weight: 600;
@@ -220,13 +220,13 @@
 
 /* Responsive Header */
 @media (max-width: 768px) {
-  .config-header-new {
+  .config-galeri-header-new {
     flex-direction: column;
     gap: 15px;
     text-align: center;
   }
 
-  .config-header-new h1 {
+  .config-galeri-header-new h1 {
     order: -1;
     text-align: center;
   }
@@ -276,7 +276,7 @@
 }
 
 /* Existing styles remain unchanged */
-.config-gallery {
+.config-galeri-gallery {
   padding: 20px;
   max-width: 1800px;
   margin: 0 auto;
@@ -363,7 +363,7 @@
 }
 
 @media (max-width: 768px) {
-  .config-gallery {
+  .config-galeri-gallery {
     padding: 15px;
   }
 
