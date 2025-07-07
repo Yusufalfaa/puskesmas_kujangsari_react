@@ -987,7 +987,7 @@ const StorageManagement = () => {
             onClick={() => fetchStorageUsageOptimized()}
             disabled={calculatingStorage}
           >
-            {calculatingStorage ? "Menghitung..." : "Refresh Storage Usage"}
+            {calculatingStorage ? "Calculating..." : "Refresh"}
           </button>
           <p style={{ fontSize: "12px", color: "#666", marginTop: "8px" }}>
             *Ukuran dihitung berdasarkan metadata dan estimasi
