@@ -1,18 +1,16 @@
 /* Tambahkan CSS untuk expand/collapse functionality */
 
+/* Staff Container - Remove unified container styling */
 .staff-container {
+  /* Remove background, border-radius, box-shadow, and overflow */
+}
+
+.staff-category-section {
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-}
-
-.staff-category-section {
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.staff-category-section:last-child {
-  border-bottom: none;
+  margin: 0 20px 20px 20px; /* Tambahkan margin kiri dan kanan 20px */
 }
 
 .category-header {
@@ -24,7 +22,7 @@
   background: linear-gradient(135deg, #0f96b5 30%, #0a7385 100%);
   transition: all 0.3s ease;
   user-select: none;
-  margin: 0 20px 0 20px;
+  /* Hapus margin: 0; karena sudah tidak diperlukan */
 }
 
 .category-header:hover {
@@ -251,16 +249,23 @@
   font-size: 24px;
   font-weight: 600;
   text-align: center;
+  border-bottom: 3px solid #0f96b5;
+  padding-bottom: 15px;
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Alert styles */
+/* Alert styles - perbaiki positioning */
 .alert {
   padding: 15px;
-  margin-bottom: 20px;
+  margin: 20px auto; /* Change from "20px 20px 20px 20px" to "20px auto" for center alignment */
+  max-width: calc(100% - 40px); /* Add max-width to prevent overflow */
   border-radius: 8px;
   display: flex;
   align-items: center;
   gap: 10px;
+  position: relative;
 }
 
 .alert-error {
@@ -277,6 +282,67 @@
 
 .alert-icon {
   font-size: 18px;
+}
+
+/* Tambahkan close button untuk alert */
+.alert-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.7;
+  padding: 0;
+  margin-left: auto;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+.alert-close:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Tambahkan animasi fade untuk alert */
+.alert {
+  animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tambahkan countdown indicator untuk auto-hide */
+.alert::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: currentColor;
+  opacity: 0.3;
+  animation: countdown 5s linear;
+}
+
+@keyframes countdown {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
 }
 
 /* Button styles */

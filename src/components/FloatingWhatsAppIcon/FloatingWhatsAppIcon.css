@@ -1,13 +1,13 @@
 /* src/components/FloatingWhatsAppIcon/FloatingWhatsAppIcon.css */
 .floating-whatsapp-icon {
   position: fixed; /* Membuat ikon mengambang */
-  bottom: 50px; /* Jarak dari bawah halaman */
-  right: 75px; /* Jarak dari kanan halaman */
+  bottom: 35px; /* Jarak dari bawah halaman */
+  right: 40px; /* Jarak dari kanan halaman */
   z-index: 9999; /* Pastikan ikon selalu di atas elemen lain */
   background-color: #25d366; /* Warna latar belakang ikon WhatsApp */
   border-radius: 50%; /* Membuat bentuk lingkaran */
-  width: 60px; /* Ukuran ikon */
-  height: 60px;
+  width: 50px; /* Ukuran ikon */
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -7,6 +7,7 @@ import "./StorageManagement.css"
 const StorageManagement = () => {
   const [buckets, setBuckets] = useState([])
   const [calculatingStorage, setCalculatingStorage] = useState(false)
+  const [refreshingStorage, setRefreshingStorage] = useState(false) // State baru untuk refresh
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
   const [newBucketName, setNewBucketName] = useState("")
@@ -80,7 +81,7 @@ const StorageManagement = () => {
 
       // Langsung hitung storage usage setelah buckets dimuat
       if (data && data.length > 0) {
-        await fetchStorageUsageOptimized(data)
+        await fetchStorageUsageOptimized(data, true) // true untuk initial load
       }
     } catch (error) {
       console.error("Error fetching buckets:", error)
@@ -146,8 +147,13 @@ const StorageManagement = () => {
   }
 
   // Fungsi optimized untuk menghitung storage usage
-  const fetchStorageUsageOptimized = async (bucketsData = buckets) => {
-    setCalculatingStorage(true)
+  const fetchStorageUsageOptimized = async (bucketsData = buckets, isInitialLoad = false) => {
+    if (isInitialLoad) {
+      setCalculatingStorage(true)
+    } else {
+      setRefreshingStorage(true)
+    }
+
     try {
       let totalStorageSize = 0
 
@@ -180,7 +186,11 @@ const StorageManagement = () => {
       console.error("Error fetching storage usage:", error)
       setError("Gagal menghitung penggunaan storage")
     } finally {
-      setCalculatingStorage(false)
+      if (isInitialLoad) {
+        setCalculatingStorage(false)
+      } else {
+        setRefreshingStorage(false)
+      }
     }
   }
 
@@ -984,10 +994,10 @@ const StorageManagement = () => {
         <div style={{ textAlign: "center", marginTop: "20px" }}>
           <button
             className="btn btn-primary"
-            onClick={() => fetchStorageUsageOptimized()}
-            disabled={calculatingStorage}
+            onClick={() => fetchStorageUsageOptimized(buckets, false)} // false untuk refresh manual
+            disabled={calculatingStorage || refreshingStorage}
           >
-            {calculatingStorage ? "Calculating..." : "Refresh"}
+            {calculatingStorage ? "Calculating..." : refreshingStorage ? "Refreshing..." : "Refresh"}
           </button>
           <p style={{ fontSize: "12px", color: "#666", marginTop: "8px" }}>
             *Ukuran dihitung berdasarkan metadata dan estimasi

@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react"
 import { supabase } from "../../../../lib/supabase"
 import "./Config_TenagaKerja.css"
+import { Container, Row, Col, Form, Button, Alert, Modal, Card } from "react-bootstrap"
+import { ArrowLeft, Save, Plus, Edit, Trash2, Upload, FolderOpen, ImageIcon } from "lucide-react"
 
 const Config_TenagaKerja = () => {
   const [tenagaKerja, setTenagaKerja] = useState([])
@@ -46,6 +48,27 @@ const Config_TenagaKerja = () => {
       fetchFolders(formData.bucket)
     }
   }, [formData.bucket])
+
+  // Auto-hide alerts after 5 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError("")
+      }, 5000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [error])
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        setSuccess("")
+      }, 5000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [success])
 
   const fetchTenagaKerja = async () => {
     try {
@@ -361,11 +384,17 @@ const Config_TenagaKerja = () => {
       {/* Header */}
       <div className="config-tenagaKerja-header-new">
         <button className="btn-back" onClick={() => window.history.back()}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-             Kembali
-          </button>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M19 12H5M12 19L5 12L12 5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          Kembali
+        </button>
         <h1>Kelola Tenaga Kerja</h1>
         <div className="header-actions">
           <button className="btn-add-staff" onClick={() => handleOpenModal("add")}>
@@ -379,6 +408,9 @@ const Config_TenagaKerja = () => {
         <div className="alert alert-error">
           <span className="alert-icon">⚠️</span>
           {error}
+          <button className="alert-close" onClick={() => setError("")}>
+            ×
+          </button>
         </div>
       )}
 
@@ -386,6 +418,9 @@ const Config_TenagaKerja = () => {
         <div className="alert alert-success">
           <span className="alert-icon">✅</span>
           {success}
+          <button className="alert-close" onClick={() => setSuccess("")}>
+            ×
+          </button>
         </div>
       )}
 
@@ -436,16 +471,13 @@ const Config_TenagaKerja = () => {
                           <p className="staff-degree">{person.degree}</p>
                         </div>
                         <div className="staff-actions">
-                          <button className="btn btn-primary btn-sm" onClick={() => handleOpenModal("edit", person)}>
-                            Edit
-                          </button>
-                          <button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => handleDeleteTenagaKerja(person.id, person.profilePictureUrl)}
-                          >
-                            Hapus
-                          </button>
-                        </div>
+                                                    <Button variant="outline-primary" size="sm" onClick={() => handleOpenModal("edit", person)}>
+                                                      <Edit size={16} />
+                                                    </Button>
+                                                    <Button variant="outline-danger" size="sm" onClick={() => handleDeleteTenagaKerja(person.id, person.profilePictureUrl)}>
+                                                      <Trash2 size={16} />
+                                                    </Button>
+                                                  </div>
                       </div>
                     ))}
                   </div>
