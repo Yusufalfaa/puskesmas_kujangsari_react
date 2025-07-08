@@ -104,18 +104,6 @@ h2 {
     pointer-events: none; 
 }
 
-.tentang-kami .image-column img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 5px;
-    transition: transform 0.3s ease;
-    margin-left: 20px;
-    padding: 10px;
-    cursor: pointer;
-    pointer-events: auto; 
-}
-
 /* Gambar pada setiap section selain Tentang Kami */
 .section-image-container {
     width: 50%;

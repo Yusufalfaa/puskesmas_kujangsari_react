@@ -242,11 +242,9 @@ const TentangPuskesmas = () => {
               }}
               style={{
                 width: "100%",
-                height: "200px",
                 objectFit: "cover",
                 borderRadius: "35px",
                 cursor: "pointer",
-                marginBottom: "10px",
               }}
             />
             {image.description && (

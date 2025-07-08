@@ -4,7 +4,7 @@ import CarouselDashboard from '../../components/CarouselDashboard/CarouselDashbo
 import JadwalPelayanan from '../../components/JadwalPelayanan/JadwalPelayanan';
 import VideoBeranda from '../../components/VideoBeranda/VideoBeranda';
 import TarifPelayanan from '../../components/TarifLayanan/TarifLayanan';
-import TenagaMedis from '../../components/TenagaMedis';
+import TenagaMedis from '../../components/TenagaMedis/TenagaMedis';
 import './Beranda.css';
 
 const Beranda = () => {

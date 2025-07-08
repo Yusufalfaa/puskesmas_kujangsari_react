@@ -522,6 +522,67 @@
   border-top: 1px solid #e2e8f0;
 }
 
+.photo-details{
+  margin-top: 7.5px;
+}
+
+/* Tambahan CSS untuk tombol sync dan animasi */
+
+.btn-sync {
+  background: rgba(255, 255, 255, 0.9);
+  color: #0f96b5;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-sync:hover {
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-sync:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive untuk header actions */
+@media (max-width: 768px) {
+  .header-actions {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .btn-sync,
+  .btn-add-staff {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .config-tenagaKerja-header-new {

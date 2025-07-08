@@ -3,8 +3,8 @@ import { NavLink } from 'react-router-dom';
 import CarouselDashboard from '../../../components/CarouselDashboard/CarouselDashboard';
 import VideoBeranda from '../../../components/VideoBeranda/AdminVideoBeranda';
 import JadwalPelayanan from '../../../components/JadwalPelayanan/AdminJadwalPelayanan';
-import TarifPelayanan from '../../../components/TarifLayanan/TarifLayanan';
-import TenagaMedis from '../../../components/TenagaMedis';
+import TarifPelayanan from '../../../components/TarifLayanan/AdminTarifLayanan';
+import TenagaMedis from '../../../components/TenagaMedis/TenagaMedis';
 import './Beranda.css';
 
 const Beranda = () => {

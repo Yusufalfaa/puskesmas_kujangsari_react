@@ -296,7 +296,7 @@ const Config_Gallery = () => {
     try {
       const { bucketName, filePath } = extractPathFromUrl(imgUrl)
       const pathParts = filePath.split("/")
-      const folder = pathParts.length > 1 ? pathParts.slice(0, -1).join("/") : "Root"
+      const folder = pathParts.length > 1 ? pathParts.slice(0, -1).join("/") : ""
 
       return {
         bucket: bucketName,
