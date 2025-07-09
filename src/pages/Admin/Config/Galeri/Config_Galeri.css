@@ -19,6 +19,25 @@
   text-align: center;
 }
 
+/* Opsi 1: Gunakan padding */
+.photo-details .photo-filename {
+  padding-bottom: 30px ;
+  display: block;
+}
+
+/* Opsi 2: Pseudo element */
+.photo-details .photo-filename::after {
+  content: "";
+  display: block;
+
+}
+
+/* Opsi 3: Flexbox gap */
+.photo-details {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
 .btn-back {
   background: rgba(255, 255, 255, 0.2);
   border: none;
@@ -291,7 +310,7 @@
   display: block;
   color: #718096;
   font-size: 12px;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 
 .gallery-actions {

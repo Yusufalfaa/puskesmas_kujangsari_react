@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react"
 import { supabase } from "../../../../lib/supabase"
 import "./Config_Galeri.css"
-import { Container, Row, Col, Form, Button, Alert, Modal, Card } from "react-bootstrap"
-import { ArrowLeft, Save, Plus, Edit, Trash2, Upload, FolderOpen, ImageIcon } from "lucide-react"
+import { Button } from "react-bootstrap"
+import { Edit, Trash2, FolderOpen, RefreshCw } from "lucide-react"
 
 const Config_Gallery = () => {
   const [galleries, setGalleries] = useState([])
@@ -22,6 +22,13 @@ const Config_Gallery = () => {
   const [success, setSuccess] = useState("")
   const [loadingFolders, setLoadingFolders] = useState(false)
 
+  // DITAMBAHKAN: State untuk nama file custom
+  const [customFileName, setCustomFileName] = useState("")
+
+  // DITAMBAHKAN: State untuk sync functionality
+  const [syncing, setSyncing] = useState(false)
+  const [syncProgress, setSyncProgress] = useState({ current: 0, total: 0 })
+
   // State untuk modal
   const [showUploadModal, setShowUploadModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
@@ -33,6 +40,7 @@ const Config_Gallery = () => {
     id: null,
     photoType: "",
     imgUrl: "",
+    fileName: "", // DITAMBAHKAN: untuk menyimpan nama file saat edit
   })
 
   // State untuk form move
@@ -55,6 +63,51 @@ const Config_Gallery = () => {
 
   // Photo type options
   const photoTypes = ["Tim Kita", "Fasilitas Puskesmas", "Kegiatan", "Pelayanan", "Lainnya"]
+
+  // DITAMBAHKAN: Daftar ekstensi gambar yang diizinkan
+  const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp", "bmp", "svg"]
+
+  // DITAMBAHKAN: Function untuk mengecek apakah file adalah gambar
+  const isImageFile = (filename) => {
+    if (!filename || !filename.includes(".")) return false
+    const extension = filename.split(".").pop().toLowerCase()
+    return imageExtensions.includes(extension)
+  }
+
+  // DITAMBAHKAN: Function untuk mendapatkan nama file tanpa ekstensi
+  const getFileNameWithoutExtension = (filename) => {
+    if (!filename || !filename.includes(".")) return filename
+    return filename.substring(0, filename.lastIndexOf("."))
+  }
+
+  // DITAMBAHKAN: Function untuk validasi nama file
+  const validateFileName = (fileName) => {
+    if (!fileName || fileName.trim() === "") {
+      return "Nama file tidak boleh kosong"
+    }
+
+    // Karakter yang tidak diizinkan dalam nama file
+    const invalidChars = /[<>:"/\\|?*]/g
+    if (invalidChars.test(fileName)) {
+      return 'Nama file tidak boleh mengandung karakter: < > : " / \\ | ? *'
+    }
+
+    // Panjang nama file
+    if (fileName.length > 100) {
+      return "Nama file terlalu panjang (maksimal 100 karakter)"
+    }
+
+    return null
+  }
+
+  // DITAMBAHKAN: Function untuk membuat nama file yang aman
+  const sanitizeFileName = (fileName) => {
+    return fileName
+      .trim()
+      .replace(/[<>:"/\\|?*]/g, "_") // Ganti karakter tidak valid dengan underscore
+      .replace(/\s+/g, "_") // Ganti spasi dengan underscore
+      .replace(/_{2,}/g, "_") // Ganti multiple underscore dengan single underscore
+  }
 
   useEffect(() => {
     fetchGalleries()
@@ -310,7 +363,172 @@ const Config_Gallery = () => {
     }
   }
 
-  // Handle file upload
+  // DITAMBAHKAN: Function untuk mendapatkan nama file dari URL
+  const getFileNameFromUrl = (imgUrl) => {
+    try {
+      const { filePath } = extractPathFromUrl(imgUrl)
+      const fileName = filePath.split("/").pop()
+      return getFileNameWithoutExtension(fileName)
+    } catch (err) {
+      return "Tidak diketahui"
+    }
+  }
+
+  // DITAMBAHKAN: Sync function untuk galeri
+  const syncFileLocations = async () => {
+    if (
+      !window.confirm(
+        "Apakah Anda yakin ingin menyinkronkan lokasi file? Proses ini akan memperbarui URL foto berdasarkan lokasi file gambar di storage.",
+      )
+    ) {
+      return
+    }
+
+    setSyncing(true)
+    setError("")
+    setSuccess("")
+    setSyncProgress({ current: 0, total: 0 })
+
+    try {
+      console.log("🚀 Starting sync process for gallery images...")
+
+      // Ambil semua data galeri yang memiliki imgUrl
+      const { data: allGalleries, error: fetchError } = await supabase
+        .from("gallery")
+        .select("*")
+        .not("imgUrl", "is", null)
+
+      if (fetchError) throw fetchError
+
+      console.log(`📋 Found ${allGalleries.length} gallery items`)
+      setSyncProgress({ current: 0, total: allGalleries.length })
+
+      let updatedCount = 0
+
+      // Ambil semua bucket untuk pencarian file
+      const { data: bucketList, error: bucketError } = await supabase.storage.listBuckets()
+      if (bucketError) throw bucketError
+
+      const allImageFiles = []
+
+      // Scan semua bucket untuk mencari file gambar
+      for (const bucket of bucketList) {
+        console.log(`🔍 Scanning bucket: ${bucket.name}`)
+
+        // Scan root folder
+        const { data: rootFiles, error: rootError } = await supabase.storage.from(bucket.name).list("", { limit: 1000 })
+
+        if (!rootError && rootFiles) {
+          // Ambil file gambar di root
+          rootFiles
+            .filter((file) => isImageFile(file.name))
+            .forEach((file) => {
+              allImageFiles.push({
+                name: file.name,
+                nameWithoutExt: getFileNameWithoutExtension(file.name),
+                path: file.name,
+                bucket: bucket.name,
+                folder: "root",
+                fullPath: file.name,
+              })
+            })
+
+          // Scan folders
+          const folders = rootFiles.filter((item) => !item.name.includes("."))
+          for (const folder of folders) {
+            const { data: folderFiles, error: folderError } = await supabase.storage
+              .from(bucket.name)
+              .list(folder.name, { limit: 1000 })
+
+            if (!folderError && folderFiles) {
+              folderFiles
+                .filter((file) => isImageFile(file.name))
+                .forEach((file) => {
+                  allImageFiles.push({
+                    name: file.name,
+                    nameWithoutExt: getFileNameWithoutExtension(file.name),
+                    path: `${folder.name}/${file.name}`,
+                    bucket: bucket.name,
+                    folder: folder.name,
+                    fullPath: `${folder.name}/${file.name}`,
+                  })
+                })
+            }
+          }
+        }
+      }
+
+      console.log(`📄 Total image files found: ${allImageFiles.length}`)
+
+      // Proses setiap item galeri
+      for (let i = 0; i < allGalleries.length; i++) {
+        const gallery = allGalleries[i]
+
+        try {
+          // Extract info dari URL saat ini
+          const { bucketName: currentBucket, filePath: currentPath } = extractPathFromUrl(gallery.imgUrl)
+          const currentFileName = currentPath.split("/").pop()
+
+          console.log(`\n📷 Processing gallery item ${i + 1}: ${gallery.photoType}`)
+          console.log(`   Current: ${currentBucket}/${currentPath}`)
+
+          // Cari file yang cocok berdasarkan nama file
+          const matchingFile = allImageFiles.find((file) => {
+            return file.name === currentFileName && file.bucket === currentBucket
+          })
+
+          if (matchingFile) {
+            // Buat URL baru
+            const newUrl = createCleanPublicUrl(matchingFile.bucket, matchingFile.fullPath)
+
+            if (newUrl !== gallery.imgUrl) {
+              console.log(`🔄 Updating URL for gallery item`)
+              console.log(`  Old: ${gallery.imgUrl}`)
+              console.log(`  New: ${newUrl}`)
+
+              const { error: updateError } = await supabase
+                .from("gallery")
+                .update({
+                  imgUrl: newUrl,
+                  updated_at: new Date().toISOString(),
+                })
+                .eq("id", gallery.id)
+
+              if (!updateError) {
+                console.log(`✅ Successfully updated gallery item`)
+                updatedCount++
+              } else {
+                console.error(`❌ Failed to update gallery item:`, updateError)
+              }
+            } else {
+              console.log(`ℹ️ URL for gallery item is already correct`)
+            }
+          } else {
+            console.log(`❌ No matching file found for gallery item`)
+          }
+        } catch (itemError) {
+          console.error(`❌ Error processing gallery item:`, itemError)
+        }
+
+        setSyncProgress({ current: i + 1, total: allGalleries.length })
+      }
+
+      if (updatedCount > 0) {
+        setSuccess(`Berhasil mengupdate ${updatedCount} dari ${allGalleries.length} URL foto galeri`)
+        await fetchGalleries()
+      } else {
+        setSuccess(`Tidak ada URL yang perlu diupdate dari ${allGalleries.length} foto galeri`)
+      }
+    } catch (error) {
+      console.error("💥 Sync failed:", error)
+      setError("Gagal menyinkronkan lokasi file: " + error.message)
+    } finally {
+      setSyncing(false)
+      setSyncProgress({ current: 0, total: 0 })
+    }
+  }
+
+  // Handle file upload - DIMODIFIKASI untuk menggunakan custom filename
   const handleFileUpload = async (e) => {
     e.preventDefault()
 
@@ -319,15 +537,44 @@ const Config_Gallery = () => {
       return
     }
 
+    // Validasi nama file jika diisi
+    if (customFileName) {
+      const validationError = validateFileName(customFileName)
+      if (validationError) {
+        setError(validationError)
+        return
+      }
+    }
+
     setSaving(true)
     setError("")
     setSuccess("")
 
     try {
-      // Generate unique filename
       const fileExt = uploadFile.name.split(".").pop()
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
+
+      // Gunakan custom filename jika diisi, atau generate otomatis
+      let fileName
+      if (customFileName && customFileName.trim() !== "") {
+        const sanitizedName = sanitizeFileName(customFileName.trim())
+        fileName = `${sanitizedName}.${fileExt}`
+      } else {
+        // Generate unique filename jika tidak ada custom name
+        fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
+      }
+
       const filePath = selectedFolder ? `${selectedFolder}/${fileName}` : fileName
+
+      // Cek apakah file sudah ada
+      const { data: existingFile } = await supabase.storage.from(selectedBucket).list(selectedFolder || "", {
+        search: fileName,
+      })
+
+      if (existingFile && existingFile.length > 0) {
+        setError(`File dengan nama "${fileName}" sudah ada. Gunakan nama yang berbeda.`)
+        setSaving(false)
+        return
+      }
 
       // Upload file to Supabase Storage
       const { error: uploadError } = await supabase.storage.from(selectedBucket).upload(filePath, uploadFile)
@@ -352,6 +599,7 @@ const Config_Gallery = () => {
       setPhotoType("")
       setSelectedBucket("")
       setSelectedFolder("")
+      setCustomFileName("") // Reset custom filename
       fetchGalleries()
       handleCloseUploadModal()
     } catch (error) {
@@ -362,27 +610,86 @@ const Config_Gallery = () => {
     }
   }
 
-  // Handle edit photo
+  // Handle edit photo - DIMODIFIKASI untuk menghandle rename file
   const handleEditPhoto = async () => {
     if (!editingPhoto.photoType) {
       setError("Tipe foto harus dipilih")
       return
     }
 
+    // Validasi nama file jika diubah
+    if (editingPhoto.fileName) {
+      const validationError = validateFileName(editingPhoto.fileName)
+      if (validationError) {
+        setError(validationError)
+        return
+      }
+    }
+
     try {
       setSaving(true)
       setError("")
 
+      let newImgUrl = editingPhoto.imgUrl
+
+      // Jika nama file diubah, rename file di storage
+      if (editingPhoto.fileName && editingPhoto.fileName.trim() !== "") {
+        const { bucketName, filePath } = extractPathFromUrl(editingPhoto.imgUrl)
+        const currentFileName = filePath.split("/").pop()
+        const currentFileNameWithoutExt = getFileNameWithoutExtension(currentFileName)
+        const fileExt = currentFileName.split(".").pop()
+
+        const sanitizedNewName = sanitizeFileName(editingPhoto.fileName.trim())
+        const newFileName = `${sanitizedNewName}.${fileExt}`
+
+        // Jika nama file berbeda, lakukan rename
+        if (newFileName !== currentFileName) {
+          const pathParts = filePath.split("/")
+          pathParts[pathParts.length - 1] = newFileName
+          const newFilePath = pathParts.join("/")
+
+          // Cek apakah file dengan nama baru sudah ada
+          const folderPath = pathParts.length > 1 ? pathParts.slice(0, -1).join("/") : ""
+          const { data: existingFile } = await supabase.storage.from(bucketName).list(folderPath || "", {
+            search: newFileName,
+          })
+
+          if (existingFile && existingFile.length > 0) {
+            setError(`File dengan nama "${newFileName}" sudah ada. Gunakan nama yang berbeda.`)
+            setSaving(false)
+            return
+          }
+
+          // Download file lama
+          const { data: fileData, error: downloadError } = await supabase.storage.from(bucketName).download(filePath)
+          if (downloadError) throw downloadError
+
+          // Upload dengan nama baru
+          const { error: uploadError } = await supabase.storage.from(bucketName).upload(newFilePath, fileData)
+          if (uploadError) throw uploadError
+
+          // Hapus file lama
+          const { error: deleteError } = await supabase.storage.from(bucketName).remove([filePath])
+          if (deleteError) console.error("Error deleting old file:", deleteError)
+
+          // Update URL
+          newImgUrl = createCleanPublicUrl(bucketName, newFilePath)
+        }
+      }
+
+      // Update database
       const { error } = await supabase
         .from("gallery")
         .update({
           photoType: editingPhoto.photoType,
+          imgUrl: newImgUrl,
+          updated_at: new Date().toISOString(),
         })
         .eq("id", editingPhoto.id)
 
       if (error) throw error
 
-      setSuccess("Tipe foto berhasil diperbarui")
+      setSuccess("Foto berhasil diperbarui")
       setShowEditModal(false)
       fetchGalleries()
     } catch (err) {
@@ -492,6 +799,7 @@ const Config_Gallery = () => {
     setSelectedFolder("")
     setPhotoType("")
     setUploadFile(null)
+    setCustomFileName("") // Reset custom filename
   }
 
   const openEditModal = (photo) => {
@@ -499,6 +807,7 @@ const Config_Gallery = () => {
       id: photo.id,
       photoType: photo.photoType,
       imgUrl: photo.imgUrl,
+      fileName: getFileNameFromUrl(photo.imgUrl), // Set nama file saat ini
     })
     setShowEditModal(true)
   }
@@ -544,7 +853,7 @@ const Config_Gallery = () => {
 
   return (
     <div className="config-galeri-gallery">
-      {/* Header */}
+      {/* Header - DITAMBAHKAN TOMBOL SYNC */}
       <div className="config-galeri-header-new">
         <button className="btn-back" onClick={() => window.history.back()}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -559,9 +868,26 @@ const Config_Gallery = () => {
           Kembali
         </button>
         <h1>Kelola Galeri</h1>
-        <button className="btn-add-photo" onClick={handleOpenUploadModal}>
-          Tambah Foto
-        </button>
+        <div className="header-actions">
+          <button
+            className="btn-sync"
+            onClick={syncFileLocations}
+            disabled={syncing}
+            title="Sinkronkan lokasi file gambar yang dipindahkan manual"
+          >
+            <RefreshCw size={16} className={syncing ? "spinning" : ""} />
+            {syncing ? (
+              <span>
+                Syncing... ({syncProgress.current}/{syncProgress.total})
+              </span>
+            ) : (
+              "Sync Files"
+            )}
+          </button>
+          <button className="btn-add-photo" onClick={handleOpenUploadModal}>
+            Tambah Foto
+          </button>
+        </div>
       </div>
 
       {/* Alert Messages */}
@@ -631,12 +957,13 @@ const Config_Gallery = () => {
                             className="gallery-image"
                           />
                           <div className="gallery-info">
-                            <p className="photo-type">{photo.photoType}</p>
-
-                            {/* Informasi lokasi dan update */}
+                            {/* DITAMBAHKAN: Informasi nama file */}
                             <div className="photo-details">
+                              <small className="photo-filename">
+                                <strong>Nama File:</strong> {getFileNameFromUrl(photo.imgUrl)}
+                              </small>
                               <small className="photo-location">
-                                <strong>Lokasi:</strong> {locationInfo.bucket}/{locationInfo.folder}
+                                <strong>Lokasi:</strong> {locationInfo.bucket}/{locationInfo.folder || ""}
                               </small>
                               <small className="photo-updated">
                                 <strong>Terakhir diupdate:</strong> {formatDate(photo.updated_at)}
@@ -644,16 +971,15 @@ const Config_Gallery = () => {
                             </div>
 
                             <div className="gallery-actions">
-                            <Button variant="outline-primary" size="sm" onClick={() => openEditModal(photo)}>
-                              <Edit size={16} />
-                            </Button>
-                            <Button variant="outline-warning" size="sm" onClick={() => openMoveModal(photo)}>
-                              <FolderOpen size={16} />
-                            </Button>
-                            <Button variant="outline-danger" size="sm" onClick={() => openDeleteModal(photo)}>
-                              <Trash2 size={16} />
-                            </Button>
-                          
+                              <Button variant="outline-primary" size="sm" onClick={() => openEditModal(photo)}>
+                                <Edit size={16} />
+                              </Button>
+                              <Button variant="outline-warning" size="sm" onClick={() => openMoveModal(photo)}>
+                                <FolderOpen size={16} />
+                              </Button>
+                              <Button variant="outline-danger" size="sm" onClick={() => openDeleteModal(photo)}>
+                                <Trash2 size={16} />
+                              </Button>
                             </div>
                           </div>
                         </div>
@@ -667,7 +993,7 @@ const Config_Gallery = () => {
         )}
       </div>
 
-      {/* Upload Modal */}
+      {/* Upload Modal - DITAMBAHKAN FIELD NAMA FILE */}
       {showUploadModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -679,6 +1005,32 @@ const Config_Gallery = () => {
             </div>
 
             <form onSubmit={handleFileUpload} className="modal-form">
+              {/* DIPINDAHKAN: Field Nama File sebelum Tipe Foto */}
+              <div className="form-group">
+                <label>Nama File (Opsional):</label>
+                <input
+                  type="text"
+                  value={customFileName}
+                  onChange={(e) => setCustomFileName(e.target.value)}
+                  placeholder="Masukkan nama file tanpa ekstensi"
+                />
+                <small className="form-text">
+                  Jika kosong, nama file akan dibuat otomatis. Ekstensi akan ditambahkan secara otomatis.
+                </small>
+              </div>
+
+              <div className="form-group">
+                <label>Tipe Foto:</label>
+                <select value={photoType} onChange={(e) => setPhotoType(e.target.value)} required>
+                  <option value="">Pilih Tipe</option>
+                  {photoTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className="form-row">
                 <div className="form-group">
                   <label>Pilih Bucket:</label>
@@ -711,20 +1063,14 @@ const Config_Gallery = () => {
               </div>
 
               <div className="form-group">
-                <label>Tipe Foto:</label>
-                <select value={photoType} onChange={(e) => setPhotoType(e.target.value)} required>
-                  <option value="">Pilih Tipe</option>
-                  {photoTypes.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="form-group">
                 <label>Pilih File:</label>
                 <input type="file" accept="image/*" onChange={(e) => setUploadFile(e.target.files[0])} required />
+                {uploadFile && customFileName && (
+                  <small className="form-text">
+                    <strong>Nama file akan menjadi:</strong> {sanitizeFileName(customFileName)}.
+                    {uploadFile.name.split(".").pop()}
+                  </small>
+                )}
               </div>
 
               <div className="modal-actions">
@@ -740,18 +1086,32 @@ const Config_Gallery = () => {
         </div>
       )}
 
-      {/* Edit Modal */}
+      {/* Edit Modal - DITAMBAHKAN FIELD NAMA FILE */}
       {showEditModal && (
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-header">
-              <h2>Edit Tipe Foto</h2>
+              <h2>Edit Foto</h2>
               <button className="modal-close" onClick={() => setShowEditModal(false)}>
                 ×
               </button>
             </div>
 
             <div className="modal-form">
+              {/* DIPINDAHKAN: Field untuk edit nama file sebelum Tipe Foto */}
+              <div className="form-group">
+                <label>Nama File:</label>
+                <input
+                  type="text"
+                  value={editingPhoto.fileName}
+                  onChange={(e) => setEditingPhoto({ ...editingPhoto, fileName: e.target.value })}
+                  placeholder="Masukkan nama file tanpa ekstensi"
+                />
+                <small className="form-text">
+                  Mengubah nama file akan merename file di storage. Ekstensi akan dipertahankan.
+                </small>
+              </div>
+
               <div className="form-group">
                 <label>Tipe Foto:</label>
                 <select
@@ -792,7 +1152,7 @@ const Config_Gallery = () => {
         </div>
       )}
 
-      {/* Move Modal */}
+      {/* Move Modal - DITAMBAHKAN PREVIEW FOTO */}
       {showMoveModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -810,6 +1170,20 @@ const Config_Gallery = () => {
                   {movingPhoto.currentBucket}/{movingPhoto.currentFolder || "root"}
                 </p>
               </div>
+
+              {/* DITAMBAHKAN: Preview Foto */}
+              {movingPhoto.imgUrl && (
+                <div className="form-group">
+                  <label>Preview Foto:</label>
+                  <div className="photo-preview">
+                    <img
+                      src={movingPhoto.imgUrl || "/placeholder.svg"}
+                      alt={movingPhoto.photoType}
+                      style={{ maxWidth: "100%", maxHeight: "200px", objectFit: "contain" }}
+                    />
+                  </div>
+                </div>
+              )}
 
               <div className="form-row">
                 <div className="form-group">
@@ -841,7 +1215,6 @@ const Config_Gallery = () => {
                   {loadingFolders && <small className="text-muted">Memuat folder...</small>}
                 </div>
               </div>
-
               <div className="modal-actions">
                 <button type="button" className="btn btn-secondary" onClick={() => setShowMoveModal(false)}>
                   Batal

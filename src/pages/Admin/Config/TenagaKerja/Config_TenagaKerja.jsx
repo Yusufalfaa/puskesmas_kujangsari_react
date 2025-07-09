@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { supabase } from "../../../../lib/supabase"
 import "./Config_TenagaKerja.css"
 import { Button } from "react-bootstrap"
-import { Edit, Trash2, RefreshCw, Search } from "lucide-react"
+import { Edit, Trash2, RefreshCw, FolderOpen } from "lucide-react"
 
 const Config_TenagaKerja = () => {
   const [tenagaKerja, setTenagaKerja] = useState([])
@@ -18,12 +18,15 @@ const Config_TenagaKerja = () => {
   const [syncProgress, setSyncProgress] = useState({ current: 0, total: 0 })
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+  const [loadingFolders, setLoadingFolders] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   // States untuk modal
   const [showModal, setShowModal] = useState(false)
   const [modalType, setModalType] = useState("add")
   const [selectedTenagaKerja, setSelectedTenagaKerja] = useState(null)
   const [uniqueJobdesks, setUniqueJobdesks] = useState([])
+  const [showMoveModal, setShowMoveModal] = useState(false)
 
   // State untuk menampilkan input bidang pekerjaan baru
   const [showNewJobdeskInput, setShowNewJobdeskInput] = useState(false)
@@ -36,6 +39,17 @@ const Config_TenagaKerja = () => {
     profilePictureUrl: "",
     bucket: "",
     folder: "",
+  })
+
+  // State untuk form move - DITAMBAHKAN DARI CONFIG_GALERI
+  const [movingPhoto, setMovingPhoto] = useState({
+    id: null,
+    photoType: "",
+    imgUrl: "",
+    currentBucket: "",
+    currentFolder: "",
+    newBucket: "",
+    newFolder: "",
   })
 
   // PERBAIKAN: Daftar ekstensi gambar yang diizinkan
@@ -151,9 +165,43 @@ const Config_TenagaKerja = () => {
       const { data, error } = await supabase.storage.listBuckets()
       if (error) throw error
       setBuckets(data || [])
+
+      // DITAMBAHKAN: Fetch folders untuk setiap bucket
+      const folderData = {}
+      for (const bucket of data || []) {
+        const folders = await fetchFoldersForBucket(bucket.name)
+        folderData[bucket.name] = folders
+      }
+      setFolders(folderData)
     } catch (error) {
       console.error("Error fetching buckets:", error)
       setError("Gagal mengambil data bucket")
+    }
+  }
+
+  // DITAMBAHKAN DARI CONFIG_GALERI: Function untuk fetch folders
+  const fetchFoldersForBucket = async (bucketName) => {
+    try {
+      const { data: files, error } = await supabase.storage.from(bucketName).list("", {
+        limit: 1000,
+        offset: 0,
+      })
+
+      if (error) {
+        console.error(`Error fetching folders for bucket ${bucketName}:`, error)
+        return []
+      }
+
+      // Filter untuk mendapatkan folder (items tanpa extension)
+      const folders = files
+        .filter((file) => file.name && !file.name.includes(".") && file.name !== ".emptyFolderPlaceholder")
+        .map((file) => file.name)
+        .sort()
+
+      return folders
+    } catch (err) {
+      console.error(`Error fetching folders for bucket ${bucketName}:`, err)
+      return []
     }
   }
 
@@ -169,6 +217,70 @@ const Config_TenagaKerja = () => {
     } catch (error) {
       console.error("Error fetching folders:", error)
       setError("Gagal mengambil data folder")
+    }
+  }
+
+  // DITAMBAHKAN DARI CONFIG_GALERI: Helper functions
+  const extractPathFromUrl = (url) => {
+    try {
+      // Decode URL sekali untuk mengatasi double encoding
+      const decodedUrl = decodeURIComponent(url.trim())
+
+      // Split URL untuk mendapatkan path setelah /storage/v1/object/public/
+      const parts = decodedUrl.split("/storage/v1/object/public/")
+      if (parts.length < 2) {
+        throw new Error("Invalid URL format")
+      }
+
+      const fullPath = parts[1]
+      const pathParts = fullPath.split("/")
+
+      // Extract bucket name (first part after public/)
+      const bucketName = pathParts[0]
+
+      // Extract file path (everything after bucket name)
+      const filePath = pathParts.slice(1).join("/")
+
+      return { bucketName, filePath }
+    } catch (err) {
+      console.error("Error extracting path from URL:", err)
+      throw err
+    }
+  }
+
+  const createCleanPublicUrl = (bucketName, filePath) => {
+    const { data } = supabase.storage.from(bucketName).getPublicUrl(filePath)
+    return data.publicUrl
+  }
+
+  // Handle bucket change untuk Move Modal
+  const handleBucketChangeMove = async (bucketName) => {
+    setMovingPhoto({
+      ...movingPhoto,
+      newBucket: bucketName,
+      newFolder: "",
+    })
+
+    if (bucketName && !folders[bucketName]) {
+      await updateFoldersForBucket(bucketName)
+    }
+  }
+
+  // Update folders ketika bucket berubah
+  const updateFoldersForBucket = async (bucketName) => {
+    if (!bucketName) return
+
+    setLoadingFolders(true)
+    try {
+      const bucketFolders = await fetchFoldersForBucket(bucketName)
+      setFolders((prev) => ({
+        ...prev,
+        [bucketName]: bucketFolders,
+      }))
+    } catch (err) {
+      console.error("Error updating folders:", err)
+    } finally {
+      setLoadingFolders(false)
     }
   }
 
@@ -226,218 +338,22 @@ const Config_TenagaKerja = () => {
     }
   }
 
-  const getStorageLocation = (url) => {
-    if (!url) return "Tidak ada foto"
-
+  // Helper function untuk mendapatkan info lokasi dari URL - DIUBAH SEPERTI CONFIG_GALERI
+  const getLocationInfo = (imgUrl) => {
     try {
-      const decodedUrl = decodeURIComponent(url)
-      const { bucket, folder } = detectBucketAndFolderFromUrl(decodedUrl)
+      const { bucketName, filePath } = extractPathFromUrl(imgUrl)
+      const pathParts = filePath.split("/")
+      const folder = pathParts.length > 1 ? pathParts.slice(0, -1).join("/") : ""
 
-      if (!bucket) return "Lokasi tidak diketahui"
-
-      if (folder === "root") {
-        return bucket
+      return {
+        bucket: bucketName,
+        folder: folder,
       }
-
-      const decodedFolder = decodeURIComponent(folder)
-      return `${bucket}/${decodedFolder}`
-    } catch (error) {
-      console.error("Error getting storage location:", error)
-      return "Lokasi tidak diketahui"
-    }
-  }
-
-  // DEBUG FUNCTION: Lihat semua data staff dan file
-  const debugSync = async () => {
-    console.log("🔍 DEBUG: Starting debug analysis...")
-
-    try {
-      // 1. Lihat semua staff
-      const { data: allStaff, error: fetchError } = await supabase
-        .from("sdm")
-        .select("*")
-        .not("profilePictureUrl", "is", null)
-
-      if (fetchError) throw fetchError
-
-      console.log("👥 ALL STAFF DATA:")
-      allStaff.forEach((staff, index) => {
-        const expectedFileName = `${staff.name || "NULL"} ${staff.degree || "NULL"}`
-        console.log(`${index + 1}. ${staff.name} ${staff.degree}`)
-        console.log(`   ID: ${staff.id}`)
-        console.log(`   URL: ${staff.profilePictureUrl}`)
-        console.log(`   Expected filename (without ext): "${expectedFileName}"`)
-        console.log("")
-      })
-
-      // 2. Lihat semua file di bucket sdm
-      const { data: rootFiles, error: rootError } = await supabase.storage.from("sdm").list("", { limit: 1000 })
-
-      if (rootError) throw rootError
-
-      console.log("📁 ALL IMAGE FILES IN SDM BUCKET:")
-
-      // PERBAIKAN: Filter hanya file gambar di root
-      const rootImageFiles = rootFiles.filter((file) => isImageFile(file.name))
-      console.log("Root image files:")
-      rootImageFiles.forEach((file) => {
-        const nameWithoutExt = getFileNameWithoutExtension(file.name)
-        console.log(`  - ${file.name} -> "${nameWithoutExt}"`)
-      })
-
-      // PERBAIKAN: Filter hanya file gambar di folder
-      const folders = rootFiles.filter((item) => !item.name.includes("."))
-      console.log(`\nFolders found: ${folders.map((f) => f.name).join(", ")}`)
-
-      for (const folder of folders) {
-        const { data: folderFiles, error: folderError } = await supabase.storage
-          .from("sdm")
-          .list(folder.name, { limit: 1000 })
-
-        if (!folderError && folderFiles) {
-          const folderImageFiles = folderFiles.filter((file) => isImageFile(file.name))
-          console.log(`\n${folder.name}/ folder image files:`)
-          folderImageFiles.forEach((file) => {
-            const nameWithoutExt = getFileNameWithoutExtension(file.name)
-            console.log(`  - ${folder.name}/${file.name} -> "${nameWithoutExt}"`)
-          })
-        }
+    } catch (err) {
+      return {
+        bucket: "Tidak diketahui",
+        folder: "Tidak diketahui",
       }
-
-      // 3. PERBAIKAN: Manual matching test untuk semua staff
-      console.log("\n🎯 MANUAL MATCHING TEST FOR ALL STAFF:")
-      for (const staff of allStaff) {
-        if (!staff.name || !staff.degree) {
-          console.log(`⚠️ Skipping ${staff.name || "Unknown"} - missing name or degree`)
-          continue
-        }
-
-        const expectedFileName = `${staff.name.trim()} ${staff.degree.trim()}`
-        console.log(`\nTesting ${staff.name}: "${expectedFileName}"`)
-
-        // Test di semua folder
-        for (const folder of folders) {
-          const { data: folderFiles, error: folderError } = await supabase.storage
-            .from("sdm")
-            .list(folder.name, { limit: 1000 })
-
-          if (!folderError && folderFiles) {
-            const folderImageFiles = folderFiles.filter((file) => isImageFile(file.name))
-
-            const matchingFile = folderImageFiles.find((file) => {
-              const nameWithoutExt = getFileNameWithoutExtension(file.name)
-              return nameWithoutExt === expectedFileName
-            })
-
-            if (matchingFile) {
-              console.log(`  ✅ Found in ${folder.name}: ${matchingFile.name}`)
-            } else {
-              console.log(`  ❌ Not found in ${folder.name}`)
-              // Show what files are available for comparison
-              if (folderImageFiles.length > 0) {
-                console.log(`    Available files in ${folder.name}:`)
-                folderImageFiles.forEach((file) => {
-                  const nameWithoutExt = getFileNameWithoutExtension(file.name)
-                  console.log(`      - "${file.name}" -> "${nameWithoutExt}"`)
-                })
-              }
-            }
-          }
-        }
-      }
-    } catch (error) {
-      console.error("Debug failed:", error)
-    }
-  }
-
-  // MANUAL FIX: Update Pele specifically
-  const manualFixPele = async () => {
-    if (!window.confirm("Apakah Anda yakin ingin memperbaiki URL Pele secara manual?")) return
-
-    setSyncing(true)
-    setError("")
-    setSuccess("")
-
-    try {
-      console.log("🔧 MANUAL FIX: Starting manual fix for Pele...")
-
-      // 1. Find Pele in database
-      const { data: allStaff, error: staffError } = await supabase.from("sdm").select("*").eq("name", "Pele")
-
-      if (staffError) throw staffError
-
-      if (!allStaff || allStaff.length === 0) {
-        throw new Error("Pele tidak ditemukan di database")
-      }
-
-      const peleData = allStaff[0]
-      console.log("Found Pele:", peleData)
-
-      // 2. PERBAIKAN: Buat expected filename berdasarkan nama + gelar
-      if (!peleData.name || !peleData.degree) {
-        throw new Error("Data Pele tidak lengkap (nama atau gelar kosong)")
-      }
-
-      const expectedFileName = `${peleData.name.trim()} ${peleData.degree.trim()}`
-      console.log(`Looking for file with name (without extension): "${expectedFileName}"`)
-
-      // 3. PERBAIKAN: Check semua file gambar di folder Bidan
-      const { data: bidanFiles, error: bidanError } = await supabase.storage.from("sdm").list("Bidan", { limit: 1000 })
-
-      if (bidanError) throw bidanError
-
-      // Filter hanya file gambar
-      const bidanImageFiles = bidanFiles.filter((file) => isImageFile(file.name))
-
-      console.log("Image files in Bidan folder:")
-      bidanImageFiles.forEach((file) => {
-        const nameWithoutExt = getFileNameWithoutExtension(file.name)
-        console.log(`  - "${file.name}" -> "${nameWithoutExt}"`)
-      })
-
-      // PERBAIKAN: Cari berdasarkan nama tanpa ekstensi
-      const matchingFile = bidanImageFiles.find((file) => {
-        const nameWithoutExt = getFileNameWithoutExtension(file.name)
-        const isMatch = nameWithoutExt === expectedFileName
-        console.log(`Checking: "${nameWithoutExt}" === "${expectedFileName}" -> ${isMatch}`)
-        return isMatch
-      })
-
-      if (matchingFile) {
-        console.log(`✅ Found matching image file: ${matchingFile.name}`)
-
-        // 4. Generate new URL
-        const newPath = `Bidan/${matchingFile.name}`
-        const { data: urlData } = supabase.storage.from("sdm").getPublicUrl(newPath)
-        const newUrl = urlData.publicUrl
-
-        console.log(`Old URL: ${peleData.profilePictureUrl}`)
-        console.log(`New URL: ${newUrl}`)
-
-        // 5. Update database
-        const { error: updateError } = await supabase
-          .from("sdm")
-          .update({
-            profilePictureUrl: newUrl,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", peleData.id)
-
-        if (updateError) throw updateError
-
-        console.log("✅ Successfully updated Pele's URL")
-        setSuccess(`Berhasil memperbaiki URL Pele! File: ${matchingFile.name}`)
-        await fetchTenagaKerja()
-      } else {
-        console.log("❌ No matching image file found in Bidan folder")
-        console.log(`Expected: "${expectedFileName}" (with any image extension)`)
-        setError(`File gambar "${expectedFileName}" tidak ditemukan di folder Bidan`)
-      }
-    } catch (error) {
-      console.error("Manual fix failed:", error)
-      setError("Gagal memperbaiki URL Pele: " + error.message)
-    } finally {
-      setSyncing(false)
     }
   }
 
@@ -795,6 +711,95 @@ const Config_TenagaKerja = () => {
     }
   }
 
+  // DITAMBAHKAN DARI CONFIG_GALERI: Function untuk membuka move modal
+  const openMoveModal = (person) => {
+    try {
+      if (!person.profilePictureUrl) {
+        setError("Tidak ada foto untuk dipindahkan")
+        return
+      }
+
+      const { bucketName, filePath } = extractPathFromUrl(person.profilePictureUrl)
+      const pathParts = filePath.split("/")
+      const currentFolder = pathParts.length > 1 ? pathParts.slice(0, -1).join("/") : ""
+
+      setMovingPhoto({
+        id: person.id,
+        photoType: "profile", // untuk tenaga kerja, ini adalah foto profil
+        imgUrl: person.profilePictureUrl,
+        currentBucket: bucketName,
+        currentFolder: currentFolder,
+        newBucket: bucketName,
+        newFolder: currentFolder,
+      })
+      setShowMoveModal(true)
+    } catch (err) {
+      setError("Gagal mengekstrak informasi foto: " + err.message)
+    }
+  }
+
+  // DITAMBAHKAN DARI CONFIG_GALERI: Function untuk handle move photo
+  const handleMovePhoto = async () => {
+    if (!movingPhoto.newBucket) {
+      setError("Bucket tujuan harus dipilih")
+      return
+    }
+
+    try {
+      setSaving(true)
+      setError("")
+
+      // Extract path dari URL lama
+      const { bucketName: oldBucketName, filePath: oldFilePath } = extractPathFromUrl(movingPhoto.imgUrl)
+
+      // Dapatkan nama file dari path lama
+      const oldFileName = oldFilePath.split("/").pop()
+
+      // Buat path baru
+      const newFilePath = movingPhoto.newFolder ? `${movingPhoto.newFolder}/${oldFileName}` : oldFileName
+
+      // Download file dari lokasi lama
+      const { data: fileData, error: downloadError } = await supabase.storage.from(oldBucketName).download(oldFilePath)
+
+      if (downloadError) throw downloadError
+
+      // Upload ke lokasi baru
+      const { error: uploadError } = await supabase.storage.from(movingPhoto.newBucket).upload(newFilePath, fileData, {
+        upsert: false,
+      })
+
+      if (uploadError) throw uploadError
+
+      // Get URL baru yang bersih
+      const newPublicUrl = createCleanPublicUrl(movingPhoto.newBucket, newFilePath)
+
+      // Update database - untuk tenaga kerja, update profilePictureUrl
+      const { error: dbError } = await supabase
+        .from("sdm")
+        .update({
+          profilePictureUrl: newPublicUrl,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", movingPhoto.id)
+
+      if (dbError) throw dbError
+
+      // Hapus file lama jika berbeda bucket/folder
+      if (oldBucketName !== movingPhoto.newBucket || oldFilePath !== newFilePath) {
+        await supabase.storage.from(oldBucketName).remove([oldFilePath])
+      }
+
+      setSuccess("Foto berhasil dipindahkan")
+      setShowMoveModal(false)
+      fetchTenagaKerja()
+    } catch (err) {
+      console.error("Error moving photo:", err)
+      setError("Gagal memindahkan foto: " + err.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
   return (
     <div className="config-tenagaKerja">
       {/* Header */}
@@ -813,50 +818,6 @@ const Config_TenagaKerja = () => {
         </button>
         <h1>Kelola Tenaga Kerja</h1>
         <div className="header-actions">
-          <button
-            className="btn-debug"
-            onClick={debugSync}
-            title="Debug: Lihat semua data dan file gambar"
-            style={{
-              background: "rgba(255, 255, 255, 0.9)",
-              color: "#e53e3e",
-              border: "none",
-              padding: "12px 20px",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontSize: "14px",
-              fontWeight: "600",
-              transition: "all 0.3s",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-            }}
-          >
-            <Search size={16} />
-            Debug
-          </button>
-          <button
-            className="btn-manual-fix"
-            onClick={manualFixPele}
-            disabled={syncing}
-            title="Manual fix untuk Pele"
-            style={{
-              background: "rgba(255, 255, 255, 0.9)",
-              color: "#38a169",
-              border: "none",
-              padding: "12px 20px",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontSize: "14px",
-              fontWeight: "600",
-              transition: "all 0.3s",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-            }}
-          >
-            Fix Pele
-          </button>
           <button
             className="btn-sync"
             onClick={syncFileLocations}
@@ -945,7 +906,10 @@ const Config_TenagaKerja = () => {
 
                           <div className="photo-details">
                             <small className="photo-location">
-                              <strong>Lokasi:</strong> {getStorageLocation(person.profilePictureUrl)}
+                              <strong>Lokasi:</strong> {(() => {
+                                const locationInfo = getLocationInfo(person.profilePictureUrl)
+                                return `${locationInfo.bucket}/${locationInfo.folder || ""}`
+                              })()}
                             </small>
                             <small className="photo-updated">
                               <strong>Terakhir diupdate:</strong> {formatDate(person.updated_at)}
@@ -953,8 +917,12 @@ const Config_TenagaKerja = () => {
                           </div>
                         </div>
                         <div className="staff-actions">
+                          {/* URUTAN TOMBOL SESUAI PERMINTAAN: Edit, Move, Delete */}
                           <Button variant="outline-primary" size="sm" onClick={() => handleOpenModal("edit", person)}>
                             <Edit size={16} />
+                          </Button>
+                          <Button variant="outline-warning" size="sm" onClick={() => openMoveModal(person)}>
+                            <FolderOpen size={16} />
                           </Button>
                           <Button
                             variant="outline-danger"
@@ -974,7 +942,7 @@ const Config_TenagaKerja = () => {
         )}
       </div>
 
-      {/* Modal sama seperti sebelumnya */}
+      {/* Modal Add/Edit - sama seperti sebelumnya */}
       {showModal && (
         <div className="modal-tenagaKerja-overlay">
           <div className="modal-tenagaKerja-content">
@@ -1058,7 +1026,10 @@ const Config_TenagaKerja = () => {
                     />
                     <div className="current-image-info">
                       <p>
-                        <strong>Lokasi:</strong> {getStorageLocation(formData.profilePictureUrl)}
+                        <strong>Lokasi:</strong> {(() => {
+                          const locationInfo = getLocationInfo(formData.profilePictureUrl)
+                          return `${locationInfo.bucket}/${locationInfo.folder || ""}`
+                        })()}
                       </p>
                     </div>
                   </div>
@@ -1110,6 +1081,82 @@ const Config_TenagaKerja = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* DITAMBAHKAN: Move Modal dari Config_Galeri */}
+      {showMoveModal && (
+        <div className="modal-tenagaKerja-overlay">
+          <div className="modal-tenagaKerja-content">
+            <div className="modal-tenagaKerja-header">
+              <h2>Pindahkan Foto Profil</h2>
+              <button className="modal-tenagaKerja-close" onClick={() => setShowMoveModal(false)}>
+                ×
+              </button>
+            </div>
+
+            <div className="modal-tenagaKerja-form">
+              <div className="current-location">
+                <strong>Lokasi Saat Ini:</strong>
+                <p>
+                  {movingPhoto.currentBucket}/{movingPhoto.currentFolder || "root"}
+                </p>
+              </div>
+
+              {movingPhoto.imgUrl && (
+                <div className="form-group">
+                  <label>Preview Foto:</label>
+                  <div className="photo-preview">
+                    <img
+                      src={movingPhoto.imgUrl || "/placeholder.svg"}
+                      alt="Preview"
+                      style={{ maxWidth: "100%", maxHeight: "200px", objectFit: "contain" }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Bucket Tujuan:</label>
+                  <select value={movingPhoto.newBucket} onChange={(e) => handleBucketChangeMove(e.target.value)}>
+                    {buckets.map((bucket) => (
+                      <option key={bucket.name} value={bucket.name}>
+                        {bucket.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Folder Tujuan:</label>
+                  <select
+                    value={movingPhoto.newFolder}
+                    onChange={(e) => setMovingPhoto({ ...movingPhoto, newFolder: e.target.value })}
+                    disabled={!movingPhoto.newBucket || loadingFolders}
+                  >
+                    <option value="">Root (Tidak ada folder)</option>
+                    {movingPhoto.newBucket &&
+                      folders[movingPhoto.newBucket] &&
+                      folders[movingPhoto.newBucket].map((folder) => (
+                        <option key={folder} value={folder}>
+                          {folder}
+                        </option>
+                      ))}
+                  </select>
+                  {loadingFolders && <small className="text-muted">Memuat folder...</small>}
+                </div>
+              </div>
+
+              <div className="modal-tenagaKerja-actions">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowMoveModal(false)}>
+                  Batal
+                </button>
+                <button type="button" className="btn btn-warning" onClick={handleMovePhoto} disabled={saving}>
+                  {saving ? "Memindahkan..." : "Pindahkan"}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

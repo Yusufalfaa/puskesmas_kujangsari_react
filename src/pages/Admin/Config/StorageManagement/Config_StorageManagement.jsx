@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { supabase } from "../../../../lib/supabase"
+import { ArrowLeft } from "lucide-react"
 import "./StorageManagement.css"
 
 const StorageManagement = () => {
   const [buckets, setBuckets] = useState([])
   const [calculatingStorage, setCalculatingStorage] = useState(false)
-  const [refreshingStorage, setRefreshingStorage] = useState(false) // State baru untuk refresh
+  const [refreshingStorage, setRefreshingStorage] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
   const [newBucketName, setNewBucketName] = useState("")
@@ -18,7 +19,7 @@ const StorageManagement = () => {
   const [bucketContents, setBucketContents] = useState({})
   const [showUploadForm, setShowUploadForm] = useState({})
   const [uploadFileToBucket, setUploadFileToBucket] = useState(null)
-  const [newFolderInBucket, setNewFolderInBucket] = useState({})
+  const [newFolderInBucket, setNewFolderInBucket] = useState("")
   const [showCreateFolderForm, setShowCreateFolderForm] = useState({})
 
   // State untuk navigasi folder
@@ -28,22 +29,39 @@ const StorageManagement = () => {
   const [storageUsage, setStorageUsage] = useState({
     database: 0,
     storage: 0,
-    maxDatabase: 500, // 500 MB untuk free tier
-    maxStorage: 1024, // 1 GB untuk free tier
+    maxDatabase: 500,
+    maxStorage: 1024,
   })
 
-  // Ganti progress states dengan yang lebih detail
+  // Progress states
   const [uploadProgress, setUploadProgress] = useState({})
   const [createFolderProgress, setCreateFolderProgress] = useState({})
   const [deleteProgress, setDeleteProgress] = useState({})
   const [generalLoading, setGeneralLoading] = useState(false)
-
-  // Tambahkan state untuk progress percentage
   const [uploadPercentage, setUploadPercentage] = useState({})
   const [operationStatus, setOperationStatus] = useState({})
-
-  // Tambahkan state untuk delete bucket progress
   const [deleteBucketProgress, setDeleteBucketProgress] = useState({})
+
+  // States untuk rename functionality
+  const [showRenameModal, setShowRenameModal] = useState(false)
+  const [renameItem, setRenameItem] = useState(null)
+  const [newItemName, setNewItemName] = useState("")
+  const [renameProgress, setRenameProgress] = useState(false)
+
+  // Enhanced move functionality states
+  const [showMoveModal, setShowMoveModal] = useState(false)
+  const [selectedItems, setSelectedItems] = useState([])
+  const [moveProgress, setMoveProgress] = useState(false)
+
+  // Move destination states
+  const [selectedDestinationBucket, setSelectedDestinationBucket] = useState("")
+  const [destinationFolderPath, setDestinationFolderPath] = useState("")
+  const [destinationContents, setDestinationContents] = useState([])
+  const [loadingDestination, setLoadingDestination] = useState(false)
+
+  // Multi-select states
+  const [selectionMode, setSelectionMode] = useState(false)
+  const [selectedItemsForMove, setSelectedItemsForMove] = useState(new Set())
 
   const handleCreateBucket = async () => {
     if (!newBucketName || !newBucketName.trim()) {
@@ -79,9 +97,8 @@ const StorageManagement = () => {
       if (error) throw error
       setBuckets(data || [])
 
-      // Langsung hitung storage usage setelah buckets dimuat
       if (data && data.length > 0) {
-        await fetchStorageUsageOptimized(data, true) // true untuk initial load
+        await fetchStorageUsageOptimized(data, true)
       }
     } catch (error) {
       console.error("Error fetching buckets:", error)
@@ -91,17 +108,14 @@ const StorageManagement = () => {
     }
   }
 
-  // Fungsi untuk menghitung database usage menggunakan RPC
   const fetchDatabaseUsage = async () => {
     try {
-      // Coba gunakan RPC function terlebih dahulu
       const { data: sizeData, error: sizeError } = await supabase.rpc("get_database_size")
 
       if (!sizeError && sizeData && sizeData.length > 0) {
         return Math.max(sizeData[0].total_size_mb || 1, 1)
       }
 
-      // Fallback: hitung manual berdasarkan tabel
       const tables = [
         "users",
         "profiles",
@@ -126,27 +140,22 @@ const StorageManagement = () => {
             accessibleTables++
           }
         } catch (err) {
-          // Table mungkin tidak ada atau tidak bisa diakses
           continue
         }
       }
 
       if (accessibleTables === 0) {
-        // Jika tidak ada tabel yang bisa diakses, return estimasi minimal
-        return 2 // 2MB minimal
+        return 2
       }
 
-      // Estimasi: 2KB per row rata-rata
       const estimatedDbSize = Math.round((totalRows * 2048) / (1024 * 1024))
-
-      return Math.max(estimatedDbSize, 1) // Minimal 1MB
+      return Math.max(estimatedDbSize, 1)
     } catch (error) {
       console.error("Error calculating database usage:", error)
-      return 3 // Default 3MB jika gagal
+      return 3
     }
   }
 
-  // Fungsi optimized untuk menghitung storage usage
   const fetchStorageUsageOptimized = async (bucketsData = buckets, isInitialLoad = false) => {
     if (isInitialLoad) {
       setCalculatingStorage(true)
@@ -159,10 +168,8 @@ const StorageManagement = () => {
 
       console.log("Starting storage calculation...")
 
-      // Hitung database usage
       const dbUsage = await fetchDatabaseUsage()
 
-      // Hitung storage usage
       for (const bucket of bucketsData) {
         try {
           console.log(`Processing bucket: ${bucket.name}`)
@@ -180,7 +187,7 @@ const StorageManagement = () => {
       setStorageUsage((prev) => ({
         ...prev,
         database: dbUsage,
-        storage: Math.round(totalStorageSize / (1024 * 1024)), // Convert to MB
+        storage: Math.round(totalStorageSize / (1024 * 1024)),
       }))
     } catch (error) {
       console.error("Error fetching storage usage:", error)
@@ -194,87 +201,7 @@ const StorageManagement = () => {
     }
   }
 
-  // Fungsi untuk membuat RPC function di Supabase (opsional)
-  const createDatabaseSizeRPC = async () => {
-    // Anda perlu menjalankan SQL ini di Supabase SQL Editor:
-    /*
-    CREATE OR REPLACE FUNCTION get_database_size()
-    RETURNS bigint
-    LANGUAGE plpgsql
-    SECURITY DEFINER
-    AS $$
-    DECLARE
-      db_size bigint;
-    BEGIN
-      SELECT pg_database_size(current_database()) INTO db_size;
-      RETURN db_size;
-    END;
-    $$;
-    */
-
-    try {
-      const { data, error } = await supabase.rpc("get_database_size")
-      if (error) throw error
-      return Math.round(data / (1024 * 1024)) // Convert to MB
-    } catch (error) {
-      console.warn("RPC function not available, using estimation")
-      return await fetchDatabaseUsage()
-    }
-  }
-
-  // Fungsi untuk mendapatkan daftar tabel dan menghitung usage
-  const fetchDatabaseUsageAdvanced = async () => {
-    try {
-      // Coba dapatkan informasi tabel dari information_schema
-      const { data: tables, error } = await supabase
-        .from("information_schema.tables")
-        .select("table_name")
-        .eq("table_schema", "public")
-        .eq("table_type", "BASE TABLE")
-
-      if (error) {
-        console.warn("Cannot access information_schema, using manual calculation")
-        return await fetchDatabaseUsage()
-      }
-
-      let totalEstimatedSize = 0
-
-      for (const table of tables) {
-        try {
-          const { count, error: countError } = await supabase
-            .from(table.table_name)
-            .select("*", { count: "exact", head: true })
-
-          if (!countError && count) {
-            // Estimasi berdasarkan nama tabel
-            let avgRowSize = 1024 // 1KB default
-
-            // Sesuaikan estimasi berdasarkan jenis tabel
-            if (table.table_name.includes("log") || table.table_name.includes("audit")) {
-              avgRowSize = 512 // Log biasanya lebih kecil
-            } else if (table.table_name.includes("user") || table.table_name.includes("profile")) {
-              avgRowSize = 2048 // User data biasanya lebih besar
-            } else if (table.table_name.includes("content") || table.table_name.includes("post")) {
-              avgRowSize = 4096 // Content bisa lebih besar
-            }
-
-            totalEstimatedSize += count * avgRowSize
-          }
-        } catch (err) {
-          console.warn(`Error processing table ${table.table_name}:`, err)
-        }
-      }
-
-      return Math.round(totalEstimatedSize / (1024 * 1024)) // Convert to MB
-    } catch (error) {
-      console.error("Error in advanced database calculation:", error)
-      return await fetchDatabaseUsage()
-    }
-  }
-
-  // Fungsi optimized untuk menghitung ukuran bucket
   const calculateBucketSizeOptimized = async (bucketName, folderPath = "", depth = 0) => {
-    // Batasi kedalaman rekursi untuk mencegah infinite loop
     if (depth > 10) {
       console.warn(`Max depth reached for ${bucketName}/${folderPath}`)
       return 0
@@ -297,21 +224,15 @@ const StorageManagement = () => {
         if (file.name === ".placeholder") continue
 
         const fullPath = folderPath ? `${folderPath}/${file.name}` : file.name
-
-        // Cek apakah ini adalah folder
         const isFolder = !file.name.includes(".") || file.metadata?.mimetype === "application/x-directory"
 
         if (isFolder) {
-          // Rekursif untuk folder
           const folderSize = await calculateBucketSizeOptimized(bucketName, fullPath, depth + 1)
           totalSize += folderSize
         } else {
-          // Untuk file, gunakan metadata size jika tersedia
           if (file.metadata && file.metadata.size) {
             totalSize += file.metadata.size
           } else {
-            // Fallback: estimasi berdasarkan nama file atau gunakan ukuran default
-            // Ini lebih cepat daripada download
             const estimatedSize = estimateFileSize(file.name)
             totalSize += estimatedSize
           }
@@ -325,85 +246,31 @@ const StorageManagement = () => {
     }
   }
 
-  // Fungsi untuk estimasi ukuran file berdasarkan ekstensi
   const estimateFileSize = (fileName) => {
     const extension = fileName.split(".").pop()?.toLowerCase()
 
-    // Estimasi berdasarkan tipe file (dalam bytes)
     const sizeEstimates = {
-      // Images
-      jpg: 2 * 1024 * 1024, // 2MB
-      jpeg: 2 * 1024 * 1024, // 2MB
-      png: 3 * 1024 * 1024, // 3MB
-      gif: 1 * 1024 * 1024, // 1MB
-      webp: 1.5 * 1024 * 1024, // 1.5MB
-
-      // Documents
-      pdf: 5 * 1024 * 1024, // 5MB
-      doc: 1 * 1024 * 1024, // 1MB
-      docx: 1 * 1024 * 1024, // 1MB
-      xls: 2 * 1024 * 1024, // 2MB
-      xlsx: 2 * 1024 * 1024, // 2MB
-
-      // Videos
-      mp4: 50 * 1024 * 1024, // 50MB
-      avi: 100 * 1024 * 1024, // 100MB
-      mov: 75 * 1024 * 1024, // 75MB
-
-      // Audio
-      mp3: 5 * 1024 * 1024, // 5MB
-      wav: 10 * 1024 * 1024, // 10MB
-
-      // Default
-      default: 1 * 1024 * 1024, // 1MB
+      jpg: 2 * 1024 * 1024,
+      jpeg: 2 * 1024 * 1024,
+      png: 3 * 1024 * 1024,
+      gif: 1 * 1024 * 1024,
+      webp: 1.5 * 1024 * 1024,
+      pdf: 5 * 1024 * 1024,
+      doc: 1 * 1024 * 1024,
+      docx: 1 * 1024 * 1024,
+      xls: 2 * 1024 * 1024,
+      xlsx: 2 * 1024 * 1024,
+      mp4: 50 * 1024 * 1024,
+      avi: 100 * 1024 * 1024,
+      mov: 75 * 1024 * 1024,
+      mp3: 5 * 1024 * 1024,
+      wav: 10 * 1024 * 1024,
+      default: 1 * 1024 * 1024,
     }
 
     return sizeEstimates[extension] || sizeEstimates["default"]
   }
 
-  // Alternative: Menggunakan Supabase RPC untuk menghitung storage (jika tersedia)
-  const fetchStorageUsageViaRPC = async () => {
-    setCalculatingStorage(true)
-    try {
-      // Ini adalah contoh jika Anda membuat RPC function di Supabase
-      // CREATE OR REPLACE FUNCTION get_storage_usage()
-      // RETURNS TABLE(bucket_name text, total_size bigint)
-      // LANGUAGE plpgsql
-      // AS $$
-      // BEGIN
-      //   RETURN QUERY
-      //   SELECT
-      //     b.name as bucket_name,
-      //     COALESCE(SUM(o.metadata->>'size')::bigint, 0) as total_size
-      //   FROM storage.buckets b
-      //   LEFT JOIN storage.objects o ON b.id = o.bucket_id
-      //   GROUP BY b.name;
-      // END;
-      // $$;
-
-      const { data, error } = await supabase.rpc("get_storage_usage")
-
-      if (error) throw error
-
-      let totalSize = 0
-      if (data) {
-        totalSize = data.reduce((sum, bucket) => sum + (bucket.total_size || 0), 0)
-      }
-
-      setStorageUsage((prev) => ({
-        ...prev,
-        storage: Math.round(totalSize / (1024 * 1024)), // Convert to MB
-      }))
-    } catch (error) {
-      console.error("RPC method not available, falling back to client-side calculation")
-      // Fallback ke method optimized
-      await fetchStorageUsageOptimized()
-    } finally {
-      setCalculatingStorage(false)
-    }
-  }
-
-  // Helper function untuk clear cache bucket
   const clearBucketCache = (bucketName) => {
     setBucketContents((prev) => {
       const newContents = { ...prev }
@@ -416,11 +283,9 @@ const StorageManagement = () => {
     })
   }
 
-  // Fetch bucket contents dengan caching
   const fetchBucketContents = async (bucketName, folderPath = "", forceRefresh = false) => {
     const cacheKey = `${bucketName}/${folderPath}`
 
-    // Cek cache terlebih dahulu, kecuali jika force refresh
     if (!forceRefresh && bucketContents[cacheKey]) {
       return bucketContents[cacheKey]
     }
@@ -455,7 +320,6 @@ const StorageManagement = () => {
     }
   }
 
-  // Toggle bucket expansion
   const toggleBucketExpansion = async (bucketName) => {
     if (expandedBucket === bucketName) {
       setExpandedBucket("")
@@ -467,13 +331,24 @@ const StorageManagement = () => {
     }
   }
 
-  // Navigasi ke folder
   const navigateToFolder = async (bucketName, folderPath) => {
     setCurrentFolderPath((prev) => ({ ...prev, [bucketName]: folderPath }))
     await fetchBucketContents(bucketName, folderPath)
   }
 
-  // Generate breadcrumb
+  // New function to navigate back to parent folder
+  const navigateBack = async (bucketName) => {
+    const currentPath = currentFolderPath[bucketName] || ""
+    if (!currentPath) return // Already at root
+
+    const pathParts = currentPath.split("/")
+    pathParts.pop() // Remove last folder
+    const parentPath = pathParts.join("/")
+
+    setCurrentFolderPath((prev) => ({ ...prev, [bucketName]: parentPath }))
+    await fetchBucketContents(bucketName, parentPath)
+  }
+
   const generateBreadcrumb = (bucketName) => {
     const currentPath = currentFolderPath[bucketName] || ""
     if (!currentPath) return [{ name: bucketName, path: "" }]
@@ -490,10 +365,9 @@ const StorageManagement = () => {
     return breadcrumb
   }
 
-  // Validasi file gambar
   const validateImageFile = (file) => {
     const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp", "image/svg+xml"]
-    const maxSize = 10 * 1024 * 1024 // 10MB maksimal
+    const maxSize = 10 * 1024 * 1024
 
     if (!allowedTypes.includes(file.type)) {
       throw new Error("Hanya file gambar yang diizinkan (JPEG, PNG, GIF, WebP, SVG)")
@@ -506,7 +380,591 @@ const StorageManagement = () => {
     return true
   }
 
-  // Upload file to bucket
+  // Multi-select functionality
+  const toggleSelectionMode = () => {
+    setSelectionMode(!selectionMode)
+    setSelectedItemsForMove(new Set())
+  }
+
+  const toggleItemSelection = (bucketName, item) => {
+    const itemKey = `${bucketName}:${item.fullPath}`
+    const newSelection = new Set(selectedItemsForMove)
+
+    if (newSelection.has(itemKey)) {
+      newSelection.delete(itemKey)
+    } else {
+      newSelection.add(itemKey)
+    }
+
+    setSelectedItemsForMove(newSelection)
+  }
+
+  const isItemSelected = (bucketName, item) => {
+    const itemKey = `${bucketName}:${item.fullPath}`
+    return selectedItemsForMove.has(itemKey)
+  }
+
+  // Enhanced move functionality
+  const startMove = (bucketName, item = null) => {
+    if (item) {
+      // Single item move
+      setSelectedItems([
+        {
+          bucketName,
+          item,
+          currentPath: currentFolderPath[bucketName] || "",
+        },
+      ])
+    } else {
+      // Multi-select move
+      const items = Array.from(selectedItemsForMove)
+        .map((itemKey) => {
+          const [bucket, fullPath] = itemKey.split(":")
+          const currentPath = currentFolderPath[bucket] || ""
+          const contents = bucketContents[`${bucket}/${currentPath}`] || []
+          const item = contents.find((content) => content.fullPath === fullPath)
+
+          return {
+            bucketName: bucket,
+            item,
+            currentPath,
+          }
+        })
+        .filter((item) => item.item) // Filter out any invalid items
+
+      setSelectedItems(items)
+    }
+
+    setSelectedDestinationBucket("")
+    setDestinationFolderPath("")
+    setDestinationContents([])
+    setShowMoveModal(true)
+  }
+
+  const handleDestinationBucketChange = async (bucketName) => {
+    setSelectedDestinationBucket(bucketName)
+    setDestinationFolderPath("")
+    setLoadingDestination(true)
+
+    try {
+      const contents = await fetchDestinationContents(bucketName, "")
+      setDestinationContents(contents)
+    } catch (error) {
+      console.error("Error loading destination contents:", error)
+      setError("Gagal memuat isi bucket tujuan")
+    } finally {
+      setLoadingDestination(false)
+    }
+  }
+
+  const fetchDestinationContents = async (bucketName, folderPath = "") => {
+    try {
+      const { data, error } = await supabase.storage.from(bucketName).list(folderPath, {
+        limit: 100,
+        sortBy: { column: "name", order: "asc" },
+      })
+
+      if (error) throw error
+
+      return data
+        .map((item) => ({
+          ...item,
+          isFolder: !item.name.includes(".") && item.name !== ".placeholder",
+          path: folderPath ? `${folderPath}/${item.name}` : item.name,
+          fullPath: folderPath ? `${folderPath}/${item.name}` : item.name,
+        }))
+        .filter((item) => item.name !== ".placeholder" && item.isFolder) // Only show folders for navigation
+    } catch (error) {
+      console.error("Error fetching destination contents:", error)
+      return []
+    }
+  }
+
+  const navigateToDestinationFolder = async (folderPath) => {
+    setDestinationFolderPath(folderPath)
+    setLoadingDestination(true)
+
+    try {
+      const contents = await fetchDestinationContents(selectedDestinationBucket, folderPath)
+      setDestinationContents(contents)
+    } catch (error) {
+      console.error("Error navigating to destination folder:", error)
+      setError("Gagal navigasi ke folder tujuan")
+    } finally {
+      setLoadingDestination(false)
+    }
+  }
+
+  const generateDestinationBreadcrumb = () => {
+    if (!destinationFolderPath) return [{ name: selectedDestinationBucket, path: "" }]
+
+    const pathParts = destinationFolderPath.split("/")
+    const breadcrumb = [{ name: selectedDestinationBucket, path: "" }]
+
+    let accumulatedPath = ""
+    pathParts.forEach((part) => {
+      accumulatedPath = accumulatedPath ? `${accumulatedPath}/${part}` : part
+      breadcrumb.push({ name: part, path: accumulatedPath })
+    })
+
+    return breadcrumb
+  }
+
+  const validateMoveOperation = () => {
+    if (!selectedDestinationBucket) {
+      throw new Error("Pilih bucket tujuan terlebih dahulu")
+    }
+
+    for (const moveItem of selectedItems) {
+      // Check if moving to same location
+      if (moveItem.bucketName === selectedDestinationBucket && moveItem.currentPath === destinationFolderPath) {
+        throw new Error("Tidak bisa memindahkan ke lokasi yang sama")
+      }
+
+      // Check if moving folder into itself
+      if (moveItem.item.isFolder && moveItem.bucketName === selectedDestinationBucket) {
+        const sourcePath = moveItem.currentPath ? `${moveItem.currentPath}/${moveItem.item.name}` : moveItem.item.name
+
+        if (destinationFolderPath.startsWith(sourcePath + "/") || destinationFolderPath === sourcePath) {
+          throw new Error(`Tidak bisa memindahkan folder "${moveItem.item.name}" ke dalam dirinya sendiri`)
+        }
+      }
+    }
+
+    return true
+  }
+
+  const handleMoveItems = async () => {
+    try {
+      validateMoveOperation()
+
+      setMoveProgress(true)
+      setUploadPercentage({ move: 0 })
+      setOperationStatus({ move: "Memulai proses pemindahan..." })
+
+      const totalItems = selectedItems.length
+      let processedItems = 0
+      let successfulMoves = 0
+      const failedMoves = []
+
+      for (const moveItem of selectedItems) {
+        const { bucketName, item, currentPath } = moveItem
+        const sourcePath = item.fullPath
+        const destinationPath = destinationFolderPath ? `${destinationFolderPath}/${item.name}` : item.name
+
+        setOperationStatus({ move: `Memproses ${item.name}... (${processedItems + 1}/${totalItems})` })
+
+        try {
+          if (item.isFolder) {
+            const moveResult = await moveFolderRecursive(
+              bucketName,
+              sourcePath,
+              selectedDestinationBucket,
+              destinationPath,
+            )
+            if (moveResult.success) {
+              successfulMoves++
+            } else {
+              failedMoves.push({ item: item.name, error: moveResult.error })
+            }
+          } else {
+            const moveResult = await moveSingleFile(bucketName, sourcePath, selectedDestinationBucket, destinationPath)
+            if (moveResult.success) {
+              successfulMoves++
+            } else {
+              failedMoves.push({ item: item.name, error: moveResult.error })
+            }
+          }
+        } catch (error) {
+          console.error(`Error moving ${item.name}:`, error)
+          failedMoves.push({ item: item.name, error: error.message })
+        }
+
+        processedItems++
+        const progress = (processedItems / totalItems) * 90
+        setUploadPercentage({ move: progress })
+      }
+
+      setUploadPercentage({ move: 100 })
+
+      // Show appropriate message based on results
+      if (successfulMoves === totalItems) {
+        setOperationStatus({ move: "Pemindahan berhasil!" })
+        setTimeout(() => {
+          setSuccess(`${successfulMoves} item berhasil dipindahkan!`)
+          setShowMoveModal(false)
+          setSelectedItems([])
+          setSelectedItemsForMove(new Set())
+          setSelectionMode(false)
+        }, 500)
+      } else if (successfulMoves > 0) {
+        setOperationStatus({ move: `${successfulMoves} item berhasil, ${failedMoves.length} gagal` })
+        setTimeout(() => {
+          setSuccess(`${successfulMoves} item berhasil dipindahkan`)
+          setError(`${failedMoves.length} item gagal dipindahkan: ${failedMoves.map((f) => f.item).join(", ")}`)
+          setShowMoveModal(false)
+          setSelectedItems([])
+          setSelectedItemsForMove(new Set())
+          setSelectionMode(false)
+        }, 500)
+      } else {
+        setOperationStatus({ move: "Pemindahan gagal!" })
+        setTimeout(() => {
+          setError(`Gagal memindahkan semua item: ${failedMoves.map((f) => `${f.item} (${f.error})`).join(", ")}`)
+          setShowMoveModal(false)
+        }, 500)
+      }
+
+      // Refresh affected buckets only if there were successful moves
+      if (successfulMoves > 0) {
+        for (const moveItem of selectedItems) {
+          clearBucketCache(moveItem.bucketName)
+          await fetchBucketContents(moveItem.bucketName, moveItem.currentPath, true)
+        }
+
+        if (selectedDestinationBucket && !selectedItems.some((item) => item.bucketName === selectedDestinationBucket)) {
+          clearBucketCache(selectedDestinationBucket)
+          await fetchBucketContents(selectedDestinationBucket, destinationFolderPath, true)
+        }
+
+        await fetchStorageUsageOptimized()
+      }
+    } catch (error) {
+      console.error("Error moving items:", error)
+      setError("Gagal memindahkan: " + error.message)
+    } finally {
+      setTimeout(() => {
+        setMoveProgress(false)
+        setUploadPercentage({})
+        setOperationStatus({})
+      }, 2000)
+    }
+  }
+
+  // Enhanced move helper functions with better error handling
+  const moveSingleFile = async (sourceBucket, sourcePath, destBucket, destPath) => {
+    try {
+      console.log(`Moving file from ${sourceBucket}/${sourcePath} to ${destBucket}/${destPath}`)
+
+      // Download file from source
+      const { data: fileData, error: downloadError } = await supabase.storage.from(sourceBucket).download(sourcePath)
+      if (downloadError) {
+        console.error("Download error:", downloadError)
+        return { success: false, error: downloadError.message }
+      }
+
+      if (!fileData) {
+        return { success: false, error: "File data is empty" }
+      }
+
+      // Upload to destination
+      const { error: uploadError } = await supabase.storage.from(destBucket).upload(destPath, fileData, {
+        upsert: false, // Don't overwrite existing files
+      })
+      if (uploadError) {
+        console.error("Upload error:", uploadError)
+        return { success: false, error: uploadError.message }
+      }
+
+      // Verify upload was successful by checking if file exists
+      const { data: verifyData, error: verifyError } = await supabase.storage
+        .from(destBucket)
+        .list(destPath.includes("/") ? destPath.substring(0, destPath.lastIndexOf("/")) : "", {
+          search: destPath.includes("/") ? destPath.substring(destPath.lastIndexOf("/") + 1) : destPath,
+        })
+
+      if (verifyError || !verifyData || verifyData.length === 0) {
+        console.error("Verification failed:", verifyError)
+        return { success: false, error: "Upload verification failed" }
+      }
+
+      // Delete from source only after successful upload and verification
+      const { error: deleteError } = await supabase.storage.from(sourceBucket).remove([sourcePath])
+      if (deleteError) {
+        console.error("Delete error:", deleteError)
+        // File was uploaded but couldn't be deleted from source
+        return { success: false, error: `File copied but couldn't delete from source: ${deleteError.message}` }
+      }
+
+      return { success: true }
+    } catch (error) {
+      console.error("Move single file error:", error)
+      return { success: false, error: error.message }
+    }
+  }
+
+  const moveFolderRecursive = async (sourceBucket, sourceFolderPath, destBucket, destFolderPath) => {
+    try {
+      console.log(`Moving folder from ${sourceBucket}/${sourceFolderPath} to ${destBucket}/${destFolderPath}`)
+
+      // Get all files in the folder
+      const allFiles = await getAllFilesInFolder(sourceBucket, sourceFolderPath)
+
+      if (allFiles.length === 0) {
+        console.log("No files found in folder, creating empty folder")
+        // Create empty folder by uploading a placeholder
+        const placeholderFile = new Blob([""], { type: "text/plain" })
+        const { error: placeholderError } = await supabase.storage
+          .from(destBucket)
+          .upload(`${destFolderPath}/.placeholder`, placeholderFile)
+
+        if (placeholderError) {
+          console.error("Placeholder error:", placeholderError)
+          return { success: false, error: placeholderError.message }
+        }
+
+        // Remove source folder (placeholder file)
+        const { error: deleteError } = await supabase.storage
+          .from(sourceBucket)
+          .remove([`${sourceFolderPath}/.placeholder`])
+        if (deleteError) {
+          console.warn("Couldn't delete source placeholder:", deleteError)
+        }
+
+        return { success: true }
+      }
+
+      let successfulFiles = 0
+      const failedFiles = []
+
+      // Process each file
+      for (const file of allFiles) {
+        const relativePath = file.replace(sourceFolderPath + "/", "")
+        const newFilePath = `${destFolderPath}/${relativePath}`
+
+        try {
+          const moveResult = await moveSingleFile(sourceBucket, file, destBucket, newFilePath)
+          if (moveResult.success) {
+            successfulFiles++
+          } else {
+            failedFiles.push({ file, error: moveResult.error })
+          }
+        } catch (error) {
+          console.warn(`Error processing file ${file}:`, error)
+          failedFiles.push({ file, error: error.message })
+        }
+      }
+
+      if (successfulFiles === allFiles.length) {
+        return { success: true }
+      } else if (successfulFiles > 0) {
+        return {
+          success: false,
+          error: `${successfulFiles}/${allFiles.length} files moved. Failed: ${failedFiles.map((f) => f.file).join(", ")}`,
+        }
+      } else {
+        return {
+          success: false,
+          error: `No files moved. Errors: ${failedFiles.map((f) => f.error).join(", ")}`,
+        }
+      }
+    } catch (error) {
+      console.error("Move folder recursive error:", error)
+      return { success: false, error: error.message }
+    }
+  }
+
+  const getAllFilesInFolder = async (bucketName, folderPath, allFiles = []) => {
+    try {
+      const { data: files, error } = await supabase.storage.from(bucketName).list(folderPath, { limit: 1000 })
+
+      if (error) {
+        console.error(`Error listing files in ${bucketName}/${folderPath}:`, error)
+        return allFiles
+      }
+
+      for (const file of files) {
+        if (file.name === ".placeholder") continue
+
+        const fullPath = `${folderPath}/${file.name}`
+        const isFolder = !file.name.includes(".") || file.metadata?.mimetype === "application/x-directory"
+
+        if (isFolder) {
+          await getAllFilesInFolder(bucketName, fullPath, allFiles)
+        } else {
+          allFiles.push(fullPath)
+        }
+      }
+
+      return allFiles
+    } catch (error) {
+      console.error(`Error getting files in ${folderPath}:`, error)
+      return allFiles
+    }
+  }
+
+  // Rename functionality (keeping existing implementation)
+  const startRename = (bucketName, item) => {
+    setRenameItem({
+      bucketName,
+      item,
+      currentPath: currentFolderPath[bucketName] || "",
+    })
+    setNewItemName(item.name)
+    setShowRenameModal(true)
+  }
+
+  const validateNewName = (newName, isFolder = false) => {
+    if (!newName || !newName.trim()) {
+      throw new Error("Nama tidak boleh kosong")
+    }
+
+    const invalidChars = /[<>:"/\\|?*]/
+    if (invalidChars.test(newName)) {
+      throw new Error('Nama tidak boleh mengandung karakter: < > : " / \\ | ? *')
+    }
+
+    const reservedNames = [
+      "CON",
+      "PRN",
+      "AUX",
+      "NUL",
+      "COM1",
+      "COM2",
+      "COM3",
+      "COM4",
+      "COM5",
+      "COM6",
+      "COM7",
+      "COM8",
+      "COM9",
+      "LPT1",
+      "LPT2",
+      "LPT3",
+      "LPT4",
+      "LPT5",
+      "LPT6",
+      "LPT7",
+      "LPT8",
+      "LPT9",
+    ]
+    if (reservedNames.includes(newName.toUpperCase())) {
+      throw new Error("Nama tersebut tidak diizinkan")
+    }
+
+    if (!isFolder && !newName.includes(".")) {
+      throw new Error("File harus memiliki ekstensi")
+    }
+
+    return true
+  }
+
+  const handleRenameFile = async () => {
+    if (!renameItem) return
+
+    try {
+      validateNewName(newItemName, renameItem.item.isFolder)
+
+      if (newItemName === renameItem.item.name) {
+        setError("Nama baru sama dengan nama lama")
+        return
+      }
+
+      setRenameProgress(true)
+      setUploadPercentage({ rename: 0 })
+      setOperationStatus({ rename: "Memulai proses rename..." })
+
+      const { bucketName, item, currentPath } = renameItem
+      const oldPath = item.fullPath
+      const newPath = currentPath ? `${currentPath}/${newItemName}` : newItemName
+
+      if (item.isFolder) {
+        await renameFolderRecursive(bucketName, oldPath, newPath)
+      } else {
+        await renameSingleFile(bucketName, oldPath, newPath)
+      }
+
+      setUploadPercentage({ rename: 100 })
+      setOperationStatus({ rename: "Rename berhasil!" })
+
+      setTimeout(() => {
+        setSuccess(`${item.isFolder ? "Folder" : "File"} berhasil direname!`)
+        setShowRenameModal(false)
+        setRenameItem(null)
+        setNewItemName("")
+      }, 500)
+
+      clearBucketCache(bucketName)
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await fetchBucketContents(bucketName, currentPath, true)
+    } catch (error) {
+      console.error("Error renaming:", error)
+      setError("Gagal rename: " + error.message)
+    } finally {
+      setTimeout(() => {
+        setRenameProgress(false)
+        setUploadPercentage({})
+        setOperationStatus({})
+      }, 2000)
+    }
+  }
+
+  const renameSingleFile = async (bucketName, oldPath, newPath) => {
+    setUploadPercentage({ rename: 20 })
+    setOperationStatus({ rename: "Mengunduh file... 20%" })
+
+    const { data: fileData, error: downloadError } = await supabase.storage.from(bucketName).download(oldPath)
+    if (downloadError) throw downloadError
+
+    setUploadPercentage({ rename: 50 })
+    setOperationStatus({ rename: "Mengupload dengan nama baru... 50%" })
+
+    const { error: uploadError } = await supabase.storage.from(bucketName).upload(newPath, fileData)
+    if (uploadError) throw uploadError
+
+    setUploadPercentage({ rename: 80 })
+    setOperationStatus({ rename: "Menghapus file lama... 80%" })
+
+    const { error: deleteError } = await supabase.storage.from(bucketName).remove([oldPath])
+    if (deleteError) throw deleteError
+  }
+
+  const renameFolderRecursive = async (bucketName, oldFolderPath, newFolderPath) => {
+    setUploadPercentage({ rename: 10 })
+    setOperationStatus({ rename: "Menganalisis isi folder... 10%" })
+
+    const allFiles = await getAllFilesInFolder(bucketName, oldFolderPath)
+
+    setUploadPercentage({ rename: 30 })
+    setOperationStatus({ rename: `Memproses ${allFiles.length} file... 30%` })
+
+    for (let i = 0; i < allFiles.length; i++) {
+      const file = allFiles[i]
+      const relativePath = file.replace(oldFolderPath + "/", "")
+      const newFilePath = `${newFolderPath}/${relativePath}`
+
+      const { data: fileData, error: downloadError } = await supabase.storage.from(bucketName).download(file)
+
+      if (downloadError) {
+        console.warn(`Error downloading ${file}:`, downloadError)
+        continue
+      }
+
+      const { error: uploadError } = await supabase.storage.from(bucketName).upload(newFilePath, fileData)
+
+      if (uploadError) {
+        console.warn(`Error uploading ${newFilePath}:`, uploadError)
+        continue
+      }
+
+      const progress = 30 + ((i + 1) / allFiles.length) * 50
+      setUploadPercentage({ rename: progress })
+      setOperationStatus({ rename: `Memproses file ${i + 1}/${allFiles.length}... ${Math.round(progress)}%` })
+    }
+
+    setUploadPercentage({ rename: 90 })
+    setOperationStatus({ rename: "Menghapus folder lama... 90%" })
+
+    if (allFiles.length > 0) {
+      const { error: deleteError } = await supabase.storage.from(bucketName).remove(allFiles)
+
+      if (deleteError) {
+        console.warn("Error deleting old files:", deleteError)
+      }
+    }
+  }
+
+  // Rest of the existing functions (upload, create folder, delete, etc.) remain the same
   const handleUploadToBucket = async (bucketName, folderPath = "") => {
     if (!uploadFileToBucket) {
       setError("Pilih file terlebih dahulu")
@@ -530,7 +988,6 @@ const StorageManagement = () => {
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
       const filePath = folderPath ? `${folderPath}/${fileName}` : fileName
 
-      // Simulasi progress untuk upload
       const progressInterval = setInterval(() => {
         setUploadPercentage((prev) => {
           const currentProgress = prev[progressKey] || 0
@@ -552,7 +1009,6 @@ const StorageManagement = () => {
 
       if (error) throw error
 
-      // Complete progress
       setUploadPercentage((prev) => ({ ...prev, [progressKey]: 100 }))
       setOperationStatus((prev) => ({ ...prev, [progressKey]: "Upload selesai!" }))
 
@@ -562,7 +1018,6 @@ const StorageManagement = () => {
         setShowUploadForm((prev) => ({ ...prev, [`${bucketName}/${folderPath}`]: false }))
       }, 500)
 
-      // Clear cache dan refresh data
       setBucketContents((prev) => {
         const newContents = { ...prev }
         Object.keys(newContents).forEach((key) => {
@@ -573,7 +1028,6 @@ const StorageManagement = () => {
         return newContents
       })
 
-      // Delay kecil untuk memastikan Supabase sudah update
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
       const currentPath = currentFolderPath[bucketName] || ""
@@ -603,7 +1057,6 @@ const StorageManagement = () => {
     }
   }
 
-  // Create folder in bucket
   const handleCreateFolderInBucket = async (bucketName, parentFolder = "") => {
     const folderName = newFolderInBucket[`${bucketName}/${parentFolder}`]
 
@@ -621,7 +1074,6 @@ const StorageManagement = () => {
       const placeholderFile = new Blob([""], { type: "text/plain" })
       const folderPath = parentFolder ? `${parentFolder}/${folderName}` : folderName
 
-      // Simulasi progress untuk creating folder
       setUploadPercentage((prev) => ({ ...prev, [progressKey]: 20 }))
       setOperationStatus((prev) => ({ ...prev, [progressKey]: "Menyiapkan struktur folder... 20%" }))
 
@@ -647,7 +1099,6 @@ const StorageManagement = () => {
         setShowCreateFolderForm((prev) => ({ ...prev, [`${bucketName}/${parentFolder}`]: false }))
       }, 500)
 
-      // Clear cache dan refresh data
       setBucketContents((prev) => {
         const newContents = { ...prev }
         Object.keys(newContents).forEach((key) => {
@@ -658,7 +1109,6 @@ const StorageManagement = () => {
         return newContents
       })
 
-      // Delay kecil untuk memastikan Supabase sudah update
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
       const currentPath = currentFolderPath[bucketName] || ""
@@ -687,7 +1137,6 @@ const StorageManagement = () => {
     }
   }
 
-  // Delete file from bucket
   const handleDeleteFile = async (bucketName, filePath) => {
     if (!window.confirm("Apakah Anda yakin ingin menghapus file ini?")) return
 
@@ -720,7 +1169,6 @@ const StorageManagement = () => {
         setSuccess("File berhasil dihapus!")
       }, 500)
 
-      // Clear cache dan refresh data
       setBucketContents((prev) => {
         const newContents = { ...prev }
         Object.keys(newContents).forEach((key) => {
@@ -731,7 +1179,6 @@ const StorageManagement = () => {
         return newContents
       })
 
-      // Delay kecil untuk memastikan Supabase sudah update
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
       const currentPath = currentFolderPath[bucketName] || ""
@@ -761,7 +1208,6 @@ const StorageManagement = () => {
     }
   }
 
-  // Delete folder from bucket
   const handleDeleteFolder = async (bucketName, folderPath) => {
     if (!window.confirm("Apakah Anda yakin ingin menghapus folder ini? Semua file di dalamnya akan terhapus.")) return
 
@@ -807,7 +1253,6 @@ const StorageManagement = () => {
         setSuccess("Folder berhasil dihapus!")
       }, 500)
 
-      // Clear cache dan refresh data
       setBucketContents((prev) => {
         const newContents = { ...prev }
         Object.keys(newContents).forEach((key) => {
@@ -818,7 +1263,6 @@ const StorageManagement = () => {
         return newContents
       })
 
-      // Delay kecil untuk memastikan Supabase sudah update
       await new Promise((resolve) => setTimeout(resolve, 500))
 
       const currentPath = currentFolderPath[bucketName] || ""
@@ -848,13 +1292,11 @@ const StorageManagement = () => {
     }
   }
 
-  // Get file URL
   const getFileUrl = (bucketName, filePath) => {
     const { data } = supabase.storage.from(bucketName).getPublicUrl(filePath)
     return data.publicUrl
   }
 
-  // Format file size
   const formatFileSize = (bytes) => {
     if (bytes === 0) return "0 Bytes"
     const k = 1024
@@ -915,7 +1357,6 @@ const StorageManagement = () => {
         return newPath
       })
 
-      // Clear cache
       setBucketContents({})
     } catch (error) {
       console.error("Error deleting bucket:", error)
@@ -941,13 +1382,11 @@ const StorageManagement = () => {
     }
   }
 
-  // Clear messages
   const clearMessages = () => {
     setError("")
     setSuccess("")
   }
 
-  // Render storage usage chart
   const renderStorageUsageChart = () => {
     const dbPercentage = (storageUsage.database / storageUsage.maxDatabase) * 100
     const storagePercentage = (storageUsage.storage / storageUsage.maxStorage) * 100
@@ -990,14 +1429,20 @@ const StorageManagement = () => {
           </div>
         </div>
 
-        {/* Tombol untuk refresh storage usage */}
         <div style={{ textAlign: "center", marginTop: "20px" }}>
           <button
             className="btn btn-primary"
-            onClick={() => fetchStorageUsageOptimized(buckets, false)} // false untuk refresh manual
+            onClick={() => fetchStorageUsageOptimized(buckets, false)}
             disabled={calculatingStorage || refreshingStorage}
           >
-            {calculatingStorage ? "Calculating..." : refreshingStorage ? "Refreshing..." : "Refresh"}
+            {calculatingStorage || refreshingStorage ? (
+              <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span className="spinner-small"></span>
+                {calculatingStorage ? "Calculating..." : "Refreshing..."}
+              </span>
+            ) : (
+              "Refresh"
+            )}
           </button>
           <p style={{ fontSize: "12px", color: "#666", marginTop: "8px" }}>
             *Ukuran dihitung berdasarkan metadata dan estimasi
@@ -1007,7 +1452,6 @@ const StorageManagement = () => {
     )
   }
 
-  // Render bucket contents
   const renderBucketContents = (bucketName, folderPath = "") => {
     const currentPath = currentFolderPath[bucketName] || ""
     const contents = bucketContents[`${bucketName}/${currentPath}`] || []
@@ -1016,26 +1460,40 @@ const StorageManagement = () => {
 
     return (
       <div className="bucket-contents">
-        {/* Breadcrumb Navigation */}
         <div className="breadcrumb-nav">
-          {breadcrumb.map((crumb, index) => (
-            <span key={index}>
-              {index > 0 && " / "}
-              <button
-                className="breadcrumb-link"
-                onClick={() => navigateToFolder(bucketName, crumb.path)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "#007bff",
-                  cursor: "pointer",
-                  textDecoration: index === breadcrumb.length - 1 ? "none" : "underline",
-                }}
-              >
-                {crumb.name}
-              </button>
-            </span>
-          ))}
+          {/* Back button area - always present */}
+          <div className="back-button-area">
+            <button
+              className="back-button"
+              onClick={() => navigateBack(bucketName)}
+              disabled={!currentPath}
+              title={currentPath ? "Kembali ke folder sebelumnya" : "Sudah di root folder"}
+            >
+              <ArrowLeft size={16} />
+              Kembali
+            </button>
+          </div>
+
+          <div className="breadcrumb-path">
+            {breadcrumb.map((crumb, index) => (
+              <span key={index}>
+                {index > 0 && " / "}
+                <button
+                  className="breadcrumb-link"
+                  onClick={() => navigateToFolder(bucketName, crumb.path)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "#007bff",
+                    cursor: "pointer",
+                    textDecoration: index === breadcrumb.length - 1 ? "none" : "underline",
+                  }}
+                >
+                  {crumb.name}
+                </button>
+              </span>
+            ))}
+          </div>
         </div>
 
         <div className="bucket-actions">
@@ -1051,6 +1509,18 @@ const StorageManagement = () => {
           >
             {showCreateFolderForm[contentKey] ? "Batal Folder" : "Buat Folder"}
           </button>
+
+          {/* Multi-select toggle button */}
+          <button className={`btn btn-sm ${selectionMode ? "btn-warning" : "btn-info"}`} onClick={toggleSelectionMode}>
+            {selectionMode ? "Batal Pilih" : "Pilih Multiple"}
+          </button>
+
+          {/* Move selected button */}
+          {selectionMode && selectedItemsForMove.size > 0 && (
+            <button className="btn btn-success btn-sm" onClick={() => startMove(bucketName)}>
+              Pindah Terpilih ({selectedItemsForMove.size})
+            </button>
+          )}
         </div>
 
         {showUploadForm[contentKey] && (
@@ -1147,13 +1617,26 @@ const StorageManagement = () => {
 
         <div className="contents-grid">
           {contents.map((item) => (
-            <div key={item.name} className="content-item">
+            <div
+              key={item.name}
+              className={`content-item ${selectionMode ? "selectable" : ""} ${isItemSelected(bucketName, item) ? "selected" : ""}`}
+            >
+              {selectionMode && (
+                <div className="selection-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={isItemSelected(bucketName, item)}
+                    onChange={() => toggleItemSelection(bucketName, item)}
+                  />
+                </div>
+              )}
+
               <div className="content-info">
                 <span
                   className="content-icon"
                   style={{ cursor: item.isFolder ? "pointer" : "default" }}
                   onClick={() => {
-                    if (item.isFolder) {
+                    if (item.isFolder && !selectionMode) {
                       navigateToFolder(bucketName, item.fullPath)
                     }
                   }}
@@ -1163,9 +1646,9 @@ const StorageManagement = () => {
                 <div className="content-details">
                   <p
                     className="content-name"
-                    style={{ cursor: item.isFolder ? "pointer" : "default" }}
+                    style={{ cursor: item.isFolder && !selectionMode ? "pointer" : "default" }}
                     onClick={() => {
-                      if (item.isFolder) {
+                      if (item.isFolder && !selectionMode) {
                         navigateToFolder(bucketName, item.fullPath)
                       }
                     }}
@@ -1179,95 +1662,115 @@ const StorageManagement = () => {
                   )}
                 </div>
               </div>
-              <div className="content-actions">
-                {!item.isFolder && (
-                  <a
-                    href={getFileUrl(bucketName, item.fullPath)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-info btn-sm"
+
+              {!selectionMode && (
+                <div className="content-actions">
+                  {!item.isFolder && (
+                    <a
+                      href={getFileUrl(bucketName, item.fullPath)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-info btn-sm"
+                    >
+                      Lihat
+                    </a>
+                  )}
+
+                  <button
+                    className="btn btn-warning btn-sm"
+                    onClick={() => startRename(bucketName, item)}
+                    title={`Rename ${item.isFolder ? "folder" : "file"}`}
                   >
-                    Lihat
-                  </a>
-                )}
-                {item.isFolder ? (
-                  <div>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDeleteFolder(bucketName, item.fullPath)}
-                      disabled={deleteProgress[`${bucketName}/${item.fullPath}`]}
-                    >
-                      {deleteProgress[`${bucketName}/${item.fullPath}`] ? "Deleting..." : "Hapus"}
-                    </button>
-                    {deleteProgress[`${bucketName}/${item.fullPath}`] && (
-                      <div className="progress-container" style={{ margin: "5px 0", width: "150px" }}>
-                        <div
-                          className="progress-bar-container"
-                          style={{
-                            width: "100%",
-                            height: "8px",
-                            backgroundColor: "#f0f0f0",
-                            borderRadius: "4px",
-                            overflow: "hidden",
-                          }}
-                        >
+                    Rename
+                  </button>
+
+                  <button
+                    className="btn btn-info btn-sm"
+                    onClick={() => startMove(bucketName, item)}
+                    title={`Pindahkan ${item.isFolder ? "folder" : "file"}`}
+                  >
+                    Pindah
+                  </button>
+
+                  {item.isFolder ? (
+                    <div>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleDeleteFolder(bucketName, item.fullPath)}
+                        disabled={deleteProgress[`${bucketName}/${item.fullPath}`]}
+                      >
+                        {deleteProgress[`${bucketName}/${item.fullPath}`] ? "Deleting..." : "Hapus"}
+                      </button>
+                      {deleteProgress[`${bucketName}/${item.fullPath}`] && (
+                        <div className="progress-container" style={{ margin: "5px 0", width: "150px" }}>
                           <div
-                            className="progress-bar"
+                            className="progress-bar-container"
                             style={{
-                              width: `${uploadPercentage[`${bucketName}/${item.fullPath}`] || 0}%`,
-                              height: "100%",
-                              backgroundColor: "#f44336",
+                              width: "100%",
+                              height: "8px",
+                              backgroundColor: "#f0f0f0",
                               borderRadius: "4px",
-                              transition: "width 0.3s ease",
+                              overflow: "hidden",
                             }}
-                          ></div>
+                          >
+                            <div
+                              className="progress-bar"
+                              style={{
+                                width: `${uploadPercentage[`${bucketName}/${item.fullPath}`] || 0}%`,
+                                height: "100%",
+                                backgroundColor: "#f44336",
+                                borderRadius: "4px",
+                                transition: "width 0.3s ease",
+                              }}
+                            ></div>
+                          </div>
+                          <div style={{ fontSize: "10px", color: "#666", marginTop: "2px" }}>
+                            {operationStatus[`${bucketName}/${item.fullPath}`] || "Deleting..."}
+                          </div>
                         </div>
-                        <div style={{ fontSize: "10px", color: "#666", marginTop: "2px" }}>
-                          {operationStatus[`${bucketName}/${item.fullPath}`] || "Deleting..."}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDeleteFile(bucketName, item.fullPath)}
-                      disabled={deleteProgress[`${bucketName}/${item.fullPath}`]}
-                    >
-                      {deleteProgress[`${bucketName}/${item.fullPath}`] ? "Deleting..." : "Hapus File"}
-                    </button>
-                    {deleteProgress[`${bucketName}/${item.fullPath}`] && (
-                      <div className="progress-container" style={{ margin: "5px 0", width: "150px" }}>
-                        <div
-                          className="progress-bar-container"
-                          style={{
-                            width: "100%",
-                            height: "8px",
-                            backgroundColor: "#f0f0f0",
-                            borderRadius: "4px",
-                            overflow: "hidden",
-                          }}
-                        >
+                      )}
+                    </div>
+                  ) : (
+                    <div>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleDeleteFile(bucketName, item.fullPath)}
+                        disabled={deleteProgress[`${bucketName}/${item.fullPath}`]}
+                      >
+                        {deleteProgress[`${bucketName}/${item.fullPath}`] ? "Deleting..." : "Hapus File"}
+                      </button>
+                      {deleteProgress[`${bucketName}/${item.fullPath}`] && (
+                        <div className="progress-container" style={{ margin: "5px 0", width: "150px" }}>
                           <div
-                            className="progress-bar"
+                            className="progress-bar-container"
                             style={{
-                              width: `${uploadPercentage[`${bucketName}/${item.fullPath}`] || 0}%`,
-                              height: "100%",
-                              backgroundColor: "#f44336",
+                              width: "100%",
+                              height: "8px",
+                              backgroundColor: "#f0f0f0",
                               borderRadius: "4px",
-                              transition: "width 0.3s ease",
+                              overflow: "hidden",
                             }}
-                          ></div>
+                          >
+                            <div
+                              className="progress-bar"
+                              style={{
+                                width: `${uploadPercentage[`${bucketName}/${item.fullPath}`] || 0}%`,
+                                height: "100%",
+                                backgroundColor: "#f44336",
+                                borderRadius: "4px",
+                                transition: "width 0.3s ease",
+                              }}
+                            ></div>
+                          </div>
+                          <div style={{ fontSize: "10px", color: "#666", marginTop: "2px" }}>
+                            {operationStatus[`${bucketName}/${item.fullPath}`] || "Deleting..."}
+                          </div>
                         </div>
-                        <div style={{ fontSize: "10px", color: "#666", marginTop: "2px" }}>
-                          {operationStatus[`${bucketName}/${item.fullPath}`] || "Deleting..."}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -1334,9 +1837,10 @@ const StorageManagement = () => {
         <div className="bucket-list">
           <h3>Daftar Bucket:</h3>
           {generalLoading ? (
-            <div className="loading">
-              <span className="spinner"></span>
-              Loading...
+            <div className="bucket-loading">
+              <div className="spinner"></div>
+              <p className="loading-text">Memuat Data...</p>
+              <p className="loading-subtext">Mohon tunggu sebentar</p>
             </div>
           ) : (
             buckets.map((bucket) => (
@@ -1394,7 +1898,6 @@ const StorageManagement = () => {
           )}
         </div>
 
-        {/* Storage Usage Charts */}
         {renderStorageUsageChart()}
       </div>
 
@@ -1426,6 +1929,246 @@ const StorageManagement = () => {
               </button>
               <button className="btn btn-primary" onClick={handleCreateBucket} disabled={generalLoading}>
                 {generalLoading ? "Membuat..." : "Buat Bucket"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rename Modal */}
+      {showRenameModal && renameItem && (
+        <div className="modal-storageoverlay" onClick={() => setShowRenameModal(false)}>
+          <div className="modal-storagecontent" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-storageheader">
+              <h3>Rename {renameItem.item.isFolder ? "Folder" : "File"}</h3>
+              <button className="modal-storageclose" onClick={() => setShowRenameModal(false)}>
+                ×
+              </button>
+            </div>
+            <div className="modal-storagebody">
+              <div className="form-group">
+                <label>Nama {renameItem.item.isFolder ? "Folder" : "File"} Baru:</label>
+                <input
+                  type="text"
+                  value={newItemName}
+                  onChange={(e) => setNewItemName(e.target.value)}
+                  placeholder={`Masukkan nama ${renameItem.item.isFolder ? "folder" : "file"} baru`}
+                  onKeyPress={(e) => e.key === "Enter" && handleRenameFile()}
+                  disabled={renameProgress}
+                />
+                <small style={{ color: "#666", fontSize: "12px", display: "block", marginTop: "4px" }}>
+                  Nama saat ini: {renameItem.item.name}
+                </small>
+              </div>
+
+              {renameProgress && (
+                <div className="progress-container" style={{ margin: "15px 0" }}>
+                  <div
+                    className="progress-bar-container"
+                    style={{
+                      width: "100%",
+                      height: "20px",
+                      backgroundColor: "#f0f0f0",
+                      borderRadius: "10px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      className="progress-bar"
+                      style={{
+                        width: `${uploadPercentage.rename || 0}%`,
+                        height: "100%",
+                        backgroundColor: "#FF9800",
+                        borderRadius: "10px",
+                        transition: "width 0.3s ease",
+                      }}
+                    ></div>
+                  </div>
+                  <div className="progress-text" style={{ fontSize: "12px", marginTop: "5px", color: "#666" }}>
+                    {operationStatus.rename || "Processing rename..."}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="modal-storagefooter">
+              <button className="btn btn-secondary" onClick={() => setShowRenameModal(false)} disabled={renameProgress}>
+                Batal
+              </button>
+              <button
+                className="btn btn-warning"
+                onClick={handleRenameFile}
+                disabled={renameProgress || !newItemName.trim()}
+              >
+                {renameProgress ? "Renaming..." : "Rename"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Enhanced Move Modal */}
+      {showMoveModal && selectedItems.length > 0 && (
+        <div className="modal-storageoverlay" onClick={() => setShowMoveModal(false)}>
+          <div className="modal-storagecontent modal-move-large" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-storageheader">
+              <h3>
+                Pindahkan {selectedItems.length > 1 ? `${selectedItems.length} Item` : selectedItems[0].item.name}
+              </h3>
+              <button className="modal-storageclose" onClick={() => setShowMoveModal(false)}>
+                ×
+              </button>
+            </div>
+            <div className="modal-storagebody">
+              <div className="move-container">
+                {/* Source Information */}
+                <div className="move-source-section">
+                  <h4>📤 Sumber:</h4>
+                  <div className="source-items">
+                    {selectedItems.map((moveItem, index) => (
+                      <div key={index} className="source-item">
+                        <span className="item-icon">{moveItem.item.isFolder ? "📁" : "📄"}</span>
+                        <div className="item-details">
+                          <p className="item-name">{moveItem.item.name}</p>
+                          <p className="item-location">
+                            {moveItem.bucketName}
+                            {moveItem.currentPath && ` / ${moveItem.currentPath}`}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Destination Selection */}
+                <div className="move-destination-section">
+                  <h4>📥 Tujuan:</h4>
+
+                  {/* Bucket Selection */}
+                  <div className="destination-bucket-selection">
+                    <label>Pilih Bucket Tujuan:</label>
+                    <select
+                      value={selectedDestinationBucket}
+                      onChange={(e) => handleDestinationBucketChange(e.target.value)}
+                      disabled={moveProgress}
+                    >
+                      <option value="">-- Pilih Bucket --</option>
+                      {buckets.map((bucket) => (
+                        <option key={bucket.name} value={bucket.name}>
+                          📁 {bucket.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Current Destination Path */}
+                  {selectedDestinationBucket && (
+                    <div className="destination-path">
+                      <h5>Lokasi Tujuan Saat Ini:</h5>
+                      <div className="destination-breadcrumb">
+                        {generateDestinationBreadcrumb().map((crumb, index) => (
+                          <span key={index}>
+                            {index > 0 && " / "}
+                            <button
+                              className="breadcrumb-link"
+                              onClick={() => navigateToDestinationFolder(crumb.path)}
+                              disabled={moveProgress || loadingDestination}
+                              style={{
+                                background: "none",
+                                border: "none",
+                                color: "#007bff",
+                                cursor: "pointer",
+                                textDecoration:
+                                  index === generateDestinationBreadcrumb().length - 1 ? "none" : "underline",
+                              }}
+                            >
+                              {crumb.name}
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Folder Navigation */}
+                  {selectedDestinationBucket && (
+                    <div className="destination-folders">
+                      <h5>Folder yang Tersedia:</h5>
+                      {loadingDestination ? (
+                        <div className="loading-destination">
+                          <span className="spinner-small"></span>
+                          Memuat folder...
+                        </div>
+                      ) : (
+                        <div className="folder-list">
+                          {destinationContents.length === 0 ? (
+                            <div className="no-folders">
+                              <p>📂 Tidak ada folder di lokasi ini</p>
+                              <small>File akan dipindahkan ke root folder</small>
+                            </div>
+                          ) : (
+                            destinationContents.map((folder) => (
+                              <div
+                                key={folder.name}
+                                className="folder-item"
+                                onClick={() => navigateToDestinationFolder(folder.fullPath)}
+                              >
+                                <span className="folder-icon">📂</span>
+                                <span className="folder-name">{folder.name}</span>
+                                <span className="folder-arrow">→</span>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Move Progress */}
+                {moveProgress && (
+                  <div className="move-progress-section">
+                    <div className="progress-container" style={{ margin: "20px 0" }}>
+                      <div
+                        className="progress-bar-container"
+                        style={{
+                          width: "100%",
+                          height: "25px",
+                          backgroundColor: "#f0f0f0",
+                          borderRadius: "12px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <div
+                          className="progress-bar"
+                          style={{
+                            width: `${uploadPercentage.move || 0}%`,
+                            height: "100%",
+                            backgroundColor: "#2196F3",
+                            borderRadius: "12px",
+                            transition: "width 0.3s ease",
+                          }}
+                        ></div>
+                      </div>
+                      <div className="progress-text" style={{ fontSize: "14px", marginTop: "8px", color: "#666" }}>
+                        {operationStatus.move || "Processing move..."}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="modal-storagefooter">
+              <button className="btn btn-secondary" onClick={() => setShowMoveModal(false)} disabled={moveProgress}>
+                Batal
+              </button>
+              <button
+                className="btn btn-success"
+                onClick={handleMoveItems}
+                disabled={moveProgress || !selectedDestinationBucket}
+              >
+                {moveProgress
+                  ? "Memindahkan..."
+                  : `Pindahkan ${selectedItems.length > 1 ? `${selectedItems.length} Item` : selectedItems[0].item.name}`}
               </button>
             </div>
           </div>
