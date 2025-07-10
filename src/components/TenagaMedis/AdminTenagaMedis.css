@@ -8,9 +8,6 @@
   margin-top: 40px;
 }
 
-.tenaga-medis-container .tenaga-medis-empty{
-  margin-top: 15px;
-}
 .tenaga-medis-carousel-wrapper {
   position: relative;
   display: flex;
@@ -90,13 +87,12 @@
   height: 48px;
   display: flex;
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
 }
 
 .tenaga-medis-carousel-button i {
-  font-size: 1.5rem; 
+  font-size: 1.5rem;
 }
-
 
 .tenaga-medis-popup-overlay {
   position: fixed;
@@ -152,6 +148,91 @@
 
 .tenaga-medis-close-button:hover {
   background-color: rgba(0, 0, 0, 1);
+}
+
+/* Header styling - Modified to position button next to title */
+.tenaga-medis-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  position: relative;
+  gap: 15px;
+}
+
+.tenaga-medis-title {
+  margin: 0;
+  font-size: 2rem;
+}
+
+/* Settings button styling - Modified positioning */
+.tenaga-medis-settings-button {
+  background: #007bff;
+  border: none;
+  color: white;
+  padding: 6px; /* Kurangi padding */
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px; /* Kurangi dari 40px ke 32px */
+  height: 30px; /* Kurangi dari 40px ke 32px */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.tenaga-medis-settings-button:hover {
+  background: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.tenaga-medis-settings-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tenaga-medis-settings-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tenaga-medis-header {
+    gap: 10px;
+  }
+
+  .tenaga-medis-settings-button {
+    width: 28px; /* Kurangi dari 35px ke 28px */
+    height: 28px; /* Kurangi dari 35px ke 28px */
+    font-size: 14px;
+    padding: 4px; /* Kurangi padding */
+  }
+
+  .tenaga-medis-title {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .tenaga-medis-settings-button {
+    width: 26px; /* Kurangi dari 30px ke 26px */
+    height: 26px; /* Kurangi dari 30px ke 26px */
+    font-size: 12px;
+    padding: 4px; /* Kurangi padding */
+  }
+
+  .tenaga-medis-title {
+    font-size: 1.5rem;
+  }
+
+  .tenaga-medis-header {
+    gap: 8px;
+  }
 }
 
 /* Tablet */

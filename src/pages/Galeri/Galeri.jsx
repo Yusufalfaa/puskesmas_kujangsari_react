@@ -149,9 +149,9 @@ const Galeri = () => {
           <h1>GALERI</h1>
           <p>Kumpulan foto kegiatan dan fasilitas Puskesmas Kujangsari.</p>
         </div>
-        <div className="loading-container">
-          <p>Memuat data...</p>
-        </div>
+          <div className="galeri-loading">
+        <div className="loading-spinner"></div><p>Memuat data...</p>
+      </div>
       </div>
     );
   }

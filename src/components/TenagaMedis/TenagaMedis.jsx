@@ -36,10 +36,15 @@ const TenagaMedis = () => {
       try {
         setLoading(true);
 
+        // Query untuk mendapatkan data SDM yang sudah di-join dengan medical-personnel-homepage
         const { data, error } = await supabase
           .from('sdm')
-          .select('*')
+          .select(`
+            *,
+            medical-personnel-homepage!inner(set-show)
+          `)
           .in('jobdesk', ['Bidan', 'Dokter', 'Dokter Gigi', 'Perawat'])
+          .eq('medical-personnel-homepage.set-show', true)
           .order('jobdesk', { ascending: true })
           .order('name', { ascending: true });
 

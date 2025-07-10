@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { supabase } from "../../../../lib/supabase"
 import { useNavigate } from "react-router-dom"
 import "./Config_TentangKami.css"
-import { Container, Row, Col, Form, Button, Alert, Modal, Card } from "react-bootstrap"
+import { Row, Col, Form, Button, Alert, Modal, Card } from "react-bootstrap"
 import { ArrowLeft, Save, Plus, Edit, Trash2, Upload, FolderOpen, ImageIcon } from "lucide-react"
 
 const Config_TentangKami = () => {
@@ -609,9 +609,8 @@ const Config_TentangKami = () => {
 
   if (loading) {
     return (
-      <div className="config-tentangKami-tentangKami-loading">
-        <div className="loading-spinner"></div>
-        <p>Memuat data...</p>
+      <div className="config-tentangKami-loading">
+        <div className="loading-spinner"></div><p>Memuat data...</p>
       </div>
     )
   }
@@ -626,7 +625,7 @@ const Config_TentangKami = () => {
         <h1>Konfigurasi Tentang Kami</h1>
       </div>
 
-      <Container>
+      <div className="config-tentangKami-container">
         {error && (
           <Alert variant="danger" dismissible onClose={() => setError(null)} className="custom-alert">
             <span className="alert-icon">⚠️</span>
@@ -653,7 +652,7 @@ const Config_TentangKami = () => {
             <h3>Deskripsi Tentang Kami</h3>
           </Card.Header>
           <Card.Body>
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-4">
               <Form.Label>Deskripsi</Form.Label>
               <Form.Control
                 as="textarea"
@@ -730,7 +729,7 @@ const Config_TentangKami = () => {
             )}
           </Card.Body>
         </Card>
-      </Container>
+      </div>
 
       {/* Add Image Modal */}
       <Modal show={showAddModal} onHide={() => setShowAddModal(false)} size="lg">
@@ -740,20 +739,20 @@ const Config_TentangKami = () => {
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3">
-              <Form.Label>Pilih File</Form.Label>
-              <Form.Control
-                type="file"
-                accept="image/*"
-                onChange={(e) => setNewImage({ ...newImage, file: e.target.files[0] })}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
               <Form.Label>Nama Gambar</Form.Label>
               <Form.Control
                 type="text"
                 value={newImage.name}
                 onChange={(e) => setNewImage({ ...newImage, name: e.target.value })}
                 placeholder="Masukkan nama gambar"
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Pilih File</Form.Label>
+              <Form.Control
+                type="file"
+                accept="image/*"
+                onChange={(e) => setNewImage({ ...newImage, file: e.target.files[0] })}
               />
             </Form.Group>
             <Row>

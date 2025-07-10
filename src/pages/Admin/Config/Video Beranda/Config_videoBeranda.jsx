@@ -191,8 +191,8 @@ const ConfigVideoBeranda = () => {
 
   if (loading) {
     return (
-      <div className="config-videoBeranda-container">
-        <div className="loading">Memuat data...</div>
+      <div className="config-videoBeranda-loading">
+        <div className="loading-spinner"></div><p>Memuat data...</p>
       </div>
     );
   }

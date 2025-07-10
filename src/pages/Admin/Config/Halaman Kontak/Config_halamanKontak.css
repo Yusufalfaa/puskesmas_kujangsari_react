@@ -205,14 +205,6 @@
 }
 
 /* Loading & Error */
-.loading-container,
-.error-container {
-  text-align: center;
-  padding: 40px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  margin: 20px 0;
-}
 
 .error-container {
   background: #f8d7da;

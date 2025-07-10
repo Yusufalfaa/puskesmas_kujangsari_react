@@ -36,7 +36,8 @@ import Config_Gallery from './pages/Admin/Config/Galeri/Config_Galeri';
 import Config_TenagaKerja from './pages/Admin/Config/TenagaKerja/Config_TenagaKerja';
 import Config_StorageManagement from './pages/Admin/Config/StorageManagement/Config_StorageManagement';
 import Config_TentangKami from './pages/Admin/Config/TentangKami/Config_TentangKami';
-
+import Config_SaranKeluhan from './pages/Admin/Config/SaranKeluhan/Config_SaranKeluhan';
+import Config_TenagaMedis from './pages/Admin/Config/TenagaMedis/Config_TenagaMedis';
 
 
 function AppContent() {
@@ -191,6 +192,22 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Config_TentangKami />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin-config-saranKeluhan" 
+          element={
+            <ProtectedRoute>
+              <Config_SaranKeluhan />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin-config-tenagaMedis" 
+          element={
+            <ProtectedRoute>
+              <Config_TenagaMedis />
             </ProtectedRoute>
           } 
         />

@@ -802,21 +802,23 @@ const Config_TenagaKerja = () => {
 
   return (
     <div className="config-tenagaKerja">
-      {/* Header */}
+      {/* Header - MODIFIED */}
       <div className="config-tenagaKerja-header-new">
-        <button className="btn-back" onClick={() => window.history.back()}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M19 12H5M12 19L5 12L12 5"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          Kembali
-        </button>
-        <h1>Kelola Tenaga Kerja</h1>
+        <div className="header-left">
+          <button className="btn-back" onClick={() => window.history.back()}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M19 12H5M12 19L5 12L12 5"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Kembali
+          </button>
+          <h1>Kelola Tenaga Kerja</h1>
+        </div>
         <div className="header-actions">
           <button
             className="btn-sync"
@@ -960,7 +962,7 @@ const Config_TenagaKerja = () => {
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="Contoh: Naufalino Farhan"
+                  placeholder="Contoh: John Doe"
                   required
                 />
                 <small className="form-text">Nama akan disimpan di database tanpa gelar</small>

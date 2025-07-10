@@ -9,7 +9,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: left;
   }
   
   .banner h1 {
@@ -42,6 +41,44 @@
   .btn-saran:hover {
     background-color: #126f77; 
   }
+
+/* Error Container Styles */
+.error-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  min-height: 200px;
+}
+
+.error-container p {
+  color: #e74c3c;
+  font-size: 16px;
+  text-align: center;
+  background-color: #fdf2f2;
+  padding: 15px 20px;
+  border-radius: 5px;
+  border: 1px solid #fecaca;
+}
+
+/* Error Container Styles */
+.error-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  min-height: 200px;
+}
+
+.error-container p {
+  color: #e74c3c;
+  font-size: 16px;
+  text-align: center;
+  background-color: #fdf2f2;
+  padding: 15px 20px;
+  border-radius: 5px;
+  border: 1px solid #fecaca;
+}
   
   @media (max-width: 768px) {
     .banner {

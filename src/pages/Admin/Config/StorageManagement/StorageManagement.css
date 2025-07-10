@@ -550,15 +550,6 @@
   background-color: #1e7e34;
 }
 
-.btn-info {
-  background-color: #17a2b8;
-  color: white;
-}
-
-.btn-info:hover {
-  background-color: #117a8b;
-}
-
 .btn-warning {
   background-color: #ffc107;
   color: #212529;
@@ -829,7 +820,7 @@
   text-align: center;
 }
 
-.loading-container {
+.loading-spinner {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -895,7 +886,7 @@
   z-index: 9999;
 }
 
-.loading-overlay .loading-container {
+.loading-overlay .loading-spinner {
   background: white;
   padding: 40px;
   border-radius: 16px;

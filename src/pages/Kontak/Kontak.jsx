@@ -98,9 +98,9 @@ const Kontak = () => {
       
       <div className="content">
         {loading && (
-          <div className="loading-container">
-            <p>Loading Kontak...</p>
-          </div>
+          <div className="kontak-loading">
+        <div className="loading-spinner"></div><p>Memuat data...</p>
+      </div>
         )}
 
         {error && (

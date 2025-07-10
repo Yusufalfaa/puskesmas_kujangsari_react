@@ -845,29 +845,30 @@ const Config_Gallery = () => {
   if (loading) {
     return (
       <div className="config-galeri-loading">
-        <div className="loading-spinner"></div>
-        <p>Memuat data...</p>
+        <div className="loading-spinner"></div><p>Memuat data...</p>
       </div>
     )
   }
 
   return (
     <div className="config-galeri-gallery">
-      {/* Header - DITAMBAHKAN TOMBOL SYNC */}
+      {/* Header - MODIFIED */}
       <div className="config-galeri-header-new">
-        <button className="btn-back" onClick={() => window.history.back()}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M19 12H5M12 19L5 12L12 5"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          Kembali
-        </button>
-        <h1>Kelola Galeri</h1>
+        <div className="header-left">
+          <button className="btn-back" onClick={() => window.history.back()}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M19 12H5M12 19L5 12L12 5"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Kembali
+          </button>
+          <h1>Kelola Galeri</h1>
+        </div>
         <div className="header-actions">
           <button
             className="btn-sync"
@@ -914,7 +915,6 @@ const Config_Gallery = () => {
       {/* Gallery Sections - Following TenagaKerja Structure */}
       <div className="gallery-section">
         <h2>Daftar Galeri Foto</h2>
-
         {Object.keys(groupedGalleries).length === 0 ? (
           <div className="no-galleries">
             <div className="no-galleries-icon">📷</div>
@@ -922,7 +922,7 @@ const Config_Gallery = () => {
             <p>Tambahkan foto pertama Anda untuk memulai galeri</p>
           </div>
         ) : (
-          <div className="gallery-container">
+          <div className="config-gallery-container">
             {Object.entries(groupedGalleries).map(([photoType, photos]) => (
               <div key={photoType} className="gallery-category-section">
                 {/* Header dengan tombol expand/collapse */}

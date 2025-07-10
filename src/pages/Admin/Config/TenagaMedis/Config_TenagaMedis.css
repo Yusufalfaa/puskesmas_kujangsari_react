@@ -1,0 +1,514 @@
+/* Config_TenagaMedis.css - Updated to match Config_Galeri styling */
+
+.config-container {
+  max-width: auto;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Header baru sesuai Config_Galeri */
+.config-tenaga-medis-header-new {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: linear-gradient(135deg, #0f96b5 30%, #0a7385 100%);
+  border-radius: 12px;
+  color: white;
+  margin: 10px 5px 0 5px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.config-tenaga-medis-header-new h1 {
+  margin: 0 0 0 20px;
+  font-size: 33px;
+  font-weight: 700;
+}
+
+.config-tenaga-medis-header-new p {
+  margin: 5px 0 0 20px;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.header-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.btn-back {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-back:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.btn-refresh {
+  background: rgba(255, 255, 255, 0.9);
+  color: #0f96b5;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-refresh:hover {
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-refresh:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.message {
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+  animation: slideIn 0.3s ease-out;
+}
+
+.message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #6c757d;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #0f96b5;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Medical Staff Section Styles - Following Config_Galeri Structure */
+.medical-staff-section {
+  margin-bottom: 30px;
+}
+
+.medical-staff-section h2 {
+  margin-bottom: 25px;
+  color: #2d3748;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 3px solid #0f96b5;
+  padding-bottom: 15px;
+  width: 1050px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Container untuk kategori tenaga medis */
+.config-medical-staff-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.medical-staff-category-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 20px 25px;
+  background: linear-gradient(135deg, #0f96b5 30%, #0a7385 100%);
+  transition: all 0.3s ease;
+  user-select: none;
+  margin: 0;
+}
+
+.category-header:hover {
+  background: linear-gradient(135deg, #0f96b5 30%, #0a7385 100%);
+}
+
+.category-header h3 {
+  margin: 0;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.expand-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.item-count {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.expand-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.expand-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.expand-icon {
+  width: 18px;
+  height: 18px;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.medical-staff-content {
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.medical-staff-content.expanded {
+  max-height: none;
+  opacity: 1;
+}
+
+.medical-staff-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+  padding: 25px;
+  background: #f8fafc;
+}
+
+.doctor-card {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.doctor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border-color: #0f96b5;
+}
+
+.doctor-image-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.doctor-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.doctor-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.doctor-name {
+  margin: 0 0 5px 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #343a40;
+}
+
+.doctor-specialization {
+  margin: 0;
+  color: #6c757d;
+  font-size: 0.95rem;
+}
+
+.doctor-controls {
+  margin-bottom: 15px;
+}
+
+.toggle-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.toggle-container {
+  position: relative;
+}
+
+.status-dropdown {
+  width: 100%;
+  padding: 10px 15px;
+  border: 2px solid #dee2e6;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23999" d="M6 9L1.5 4.5h9L6 9z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 12px;
+}
+
+.status-dropdown:focus {
+  outline: none;
+  border-color: #0f96b5;
+  box-shadow: 0 0 0 3px rgba(15, 150, 181, 0.1);
+}
+
+.status-dropdown.active {
+  border-color: #28a745;
+  color: #28a745;
+}
+
+.status-dropdown.inactive {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.status-dropdown:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.doctor-status {
+  text-align: center;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge.inactive {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6c757d;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.config-actions {
+  text-align: center;
+  margin-top: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .config-tenaga-medis-header-new {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .header-left {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .config-tenaga-medis-header-new h1 {
+    text-align: center;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .btn-back,
+  .btn-refresh {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .category-header {
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .category-header h3 {
+    font-size: 18px;
+  }
+
+  .expand-controls {
+    gap: 10px;
+  }
+
+  .doctors-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .doctor-card {
+    padding: 20px;
+  }
+
+  .doctor-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .doctor-name {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .config-tenaga-medis-header-new {
+    padding: 15px;
+  }
+
+  .config-tenaga-medis-header-new h1 {
+    font-size: 1.8rem;
+  }
+
+  .config-tenaga-medis-header-new p {
+    font-size: 1rem;
+  }
+
+  .category-header {
+    padding: 12px 15px;
+  }
+
+  .category-header h3 {
+    font-size: 16px;
+  }
+
+  .doctors-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .doctor-card {
+    padding: 15px;
+  }
+
+  .doctor-image {
+    width: 70px;
+    height: 70px;
+  }
+}

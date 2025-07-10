@@ -1,41 +1,41 @@
-/* Config_TentangKami.css */
+/* Config_SaranKeluhan.css */
 
-.config-tentangKami-tentang-kami {
+.config-saranKeluhan-saran-keluhan {
   min-height: 100vh;
   background-color: #f8f9fa;
   padding: 20px 0;
 }
 
-.config-tentangKami-header {
+.config-saranKeluhan-header {
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
   margin-bottom: 30px;
   padding: 20px;
-  background: linear-gradient(135deg, #0c6478 0%, #0a5563 100%);
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
   border-radius: 12px;
   color: white;
   margin: 0 20px 20px 20px;
 }
 
 /* Container khusus untuk menyamakan lebar dengan header */
-.config-tentangKami-container {
+.config-saranKeluhan-container {
   margin: 0 20px;
   padding: 0;
 }
 
 /* Pastikan card memiliki lebar penuh dalam container */
-.config-tentangKami-container .card {
+.config-saranKeluhan-container .card {
   width: 100%;
 }
 
-.config-tentangKami-header .container {
+.config-saranKeluhan-header .container {
   margin: auto;
   padding: 0 20px;
 }
 
-.config-tentangKami-header h1 {
+.config-saranKeluhan-header h1 {
   margin: 0;
   font-size: 2rem;
   font-weight: 700;
@@ -61,7 +61,7 @@
   transform: translateY(-2px);
 }
 
-.config-tentangKami-loading {
+.config-saranKeluhan-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,7 +69,6 @@
   min-height: 400px;
   color: #6c757d;
 }
-
 
 .card {
   border: none;
@@ -84,9 +83,9 @@
 }
 
 .card-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
   color: white;
-  border-radius: 15px;
+  border-radius: 15px 15px 0 0;
   border-bottom: none;
   padding: 20px;
   font-weight: 600;
@@ -96,6 +95,8 @@
   margin: 0;
   font-size: 1.3rem;
   font-weight: 600;
+  display: flex;
+  align-items: center;
 }
 
 .card-body {
@@ -119,8 +120,8 @@
 
 .form-control:focus,
 .form-select:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  border-color: #17a2b8;
+  box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
 }
 
 .form-control[as="textarea"] {
@@ -140,14 +141,14 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
   border: none;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  background: linear-gradient(135deg, #138496 0%, #117a8b 100%);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 5px 15px rgba(23, 162, 184, 0.3);
 }
 
 .btn-success {
@@ -161,148 +162,18 @@
   box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
 }
 
-.btn-outline-primary,
-.btn-outline-warning,
-.btn-outline-danger {
-  border: 1.5px solid;
-  background: transparent;
-  transition: all 0.3s ease;
-}
-
-.btn-outline-primary:hover,
-.btn-outline-warning:hover,
-.btn-outline-danger:hover {
-  transform: translateY(-2px);
-}
-
 .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none !important;
 }
 
-.no-images {
-  text-align: center;
-  padding: 60px 20px;
-  color: #6c757d;
-}
-
-.no-images p {
-  margin-top: 20px;
-  font-size: 1.1rem;
-}
-
-.image-card {
-  height: 100%;
-  transition: all 0.3s ease;
-}
-
-.image-card:hover {
-  transform: translateY(-5px);
-}
-
-.image-preview {
-  height: 200px;
-  object-fit: cover;
-  transition: all 0.3s ease;
-}
-
-.image-preview:hover {
-  transform: scale(1.05);
-}
-
-.image-actions {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-top: 15px;
-}
-
-.image-actions .btn {
-  flex: 1;
-  max-width: 50px;
-  height: 40px;
-  padding: 0;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.image-actions .btn-outline-primary {
-  color: #667eea;
-  border-color: #667eea;
-}
-
-.image-actions .btn-outline-primary:hover {
-  background-color: #667eea;
-  color: white;
-}
-
-.image-actions .btn-outline-warning {
-  color: #ffc107;
-  border-color: #ffc107;
-}
-
-.image-actions .btn-outline-warning:hover {
-  background-color: #ffc107;
-  color: #212529;
-}
-
-.image-actions .btn-outline-danger {
-  color: #dc3545;
-  border-color: #dc3545;
-}
-
-.image-actions .btn-outline-danger:hover {
-  background-color: #dc3545;
-  color: white;
-}
-
-.modal-content {
-  border: none;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-}
-
-.modal-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-bottom: none;
-  border-radius: 15px 15px 0 0;
-}
-
-.modal-header .modal-title {
-  font-weight: 600;
-  font-size: 1.2rem;
-}
-
-.modal-header .btn-close {
-  filter: brightness(0) invert(1);
-  opacity: 0.8;
-}
-
-.modal-header .btn-close:hover {
-  opacity: 1;
-}
-
-.modal-body {
-  padding: 30px;
-}
-
-.modal-footer {
-  border-top: 1px solid #e9ecef;
-  padding: 20px 30px;
-  background-color: #f8f9fa;
-  border-radius: 0 0 15px 15px;
-}
-
-/* Custom Alert Styles - Fixed positioning */
+/* Custom Alert Styles */
 .custom-alert {
   border: none;
   border-radius: 12px;
   padding: 15px 20px;
-  margin: 20px 0 20px 0; /* Consistent margins */
+  margin: 20px 0 20px 0;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -350,6 +221,22 @@
   background: rgba(0, 0, 0, 0.1);
 }
 
+/* Preview URL Styling */
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+.bg-light a {
+  color: #17a2b8;
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.bg-light a:hover {
+  color: #138496;
+  text-decoration: underline !important;
+}
+
 /* Animations */
 @keyframes slideInDown {
   from {
@@ -385,16 +272,18 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .config-tentangKami-container {
+  .config-saranKeluhan-container {
     margin: 0 10px;
   }
 
-  .config-tentangKami-header h1 {
-    font-size: 2rem;
+  .config-saranKeluhan-header h1 {
+    font-size: 1.8rem;
   }
 
-  .config-tentangKami-header {
+  .config-saranKeluhan-header {
     padding: 20px 0;
+    flex-direction: column;
+    text-align: center;
   }
 
   .back-button {
@@ -407,35 +296,12 @@
     transform: translateY(-2px);
   }
 
-  .config-tentangKami-header {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .config-tentangKami-header h1 {
+  .config-saranKeluhan-header h1 {
     flex: none;
   }
 
   .card-body {
     padding: 20px;
-  }
-
-  .modal-body {
-    padding: 20px;
-  }
-
-  .modal-footer {
-    padding: 15px 20px;
-  }
-
-  .image-actions {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .image-actions .btn {
-    max-width: 100%;
-    height: 45px;
   }
 
   .btn {
@@ -449,16 +315,16 @@
 }
 
 @media (max-width: 576px) {
-  .config-tentangKami-container {
+  .config-saranKeluhan-container {
     margin: 0 5px;
   }
 
-  .config-tentangKami-tentang-kami {
+  .config-saranKeluhan-saran-keluhan {
     padding: 10px 0;
   }
 
-  .config-tentangKami-header h1 {
-    font-size: 1.8rem;
+  .config-saranKeluhan-header h1 {
+    font-size: 1.6rem;
   }
 
   .card-header {
@@ -467,14 +333,6 @@
 
   .card-body {
     padding: 15px;
-  }
-
-  .no-images {
-    padding: 40px 15px;
-  }
-
-  .image-preview {
-    height: 150px;
   }
 
   .btn {
@@ -513,26 +371,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
-}
-
-/* Loading overlay */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+  background: linear-gradient(135deg, #138496 0%, #1ea085 100%);
 }
 
 /* Focus styles for accessibility */
@@ -540,15 +384,14 @@
 .form-control:focus,
 .form-select:focus {
   outline: none;
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
 }
 
 /* Print styles */
 @media print {
-  .config-tentangKami-header,
+  .config-saranKeluhan-header,
   .back-button,
   .btn,
-  .modal,
   .custom-alert {
     display: none !important;
   }
@@ -556,9 +399,5 @@
   .card {
     box-shadow: none;
     border: 1px solid #ddd;
-  }
-
-  .image-preview {
-    max-height: 300px;
   }
 }

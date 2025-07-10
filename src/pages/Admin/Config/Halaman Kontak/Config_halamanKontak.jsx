@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../../lib/supabase';
+import './Config_halamanKontak.css';
 import { FaEdit, FaSave, FaTimes, FaPlus, FaTrash, FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +13,8 @@ const Config_Kontak = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [addForm, setAddForm] = useState({
     contact_type: 'WhatsApp',
-    value: ''
+    value: '',
+    is_active: true
   });
   const navigate = useNavigate();
 
@@ -47,7 +49,8 @@ const Config_Kontak = () => {
     setEditingId(contact.id);
     setEditForm({
       contact_type: contact.contact_type,
-      value: contact.value
+      value: contact.value,
+      is_active: contact.is_active
     });
   };
 
@@ -65,6 +68,7 @@ const Config_Kontak = () => {
         .update({
           contact_type: editForm.contact_type,
           value: editForm.value,
+          is_active: editForm.is_active,
           updated_at: new Date().toISOString()
         })
         .eq('id', editingId);
@@ -113,6 +117,7 @@ const Config_Kontak = () => {
         .insert([{
           contact_type: addForm.contact_type,
           value: addForm.value,
+          is_active: addForm.is_active,
           created_at: new Date().toISOString()
         }]);
 
@@ -123,7 +128,8 @@ const Config_Kontak = () => {
       // Reset form dan refresh data
       setAddForm({
         contact_type: 'WhatsApp',
-        value: ''
+        value: '',
+        is_active: true
       });
       setShowAddForm(false);
       await fetchContacts();
@@ -145,26 +151,19 @@ const Config_Kontak = () => {
     });
   };
 
-  // Batasi tipe kontak yang bisa diedit
-  const editableContactTypes = ['WhatsApp', 'Phone', 'Instagram'];
-  const contactTypes = ['WhatsApp', 'Phone', 'Instagram'];
-
-  // Cek apakah kontak bisa diedit
-  const isEditable = (contactType) => {
-    return editableContactTypes.includes(contactType);
-  };
+  const contactTypes = ['WhatsApp', 'Instagram', 'Phone', 'Email', 'Website'];
 
   return (
-    <div className="config-halamanKontak-kontak-container">
+    <div className="config-kontak-kontak-container">
       {/* Header */}
-      <div className="config-halamanKontak-header">
+      <div className="config-kontak-header">
         <div className="header-left">
           <button className="btn-back" onClick={() => navigate(-1)}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          Kembali
-        </button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Kembali
+          </button>
           <h1>Konfigurasi Kontak</h1>
         </div>
         <button 
@@ -209,6 +208,16 @@ const Config_Kontak = () => {
                   placeholder="Masukkan nilai kontak"
                 />
               </div>
+              <div className="form-group">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={addForm.is_active}
+                    onChange={(e) => setAddForm({...addForm, is_active: e.target.checked})}
+                  />
+                  Aktif
+                </label>
+              </div>
             </div>
             <div className="modal-footer">
               <button 
@@ -231,9 +240,9 @@ const Config_Kontak = () => {
 
       {/* Loading */}
       {loading && (
-        <div className="loading-container">
-          <p>Loading data kontak...</p>
-        </div>
+          <div className="config-saranKeluhan-loading">
+        <div className="loading-spinner"></div><p>Memuat data...</p>
+      </div>
       )}
 
       {/* Error */}
@@ -309,14 +318,12 @@ const Config_Kontak = () => {
                         </>
                       ) : (
                         <>
-                          {isEditable(contact.contact_type) && (
-                            <button 
-                              className="edit-btn"
-                              onClick={() => handleEdit(contact)}
-                            >
-                              <FaEdit />
-                            </button>
-                          )}
+                          <button 
+                            className="edit-btn"
+                            onClick={() => handleEdit(contact)}
+                          >
+                            <FaEdit />
+                          </button>
                           <button 
                             className="delete-btn"
                             onClick={() => handleDelete(contact.id)}

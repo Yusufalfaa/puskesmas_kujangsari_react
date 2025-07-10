@@ -240,9 +240,9 @@ const Config_Kontak = () => {
 
       {/* Loading */}
       {loading && (
-        <div className="loading-container">
-          <p>Loading data kontak...</p>
-        </div>
+          <div className="config-saranKeluhan-loading">
+        <div className="loading-spinner"></div><p>Memuat data...</p>
+      </div>
       )}
 
       {/* Error */}

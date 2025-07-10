@@ -277,7 +277,9 @@ const TentangPuskesmas = () => {
 
   return (
     <div>
-      <div className="banner">
+      <div className="banner" style={{
+        marginBottom: "-5px",
+      }}>
         <h1>PROFIL PUSKESMAS KUJANGSARI</h1>
         <p>Semua yang perlu Anda ketahui tentang Puskesmas Kujangsari tersedia di sini.</p>
       </div>

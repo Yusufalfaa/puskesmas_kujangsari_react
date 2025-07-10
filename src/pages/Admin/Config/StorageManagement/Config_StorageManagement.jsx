@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { supabase } from "../../../../lib/supabase"
-import { ArrowLeft } from "lucide-react"
 import "./StorageManagement.css"
+import { Button } from "react-bootstrap"
+import { Edit, Trash2, FolderOpen, RefreshCw, ArrowLeft, EyeIcon } from "lucide-react"
 
 const StorageManagement = () => {
   const [buckets, setBuckets] = useState([])
@@ -1670,37 +1671,29 @@ const StorageManagement = () => {
                       href={getFileUrl(bucketName, item.fullPath)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn btn-info btn-sm"
                     >
-                      Lihat
+                      <Button variant="outline-dark" size="sm">
+                                <EyeIcon size={16} />
+                              </Button>
                     </a>
                   )}
 
-                  <button
-                    className="btn btn-warning btn-sm"
-                    onClick={() => startRename(bucketName, item)}
-                    title={`Rename ${item.isFolder ? "folder" : "file"}`}
-                  >
-                    Rename
-                  </button>
+                  <Button variant="outline-primary" size="sm" onClick={() => startRename(bucketName, item)} title={`Rename ${item.isFolder ? "folder" : "file"}`}>
+                                                  <Edit size={16} />
+                                                </Button>
 
-                  <button
-                    className="btn btn-info btn-sm"
-                    onClick={() => startMove(bucketName, item)}
-                    title={`Pindahkan ${item.isFolder ? "folder" : "file"}`}
-                  >
-                    Pindah
-                  </button>
+                  <Button variant="outline-warning" size="sm"
+                   onClick={() => startMove(bucketName, item)}
+                   title={`Pindahkan ${item.isFolder ? "folder" : "file"}`}>
+                  <FolderOpen size={16} />
+                  </Button>
 
                   {item.isFolder ? (
                     <div>
-                      <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => handleDeleteFolder(bucketName, item.fullPath)}
-                        disabled={deleteProgress[`${bucketName}/${item.fullPath}`]}
-                      >
-                        {deleteProgress[`${bucketName}/${item.fullPath}`] ? "Deleting..." : "Hapus"}
-                      </button>
+                      <Button variant="outline-danger" size="sm" onClick={() => handleDeleteFolder(bucketName, item.fullPath)} disabled={deleteProgress[`${bucketName}/${item.fullPath}`]}>
+                                                      <Trash2 size={16} />
+                                                      {deleteProgress[`${bucketName}/${item.fullPath}`] ? "Deleting..." : ""}
+                                                    </Button>
                       {deleteProgress[`${bucketName}/${item.fullPath}`] && (
                         <div className="progress-container" style={{ margin: "5px 0", width: "150px" }}>
                           <div
@@ -1732,13 +1725,11 @@ const StorageManagement = () => {
                     </div>
                   ) : (
                     <div>
-                      <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => handleDeleteFile(bucketName, item.fullPath)}
-                        disabled={deleteProgress[`${bucketName}/${item.fullPath}`]}
-                      >
-                        {deleteProgress[`${bucketName}/${item.fullPath}`] ? "Deleting..." : "Hapus File"}
-                      </button>
+                      <Button variant="outline-danger" size="sm" onClick={() => handleDeleteFile(bucketName, item.fullPath)} disabled={deleteProgress[`${bucketName}/${item.fullPath}`]}>
+                                                      <Trash2 size={16} />
+                                                      {deleteProgress[`${bucketName}/${item.fullPath}`] ? "Deleting..." : ""}
+                                                    </Button>
+                      
                       {deleteProgress[`${bucketName}/${item.fullPath}`] && (
                         <div className="progress-container" style={{ margin: "5px 0", width: "150px" }}>
                           <div
@@ -1852,13 +1843,10 @@ const StorageManagement = () => {
                     </span>
                   </button>
                   <div>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDeleteBucket(bucket.name)}
-                      disabled={deleteBucketProgress[bucket.name]}
-                    >
-                      {deleteBucketProgress[bucket.name] ? "Deleting..." : "Hapus"}
-                    </button>
+                    <Button variant="outline-danger" size="sm" onClick={() => handleDeleteBucket(bucket.name)} disabled={deleteBucketProgress[bucket.name]}>
+                                                    <Trash2 size={16} />
+                                                    {deleteBucketProgress[bucket.name] ? "Deleting..." : "Hapus"}
+                                                  </Button>
                     {deleteBucketProgress[bucket.name] && (
                       <div className="progress-container" style={{ margin: "5px 0", width: "200px" }}>
                         <div

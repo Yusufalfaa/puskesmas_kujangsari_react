@@ -51,7 +51,7 @@ const CarouselDashboard = () => {
   // agar gaya penempatan dan ukuran tetap diterapkan pada kontainer ini
   if (loading) {
     return (
-      <div className="carousel-dashboard-container carousel-loading-container">
+      <div className="carousel-dashboard-container carousel-loading-spinner">
         <div className="d-flex justify-content-center align-items-center" style={{ height: 'auto' }}>
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Loading...</span>

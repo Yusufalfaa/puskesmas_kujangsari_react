@@ -76,9 +76,9 @@ const TenagaKerja = () => {
           <h1>DAFTAR TENAGA KERJA</h1>
           <p>Informasi mengenai tenaga kesehatan dan staf yang bekerja di Puskesmas Kujangsari.</p>
         </div>
-        <div className="loading-container">
-          <p>Memuat data...</p>
-        </div>
+          <div className="tenagaKerja-loading">
+        <div className="loading-spinner"></div><p>Memuat data...</p>
+      </div>
       </div>
     );
   }
