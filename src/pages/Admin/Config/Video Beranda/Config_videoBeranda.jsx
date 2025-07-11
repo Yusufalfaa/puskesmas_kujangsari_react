@@ -298,8 +298,18 @@ const ConfigVideoBeranda = () => {
                     )}
                   </div>
                   <div className="video-info">
-                    <h4>{video.title}</h4>
+                    <div className="video-header">
+                      <h4>{video.title}</h4>
+                      <div className="video-order-badge">
+                        {video.order ? `#${video.order}` : '#-'}
+                      </div>
+                    </div>
                     <p className="video-url">{video.videoUrl}</p>
+                    <div className="video-meta">
+                      <span className="video-order-info">
+                        Urutan: {video.order ? video.order : '-'}
+                      </span>
+                    </div>
                     <div className="video-actions">
                       <button 
                         onClick={() => startEdit(video)}

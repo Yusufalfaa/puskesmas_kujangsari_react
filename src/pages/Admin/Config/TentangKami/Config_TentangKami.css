@@ -161,20 +161,6 @@
   box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
 }
 
-.btn-outline-primary,
-.btn-outline-warning,
-.btn-outline-danger {
-  border: 1.5px solid;
-  background: transparent;
-  transition: all 0.3s ease;
-}
-
-.btn-outline-primary:hover,
-.btn-outline-warning:hover,
-.btn-outline-danger:hover {
-  transform: translateY(-2px);
-}
-
 .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;

@@ -618,7 +618,7 @@ const Config_TentangKami = () => {
   return (
     <div className="config-tentangKami-tentang-kami">
       <div className="config-tentangKami-header">
-        <Button variant="outline-secondary" onClick={() => navigate("/admin-tentangPuskesmas")} className="back-button">
+        <Button variant="outline-secondary" onClick={() => navigate("/admin-profilPuskesmas")} className="back-button">
           <ArrowLeft size={20} />
           Kembali
         </Button>

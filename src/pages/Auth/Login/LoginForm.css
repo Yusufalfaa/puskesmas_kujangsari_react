@@ -223,6 +223,31 @@
   margin: 0;
 }
 
+.login-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.login-footer p {
+  font-size: 14px;
+  color: #718096;
+  margin: 0;
+}
+
+.login-footer a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.login-footer a:hover {
+  color: #5a67d8;
+  text-decoration: underline;
+}
+
 /* Responsive design */
 @media (max-width: 480px) {
   .login-page {

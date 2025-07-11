@@ -960,7 +960,7 @@ const Config_Gallery = () => {
                             {/* DITAMBAHKAN: Informasi nama file */}
                             <div className="photo-details">
                               <small className="photo-filename">
-                                <strong>Nama File:</strong> {getFileNameFromUrl(photo.imgUrl)}
+                                <strong>Nama File:<br></br></strong> {getFileNameFromUrl(photo.imgUrl)}
                               </small>
                               <small className="photo-location">
                                 <strong>Lokasi:</strong> {locationInfo.bucket}/{locationInfo.folder || ""}

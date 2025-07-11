@@ -52,7 +52,7 @@ const Navbar = () => {
             <li className="nav-item dropdown">
               <NavLink
                 className="nav-link dropdown-toggle"
-                to="/admin-tentangPuskesmas"
+                to="/admin-profilPuskesmas"
                 id="tentangDropdown"
                 role="button"
                 data-bs-toggle="dropdown"
@@ -62,7 +62,7 @@ const Navbar = () => {
               </NavLink>
               <ul className="dropdown-menu" aria-labelledby="tentangDropdown">
                 <li>
-                  <NavLink className="dropdown-item" to="/admin-tentangPuskesmas">
+                  <NavLink className="dropdown-item" to="/admin-profilPuskesmas">
                     Profil Puskesmas
                   </NavLink>
                 </li>
@@ -114,7 +114,7 @@ const Navbar = () => {
                 </ul>
               </div>
             ) : (
-              <NavLink className="nav-link login-btn" to="/login">
+              <NavLink className="nav-link login-btn" to="/admin-login-form">
                 <i className="fas fa-user me-2"></i>
                 Login
               </NavLink>

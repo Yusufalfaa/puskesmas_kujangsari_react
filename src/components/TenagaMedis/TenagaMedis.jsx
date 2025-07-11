@@ -43,7 +43,6 @@ const TenagaMedis = () => {
             *,
             medical-personnel-homepage!inner(set-show)
           `)
-          .in('jobdesk', ['Bidan', 'Dokter', 'Dokter Gigi', 'Perawat'])
           .eq('medical-personnel-homepage.set-show', true)
           .order('jobdesk', { ascending: true })
           .order('name', { ascending: true });
@@ -85,6 +84,16 @@ const TenagaMedis = () => {
     window.addEventListener('resize', updateImageCount);
     return () => window.removeEventListener('resize', updateImageCount);
   }, []);
+
+  // Fungsi untuk menentukan apakah perlu menampilkan tombol navigasi
+  const shouldShowNavButtons = () => {
+    return images.length > imageCount;
+  };
+
+  // Fungsi untuk menentukan apakah gambar perlu di-center
+  const shouldCenterImages = () => {
+    return images.length <= imageCount;
+  };
 
   const handleNext = () => {
     if (scrollIndex < images.length - imageCount) {
@@ -148,17 +157,25 @@ const TenagaMedis = () => {
     <div className="tenaga-medis-container">
       <h2 className="tenaga-medis-title">Tenaga Medis</h2>
       <div className="tenaga-medis-carousel-wrapper">
-        <button 
-          onClick={handlePrev} 
-          className="tenaga-medis-carousel-button left"
-          disabled={scrollIndex === 0}
-        >
-          {'<'}
-        </button>
+        {/* Tombol Previous - hanya tampil jika gambar lebih dari imageCount */}
+        {shouldShowNavButtons() && (
+          <button 
+            onClick={handlePrev} 
+            className="tenaga-medis-carousel-button left"
+            disabled={scrollIndex === 0}
+          >
+            {'<'}
+          </button>
+        )}
+        
         <div className="tenaga-medis-carousel">
           <div
-            className="tenaga-medis-carousel-track"
-            style={{ transform: `translateX(-${scrollIndex * (100 / imageCount)}%)` }}
+            className={`tenaga-medis-carousel-track ${shouldCenterImages() ? 'centered' : ''}`}
+            style={{ 
+              transform: shouldCenterImages() 
+                ? 'translateX(0)' 
+                : `translateX(-${scrollIndex * (100 / imageCount)}%)` 
+            }}
           >
             {images.map((img, index) => (
               <div key={img.id || index} className="tenaga-medis-carousel-item">
@@ -166,7 +183,7 @@ const TenagaMedis = () => {
                   <img
                     src={img.src}
                     alt={`Tenaga Medis ${img.caption}`}
-                    loading="lazy" // ✅ Lazy loading here
+                    loading="lazy"
                     className="tenaga-medis-carousel-image"
                     onClick={() => setPopupImage(img.src)}
                     onError={(e) => {
@@ -181,13 +198,17 @@ const TenagaMedis = () => {
             ))}
           </div>
         </div>
-        <button 
-          onClick={handleNext} 
-          className="tenaga-medis-carousel-button right"
-          disabled={scrollIndex >= images.length - imageCount}
-        >
-          {'>'}
-        </button>
+        
+        {/* Tombol Next - hanya tampil jika gambar lebih dari imageCount */}
+        {shouldShowNavButtons() && (
+          <button 
+            onClick={handleNext} 
+            className="tenaga-medis-carousel-button right"
+            disabled={scrollIndex >= images.length - imageCount}
+          >
+            {'>'}
+          </button>
+        )}
       </div>
 
       {popupImage && (

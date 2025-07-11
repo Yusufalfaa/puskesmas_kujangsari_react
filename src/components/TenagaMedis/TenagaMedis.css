@@ -5,12 +5,12 @@
 
 .tenaga-medis-title {
   font-size: 2rem;
-  margin-top: 40px;
 }
 
 .tenaga-medis-container .tenaga-medis-empty{
   margin-top: 15px;
 }
+
 .tenaga-medis-carousel-wrapper {
   position: relative;
   display: flex;
@@ -29,6 +29,11 @@
 .tenaga-medis-carousel-track {
   display: flex;
   transition: transform 0.3s ease-in-out;
+}
+
+/* Kelas untuk centering ketika gambar sedikit */
+.tenaga-medis-carousel-track.centered {
+  justify-content: center;
 }
 
 .tenaga-medis-carousel-item {
@@ -93,10 +98,15 @@
   justify-content: center; 
 }
 
+.tenaga-medis-carousel-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .tenaga-medis-carousel-button i {
   font-size: 1.5rem; 
 }
-
 
 .tenaga-medis-popup-overlay {
   position: fixed;
@@ -154,16 +164,26 @@
   background-color: rgba(0, 0, 0, 1);
 }
 
-/* Tablet */
+/* Tablet - 2 gambar per baris */
 @media (max-width: 992px) {
   .tenaga-medis-carousel-item {
     flex: 0 0 calc(100% / 2);
   }
+  
+  /* Untuk centering di tablet ketika gambar <= 2 */
+  .tenaga-medis-carousel-track.centered .tenaga-medis-carousel-item {
+    flex: 0 0 auto;
+  }
 }
 
-/* HP */
+/* Mobile - 1 gambar per baris */
 @media (max-width: 576px) {
   .tenaga-medis-carousel-item {
     flex: 0 0 100%;
+  }
+  
+  /* Untuk centering di mobile ketika gambar = 1 */
+  .tenaga-medis-carousel-track.centered .tenaga-medis-carousel-item {
+    flex: 0 0 auto;
   }
 }

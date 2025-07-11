@@ -403,20 +403,6 @@
   font-size: 16px;
 }
 
-.btn-outline-primary,
-.btn-outline-warning,
-.btn-outline-danger {
-  border: 1.5px solid;
-  background: transparent;
-  transition: all 0.3s ease;
-}
-
-.btn-outline-primary:hover,
-.btn-outline-warning:hover,
-.btn-outline-danger:hover {
-  transform: translateY(-2px);
-}
-
 /* Modal styles */
 .modal-tenagaKerja-overlay {
   position: fixed;

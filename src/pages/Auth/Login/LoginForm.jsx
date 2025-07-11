@@ -1,8 +1,9 @@
-// src/pages/Auth/LoginForm.jsx - Fixed Version
+// src/pages/Auth/LoginForm.jsx - Fixed Version with bcrypt password verification
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../contexts/AuthContext';
+import { supabase } from '../../../lib/supabase';
+import { useAuth } from '../../../contexts/AuthContext';
+import bcrypt from 'bcryptjs';
 import './LoginForm.css'; // Import CSS biasa, bukan modules
 
 const LoginForm = () => {
@@ -36,30 +37,50 @@ const LoginForm = () => {
     const { username, password } = formData;
 
     try {
+      // First, get user data by username only
       const { data, error: supabaseError } = await supabase
         .from('users')
         .select('*')
         .eq('username', username)
-        .eq('password', password)
         .single();
 
       if (supabaseError || !data) {
         setError('Username atau password salah.');
-      } else {
-        const userData = {
-          id: data.id,
-          username: data.username,
-          role: data.role,
-          created_at: data.created_at
-        };
-        
-        login(userData);
-        setSuccess(true);
-        
-        setTimeout(() => {
-          navigate('/admin-beranda');
-        }, 1500);
+        setLoading(false);
+        return;
       }
+
+      // Compare the input password with the hashed password from database
+      const passwordMatch = await bcrypt.compare(password, data.password);
+
+      if (!passwordMatch) {
+        setError('Username atau password salah.');
+        setLoading(false);
+        return;
+      }
+
+      // Check if user role is ADMIN
+      if (data.role !== 'ADMIN') {
+        setError('Akses ditolak. Hanya admin yang dapat login.');
+        setLoading(false);
+        return;
+      }
+
+      // If password matches and role is ADMIN, proceed with login
+      const userData = {
+        id: data.id,
+        username: data.username,
+        role: data.role,
+        created_at: data.created_at
+      };
+      
+      login(userData);
+      setSuccess(true);
+      
+      setTimeout(() => {
+        navigate('/admin-beranda');
+      }, 1500);
+
     } catch (err) {
       setError('Terjadi kesalahan saat login. Coba lagi.');
       console.error('Login error:', err);
@@ -134,7 +155,7 @@ const LoginForm = () => {
             >
               {loading ? (
                 <>
-                  <span className="loading-spinner"></span>
+                  <span className="loading-login"></span>
                   Signing In...
                 </>
               ) : (
@@ -142,6 +163,10 @@ const LoginForm = () => {
               )}
             </button>
           </form>
+
+          <div className="login-footer">
+            <p>Belum punya akun admin? <a href="/admin-register-form">Daftar di sini</a></p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,14 +1,17 @@
-.tenaga-medis-container {
+.config-tenaga-medis-medis-container {
   text-align: center;
   padding: 40px 0;
 }
 
-.tenaga-medis-title {
+.config-tenaga-medis-medis-title {
   font-size: 2rem;
-  margin-top: 40px;
 }
 
-.tenaga-medis-carousel-wrapper {
+.config-tenaga-medis-medis-container .config-tenaga-medis-medis-empty{
+  margin-top: 15px;
+}
+
+.config-tenaga-medis-medis-carousel-wrapper {
   position: relative;
   display: flex;
   align-items: center;
@@ -17,18 +20,23 @@
   margin: 0 auto;
 }
 
-.tenaga-medis-carousel {
+.config-tenaga-medis-medis-carousel {
   overflow: hidden;
   width: 100%;
   max-width: 1200px;
 }
 
-.tenaga-medis-carousel-track {
+.config-tenaga-medis-medis-carousel-track {
   display: flex;
   transition: transform 0.3s ease-in-out;
 }
 
-.tenaga-medis-carousel-item {
+/* Kelas untuk centering ketika gambar sedikit */
+.config-tenaga-medis-medis-carousel-track.centered {
+  justify-content: center;
+}
+
+.config-tenaga-medis-medis-carousel-item {
   flex: 0 0 calc(100% / 5);
   padding: 10px;
   box-sizing: border-box;
@@ -36,7 +44,7 @@
   justify-content: center;
 }
 
-.tenaga-medis-card {
+.config-tenaga-medis-medis-card {
   width: 180px;
   height: 300px;
   display: flex;
@@ -48,7 +56,7 @@
   box-sizing: border-box;
 }
 
-.tenaga-medis-carousel-image {
+.config-tenaga-medis-medis-carousel-image {
   width: 100%;
   height: 219px;
   object-fit: cover;
@@ -58,7 +66,7 @@
   margin-bottom: 15px;
 }
 
-.tenaga-medis-caption {
+.config-tenaga-medis-medis-caption {
   height: 21px;
   font-size: 1rem;
   font-weight: bold;
@@ -70,11 +78,11 @@
   text-align: center;
 }
 
-.tenaga-medis-carousel-image:hover {
+.config-tenaga-medis-medis-carousel-image:hover {
   transform: scale(1.05);
 }
 
-.tenaga-medis-carousel-button {
+.config-tenaga-medis-medis-carousel-button {
   background-color: #0d6f83;
   color: white;
   border: none;
@@ -87,14 +95,20 @@
   height: 48px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; 
 }
 
-.tenaga-medis-carousel-button i {
-  font-size: 1.5rem;
+.config-tenaga-medis-medis-carousel-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
-.tenaga-medis-popup-overlay {
+.config-tenaga-medis-medis-carousel-button i {
+  font-size: 1.5rem; 
+}
+
+.config-tenaga-medis-medis-popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -109,7 +123,7 @@
   padding: 20px;
 }
 
-.tenaga-medis-popup-image-wrapper {
+.config-tenaga-medis-medis-popup-image-wrapper {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -120,7 +134,7 @@
   position: relative;
 }
 
-.tenaga-medis-popup-image {
+.config-tenaga-medis-medis-popup-image {
   max-width: 100%;
   max-height: 100%;
   cursor: grab;
@@ -128,7 +142,7 @@
   transform-origin: center;
 }
 
-.tenaga-medis-close-button {
+.config-tenaga-medis-medis-close-button {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -146,105 +160,67 @@
   z-index: 1000;
 }
 
-.tenaga-medis-close-button:hover {
+.config-tenaga-medis-medis-close-button:hover {
   background-color: rgba(0, 0, 0, 1);
 }
 
-/* Header styling - Modified to position button next to title */
-.tenaga-medis-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  position: relative;
-  gap: 15px;
-}
-
-.tenaga-medis-title {
-  margin: 0;
-  font-size: 2rem;
-}
-
-/* Settings button styling - Modified positioning */
-.tenaga-medis-settings-button {
+/* Settings button styling - DIPERBAIKI */
+.config-tenaga-medis-settings-button {
   background: #007bff;
   border: none;
   color: white;
-  padding: 6px; /* Kurangi padding */
+  padding: 0;
   border-radius: 50%;
   cursor: pointer;
   font-size: 16px;
   transition: all 0.3s ease;
-  display: flex;
+  width: 30px;
+  height: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px; /* Kurangi dari 40px ke 32px */
-  height: 30px; /* Kurangi dari 40px ke 32px */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  flex-shrink: 0;
+  margin: 0 0 3px 10px;
+  vertical-align: middle;
 }
 
-.tenaga-medis-settings-button:hover {
+.config-tenaga-medis-settings-button:hover {
   background: #0056b3;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.tenaga-medis-settings-button:active {
+.config-tenaga-medis-settings-button:active {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.tenaga-medis-settings-button:focus {
+.config-tenaga-medis-settings-button:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .tenaga-medis-header {
-    gap: 10px;
-  }
-
-  .tenaga-medis-settings-button {
-    width: 28px; /* Kurangi dari 35px ke 28px */
-    height: 28px; /* Kurangi dari 35px ke 28px */
-    font-size: 14px;
-    padding: 4px; /* Kurangi padding */
-  }
-
-  .tenaga-medis-title {
-    font-size: 1.8rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .tenaga-medis-settings-button {
-    width: 26px; /* Kurangi dari 30px ke 26px */
-    height: 26px; /* Kurangi dari 30px ke 26px */
-    font-size: 12px;
-    padding: 4px; /* Kurangi padding */
-  }
-
-  .tenaga-medis-title {
-    font-size: 1.5rem;
-  }
-
-  .tenaga-medis-header {
-    gap: 8px;
-  }
-}
-
-/* Tablet */
+/* Tablet - 2 gambar per baris */
 @media (max-width: 992px) {
-  .tenaga-medis-carousel-item {
+  .config-tenaga-medis-medis-carousel-item {
     flex: 0 0 calc(100% / 2);
   }
+  
+  /* Untuk centering di tablet ketika gambar <= 2 */
+  .config-tenaga-medis-medis-carousel-track.centered .config-tenaga-medis-medis-carousel-item {
+    flex: 0 0 auto;
+  }
 }
 
-/* HP */
+/* Mobile - 1 gambar per baris */
 @media (max-width: 576px) {
-  .tenaga-medis-carousel-item {
+  .config-tenaga-medis-medis-carousel-item {
     flex: 0 0 100%;
+  }
+  
+  /* Untuk centering di mobile ketika gambar = 1 */
+  .config-tenaga-medis-medis-carousel-track.centered .config-tenaga-medis-medis-carousel-item {
+    flex: 0 0 auto;
   }
 }

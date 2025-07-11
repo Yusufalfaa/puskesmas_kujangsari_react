@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
 import AdminNavbar from './components/Navbar/AdminNavbar';
@@ -9,7 +9,8 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 import Beranda from './pages/Beranda/Beranda';
-import LoginForm from './pages/Auth/LoginForm';
+import RegisterForm from './pages/Auth/Register/RegisterForm';
+import LoginForm from './pages/Auth/Login/LoginForm';
 import SaranKeluhan from './pages/sarankeluhan/SaranKeluhan';
 import TentangPuskesmas from './pages/TentangPuskesmas/TentangPuskesmas';
 import Kontak from './pages/Kontak/Kontak';
@@ -18,7 +19,7 @@ import Galeri from './pages/Galeri/Galeri';
 import LayananSubDetailPage from './pages/LayananKlaster/LayananSubDetailPage';
 import FloatingWhatsAppIcon from './components/FloatingWhatsAppIcon/FloatingWhatsAppIcon';
 import FloatingStorage from './components/FloatingStorage/FloatingStorage';
-
+import PageNotFound from './pages/PageNotFound';
 
 import Admin_Beranda from './pages/Admin/Beranda/Admin_Beranda';
 import Admin_SaranKeluhan from './pages/Admin/SaranKeluhan/Admin_SaranKeluhan';
@@ -39,25 +40,46 @@ import Config_TentangKami from './pages/Admin/Config/TentangKami/Config_TentangK
 import Config_SaranKeluhan from './pages/Admin/Config/SaranKeluhan/Config_SaranKeluhan';
 import Config_TenagaMedis from './pages/Admin/Config/TenagaMedis/Config_TenagaMedis';
 
+// Custom wrapper untuk PageNotFound yang mengset state
+function PageNotFoundWrapper({ setIsNotFound }) {
+  useEffect(() => {
+    setIsNotFound(true);
+    return () => setIsNotFound(false);
+  }, [setIsNotFound]);
+  
+  return <PageNotFound />;
+}
 
 function AppContent() {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
+  const [isNotFound, setIsNotFound] = useState(false);
   
   // Check if current route is admin route
   const isAdminRoute = location.pathname.startsWith('/admin-');
   
   // Check if current route is login page
-  const isLoginPage = location.pathname === '/login';
+  const isLoginPage = location.pathname === '/admin-login-form';
+  const isRegisterPage = location.pathname === '/admin-register-form';
+
+  // Reset isNotFound when location changes (except when going to 404)
+  useEffect(() => {
+    if (!location.pathname.match(/^\/(?!admin-register-form|admin-login-form)/)) {
+      setIsNotFound(false);
+    }
+  }, [location.pathname]);
 
   return (
     <div className="App">
-      {/* Conditional Navbar - Show AdminNavbar for admin routes only if authenticated, regular Navbar for public routes */}
-      {(isAdminRoute && isAuthenticated ? <AdminNavbar /> : <Navbar />)}
+      {/* Conditional Navbar */}
+      {(
+        isAdminRoute && isAuthenticated ? <AdminNavbar /> : <Navbar />
+      )}
       
       <Routes>
         {/* Public Routes */}
-        <Route path="/login" element={<LoginForm />} />
+        <Route path="/admin-register-form" element={<RegisterForm />} />
+        <Route path="/admin-login-form" element={<LoginForm />} />
         <Route path="/" element={<Beranda />} />
         <Route path="/tentangPuskesmas" element={<TentangPuskesmas />} />
         <Route path="/tenagaKerja" element={<TenagaKerja />} />
@@ -76,7 +98,7 @@ function AppContent() {
           } 
         />
         <Route 
-          path="/admin-tentangPuskesmas" 
+          path="/admin-profilPuskesmas" 
           element={
             <ProtectedRoute>
               <Admin_TentangPuskesmas />
@@ -211,13 +233,25 @@ function AppContent() {
             </ProtectedRoute>
           } 
         />
+        
+        {/* 404 Page - This should be the last route */}
+        <Route path="*" element={<PageNotFoundWrapper setIsNotFound={setIsNotFound} />} />
       </Routes>
       
-      {/* Conditional Footer - Show AdminFooter for admin routes only if authenticated, regular Footer for public routes */}
-      {isAdminRoute && isAuthenticated ? <AdminFooter /> : <Footer />}
-      {isAdminRoute && !isLoginPage && ( <FloatingStorage/>)}
-
-      {!isLoginPage && !isAdminRoute && ( <FloatingWhatsAppIcon/>)}
+      {/* Conditional Footer */}
+      {(
+        isAdminRoute && isAuthenticated ? <AdminFooter /> : <Footer />
+      )}
+      
+      {/* Floating Storage - Show only on authenticated admin routes */}
+      {isAdminRoute && isAuthenticated && !isLoginPage && !isRegisterPage && !isNotFound && (
+        <FloatingStorage />
+      )}
+      
+      {/* Floating WhatsApp - Show only on public routes */}
+      {!isLoginPage && !isRegisterPage && !isAdminRoute && !isNotFound && (
+        <FloatingWhatsAppIcon />
+      )}
     </div>
   );
 }
