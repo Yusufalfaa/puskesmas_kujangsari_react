@@ -11,7 +11,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Beranda from './pages/Beranda/Beranda';
 import RegisterForm from './pages/Auth/Register/RegisterForm';
 import LoginForm from './pages/Auth/Login/LoginForm';
-import SaranKeluhan from './pages/sarankeluhan/SaranKeluhan';
+import SaranKeluhan from './pages/SaranKeluhan/SaranKeluhan';
 import TentangPuskesmas from './pages/TentangPuskesmas/TentangPuskesmas';
 import Kontak from './pages/Kontak/Kontak';
 import TenagaKerja from './pages/TenagaKerja/TenagaKerja'
