@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabase';
 import './Kontak.css';
-import { FaWhatsapp, FaInstagram, FaPhoneAlt, FaCog } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate untuk navigasi
-
-// Konfigurasi Supabase
+import { FaWhatsapp, FaInstagram, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Kontak = () => {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Hook untuk navigasi
+  const navigate = useNavigate();
 
-  // Fetch data kontak dari Supabase (hanya WhatsApp, Instagram, Phone)
+  // Fetch data kontak dari Supabase (termasuk Email)
   useEffect(() => {
     const fetchContacts = async () => {
       try {
@@ -20,7 +18,8 @@ const Kontak = () => {
         const { data, error } = await supabase
           .from('contacts')
           .select('*')
-          .in('contact_type', ['WhatsApp', 'Instagram', 'Phone'])
+          .in('contact_type', ['WhatsApp', 'Instagram', 'Phone', 'Email'])
+          .eq('set_show', true) // Hanya ambil contact yang set_show = true
           .order('created_at', { ascending: true });
 
         if (error) {
@@ -64,6 +63,8 @@ const Kontak = () => {
         return <FaInstagram size={92} />;
       case 'phone':
         return <FaPhoneAlt size={92} />;
+      case 'email':
+        return <FaEnvelope size={92} />;
       default:
         return <FaPhoneAlt size={92} />;
     }
@@ -82,6 +83,8 @@ const Kontak = () => {
       case 'instagram':
         const username = value.startsWith('@') ? value.substring(1) : value;
         return `https://instagram.com/${username}`;
+      case 'email':
+        return `mailto:${value}`;
       default:
         return '#';
     }
@@ -93,8 +96,8 @@ const Kontak = () => {
     return ['whatsapp', 'instagram'].includes(type);
   };
 
-  // Urutan tampilan kontak
-  const displayOrder = ['WhatsApp', 'Instagram', 'Phone'];
+  // Urutan tampilan kontak (sekarang termasuk Email)
+  const displayOrder = ['WhatsApp', 'Instagram', 'Phone', 'Email'];
 
   return (
     <div>
@@ -119,9 +122,10 @@ const Kontak = () => {
       
       <div className="content">
         {loading && (
-            <div className="config-saranKeluhan-loading">
-        <div className="loading-spinner"></div><p>Memuat data...</p>
-      </div>
+          <div className="config-saranKeluhan-loading">
+            <div className="loading-spinner"></div>
+            <p>Memuat data...</p>
+          </div>
         )}
 
         {error && (
@@ -137,7 +141,6 @@ const Kontak = () => {
               if (!contactList || contactList.length === 0) return null;
 
               // Jika ada multiple contacts dengan tipe yang sama, tampilkan yang pertama
-              // Atau bisa dimodifikasi untuk menampilkan semua
               const primaryContact = contactList[0];
 
               return (

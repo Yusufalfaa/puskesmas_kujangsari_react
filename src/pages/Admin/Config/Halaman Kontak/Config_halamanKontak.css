@@ -212,6 +212,93 @@
   border: 1px solid #f5c6cb;
 }
 
+.eye-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+}
+
+/* Eye Button Active (is_active = true) - Green */
+.eye-btn.active {
+  color: #28a745;
+  background: rgba(40, 167, 69, 0.1);
+  border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+.eye-btn.active:hover {
+  background: rgba(40, 167, 69, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+}
+
+/* Eye Button Inactive (is_active = false) - Red */
+.eye-btn.inactive {
+  color: #dc3545;
+  background: rgba(220, 53, 69, 0.1);
+  border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.eye-btn.inactive:hover {
+  background: rgba(220, 53, 69, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+}
+
+/* Eye Button Icon Animation */
+.eye-btn svg {
+  transition: transform 0.2s ease;
+}
+
+.eye-btn:hover svg {
+  transform: scale(1.1);
+}
+
+/* Eye Button Tooltip Effect */
+.eye-btn:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-bottom: 5px;
+}
+
+.eye-btn:hover::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #333;
+  z-index: 1000;
+}
+
+/* Update Action Buttons Container for Better Spacing */
+.action-buttons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  position: relative;
+}
+
 /* Table Container */
 .table-container {
   background: white;
@@ -412,6 +499,23 @@
 }
 
 @media (max-width: 768px) {
+  .eye-btn {
+    padding: 6px;
+    min-width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+  
+  .action-buttons {
+    gap: 4px;
+  }
+  
+  /* Hide tooltip on mobile */
+  .eye-btn:hover::after,
+  .eye-btn:hover::before {
+    display: none;
+  }
+  
   .table-container {
     overflow-x: auto;
   }

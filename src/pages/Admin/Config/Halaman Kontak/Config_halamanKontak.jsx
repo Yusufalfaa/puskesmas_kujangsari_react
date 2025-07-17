@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../../lib/supabase';
 import './Config_halamanKontak.css';
-import { FaEdit, FaSave, FaTimes, FaPlus, FaTrash, FaArrowLeft } from 'react-icons/fa';
+import { FaEdit, FaSave, FaTimes, FaPlus, FaTrash, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 const Config_Kontak = () => {
@@ -11,11 +11,7 @@ const Config_Kontak = () => {
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({});
   const [showAddForm, setShowAddForm] = useState(false);
-  const [addForm, setAddForm] = useState({
-    contact_type: 'WhatsApp',
-    value: '',
-    is_active: true
-  });
+  const [addForm, setAddForm] = useState({});
   const navigate = useNavigate();
 
   // Fetch semua data kontak dari Supabase
@@ -44,13 +40,37 @@ const Config_Kontak = () => {
     }
   };
 
+  // Toggle visibility status
+  const toggleVisibility = async (contact) => {
+    try {
+      const newStatus = !contact.set_show;
+      const { error } = await supabase
+        .from('contacts')
+        .update({
+          set_show: newStatus,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', contact.id);
+
+      if (error) {
+        throw error;
+      }
+
+      // Refresh data
+      await fetchContacts();
+    } catch (err) {
+      console.error('Error updating contact visibility:', err);
+      alert('Error updating contact visibility: ' + err.message);
+    }
+  };
+
   // Mulai edit kontak
   const handleEdit = (contact) => {
     setEditingId(contact.id);
     setEditForm({
       contact_type: contact.contact_type,
       value: contact.value,
-      is_active: contact.is_active
+      set_show: contact.set_show
     });
   };
 
@@ -68,7 +88,7 @@ const Config_Kontak = () => {
         .update({
           contact_type: editForm.contact_type,
           value: editForm.value,
-          is_active: editForm.is_active,
+          set_show: editForm.set_show,
           updated_at: new Date().toISOString()
         })
         .eq('id', editingId);
@@ -117,7 +137,7 @@ const Config_Kontak = () => {
         .insert([{
           contact_type: addForm.contact_type,
           value: addForm.value,
-          is_active: addForm.is_active,
+          set_show: addForm.set_show,
           created_at: new Date().toISOString()
         }]);
 
@@ -129,7 +149,7 @@ const Config_Kontak = () => {
       setAddForm({
         contact_type: 'WhatsApp',
         value: '',
-        is_active: true
+        set_show: true
       });
       setShowAddForm(false);
       await fetchContacts();
@@ -151,7 +171,7 @@ const Config_Kontak = () => {
     });
   };
 
-  const contactTypes = ['WhatsApp', 'Instagram', 'Phone', 'Email', 'Website'];
+  const contactTypes = ['WhatsApp', 'Instagram', 'Phone', 'Email'];
 
   return (
     <div className="config-kontak-kontak-container">
@@ -212,10 +232,10 @@ const Config_Kontak = () => {
                 <label>
                   <input
                     type="checkbox"
-                    checked={addForm.is_active}
-                    onChange={(e) => setAddForm({...addForm, is_active: e.target.checked})}
+                    checked={addForm.set_show}
+                    onChange={(e) => setAddForm({...addForm, set_show: e.target.checked})}
                   />
-                  Aktif
+                  Tampilkan
                 </label>
               </div>
             </div>
@@ -318,6 +338,13 @@ const Config_Kontak = () => {
                         </>
                       ) : (
                         <>
+                          <button 
+                            className={`eye-btn ${contact.set_show ? 'active' : 'inactive'}`}
+                            onClick={() => toggleVisibility(contact)}
+                            title={contact.set_show ? 'Sembunyikan' : 'Tampilkan'}
+                          >
+                            {contact.set_show ? <FaEye /> : <FaEyeSlash />}
+                          </button>
                           <button 
                             className="edit-btn"
                             onClick={() => handleEdit(contact)}

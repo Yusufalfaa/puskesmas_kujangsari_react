@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { supabase } from "../../../../lib/supabase"
 import "./StorageManagement.css"
 import { Button } from "react-bootstrap"
-import { Edit, Trash2, FolderOpen, RefreshCw, ArrowLeft, EyeIcon } from "lucide-react"
+import { Edit, Trash2, FolderOpen, ArrowLeft, EyeIcon } from "lucide-react"
 
 const StorageManagement = () => {
   const [buckets, setBuckets] = useState([])
@@ -1645,25 +1645,34 @@ const StorageManagement = () => {
                   {item.isFolder ? "📁" : "📄"}
                 </span>
                 <div className="content-details">
-                  <p
-                    className="content-name"
-                    style={{ cursor: item.isFolder && !selectionMode ? "pointer" : "default" }}
-                    onClick={() => {
-                      if (item.isFolder && !selectionMode) {
-                        navigateToFolder(bucketName, item.fullPath)
-                      }
+                  <div
+                    className="content-name-size-row"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: "12px",
                     }}
                   >
-                    {item.name}
-                  </p>
-                  {!item.isFolder && (
-                    <p className="content-size">
-                      {item.metadata?.size ? formatFileSize(item.metadata.size) : "Ukuran tidak diketahui"}
+                    <p
+                      className="content-name"
+                      style={{ cursor: item.isFolder && !selectionMode ? "pointer" : "default", margin: 0 }}
+                      onClick={() => {
+                        if (item.isFolder && !selectionMode) {
+                          navigateToFolder(bucketName, item.fullPath)
+                        }
+                      }}
+                    >
+                      {item.name}
                     </p>
-                  )}
+                    {!item.isFolder && (
+                      <span className="content-size" style={{ fontSize: "12px", color: "#888" }}>
+                        {item.metadata?.size ? formatFileSize(item.metadata.size) : "Ukuran tidak diketahui"}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
-
               {!selectionMode && (
                 <div className="content-actions">
                   {!item.isFolder && (
