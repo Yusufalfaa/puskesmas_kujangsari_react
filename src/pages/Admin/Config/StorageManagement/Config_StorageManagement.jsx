@@ -167,24 +167,16 @@ const StorageManagement = () => {
     try {
       let totalStorageSize = 0
 
-      console.log("Starting storage calculation...")
-
       const dbUsage = await fetchDatabaseUsage()
 
       for (const bucket of bucketsData) {
         try {
-          console.log(`Processing bucket: ${bucket.name}`)
           const bucketSize = await calculateBucketSizeOptimized(bucket.name)
           totalStorageSize += bucketSize
-          console.log(`Bucket ${bucket.name}: ${(bucketSize / (1024 * 1024)).toFixed(2)} MB`)
         } catch (err) {
           console.warn(`Error calculating size for bucket ${bucket.name}:`, err)
         }
       }
-
-      console.log(`Total storage: ${(totalStorageSize / (1024 * 1024)).toFixed(2)} MB`)
-      console.log(`Database usage: ${dbUsage} MB`)
-
       setStorageUsage((prev) => ({
         ...prev,
         database: dbUsage,
@@ -549,7 +541,7 @@ const StorageManagement = () => {
       const failedMoves = []
 
       for (const moveItem of selectedItems) {
-        const { bucketName, item, currentPath } = moveItem
+        const { bucketName, item } = moveItem
         const sourcePath = item.fullPath
         const destinationPath = destinationFolderPath ? `${destinationFolderPath}/${item.name}` : item.name
 
@@ -645,9 +637,6 @@ const StorageManagement = () => {
   // Enhanced move helper functions with better error handling
   const moveSingleFile = async (sourceBucket, sourcePath, destBucket, destPath) => {
     try {
-      console.log(`Moving file from ${sourceBucket}/${sourcePath} to ${destBucket}/${destPath}`)
-
-      // Download file from source
       const { data: fileData, error: downloadError } = await supabase.storage.from(sourceBucket).download(sourcePath)
       if (downloadError) {
         console.error("Download error:", downloadError)
@@ -696,13 +685,10 @@ const StorageManagement = () => {
 
   const moveFolderRecursive = async (sourceBucket, sourceFolderPath, destBucket, destFolderPath) => {
     try {
-      console.log(`Moving folder from ${sourceBucket}/${sourceFolderPath} to ${destBucket}/${destFolderPath}`)
-
       // Get all files in the folder
       const allFiles = await getAllFilesInFolder(sourceBucket, sourceFolderPath)
 
       if (allFiles.length === 0) {
-        console.log("No files found in folder, creating empty folder")
         // Create empty folder by uploading a placeholder
         const placeholderFile = new Blob([""], { type: "text/plain" })
         const { error: placeholderError } = await supabase.storage

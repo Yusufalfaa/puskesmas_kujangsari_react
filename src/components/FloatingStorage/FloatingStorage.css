@@ -3,22 +3,28 @@
   position: fixed; /* Membuat ikon mengambang */
   bottom: 35px; /* Jarak dari bawah halaman */
   right: 40px; /* Jarak dari kanan halaman */
-  z-index: 9999; /* Pastikan ikon selalu di atas elemen lain */
-  background-color: #25d366; /* Warna latar belakang ikon WhatsApp */
+  z-index: 1; /* Pastikan ikon selalu di atas elemen lain */
+  background-color: #25d366; 
+  border-color: none;/* Warna latar belakang ikon WhatsApp */
   border-radius: 50%; /* Membuat bentuk lingkaran */
   width: 50px; /* Ukuran ikon */
   height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Bayangan ikon */
+  box-shadow: none;
+  outline: none;
+  border: none;
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .floating-storage-icon:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  transform:  translateY(-2px);
+  background-color: #20ba59; 
+  box-shadow: none;
+  outline: none;
+  border: none;
 }
 
 .floating-storage-icon img {
